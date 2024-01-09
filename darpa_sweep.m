@@ -69,3 +69,15 @@ for m = 1:size(mech_file,1)
     end
 
 end
+%% putting things into block - will need to concat response tables?
+block_struct.Date = exp_date;
+block_struct.MechTable  = MechDetect_Table;
+block_struct.ElectTable = ElectDetect_Table;
+
+
+for i = 1:length(block_struct)
+    
+
+end
+
+
