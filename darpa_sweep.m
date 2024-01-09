@@ -81,7 +81,7 @@ for i = 1:length(block_struct)
 
         [results] = AnalyzeMechTable(block_struct.MechTable);
 
-        [otherresults] = Alany
+        [otherresults] = AnalyzeDetectionTable(block_struct.ElectTable);
     
 
 end
