@@ -5,7 +5,7 @@ function[detection_table] = AnalyzeMechTable(input_table)
     sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
 
     x = input_table.MechAmp;
-    y = strcmpi(input_table.Response, 'correct');
+    y = strcmpi(input_table.Resposne, 'correct');
 
     [ux, ~, ic] = unique(x);
 
@@ -26,14 +26,6 @@ function[detection_table] = AnalyzeMechTable(input_table)
     if detection_vector(1) < 1e-3
         z_fa = norminv(1e-3);
     else
-        z_fa = norminv(detection_vector(1));
-    end
-
-    z_hit = norminv(detection_vector);
-    zhit(isinf(z_hit)) = norminv(1-1e-3);
-    dprime = z_hit-z_fa;
-
-    detection_table = table(ux, detection_vector, dprime, 'VariableNames', {'MechAmp', 'pDetect', 'dPrime'});
-end
+        z_fa = norminv(detection_)
 
 

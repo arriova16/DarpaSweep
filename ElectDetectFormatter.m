@@ -15,6 +15,6 @@ input_cell_array = input_cell_array(~strcmpi(input_cell_array(:,7), 'empty respo
 %converting
 
 output_table = cell2table(input_cell_array, 'VariableNames', {'Trial', 'CorrectAnswer', 'CorrectAnserText', ...
-                                                               'StimAmp', 'StimFreq', 'Electrode', 'Response'});
+                                                               'TestStimAmp', 'TestStimFreq', 'Electrode', 'Response'});
 
 end

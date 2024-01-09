@@ -76,6 +76,12 @@ block_struct.ElectTable = ElectDetect_Table;
 
 
 for i = 1:length(block_struct)
+    %create function for analyzing pdetect and dprime
+    %then take dprime and pdetect and use charles function for coeffs
+
+        [results] = AnalyzeMechTable(block_struct.MechTable);
+
+        [otherresults] = Alany
     
 
 end
