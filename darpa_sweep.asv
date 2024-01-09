@@ -8,5 +8,4 @@ file_list = dir(data_folder);
 %% Loading folders
 %load folders then load files from there
 
-task_type = {'Mech', 'Elect'};
-block_struct = struct(); ii = 1;
+
