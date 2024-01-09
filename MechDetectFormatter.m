@@ -1,0 +1,1 @@
+function output_table = MechDetectFormatter(input_cell_array)

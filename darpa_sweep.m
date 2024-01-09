@@ -23,6 +23,9 @@ mech_file = dir(fullfile(mech, '*rsp'));
 
 %formatting electdetect files name
 for e = 1:size(elect_file,1)
+
+    %getting monkey name and sess date for file name
+
     name_split = strsplit(elect_file(e).name, '_');
     us_idx = find(elect_file(e).name == '_', 1, 'last');
     dt_string = elect_file(e).name(us_idx(1)+1:end-4);
@@ -31,12 +34,34 @@ for e = 1:size(elect_file,1)
     monkey_name = name_split{2}(1:end -7);
     fname = sprintf('%s_%s_ElectDetect.mat', monkey_name, exp_date);
     
-    if exist(fullfile(elect,fname), 'file') ~= 2 || overwrite
+    if exist(fullfile(elect,fname), 'file') ~= 1 || overwrite
+        %loading and formatting data
         raw_data = readcell(fullfile(elect, elect_file(e).name), ...
             'FileType','text', 'NumHeaderLines', 1);
+     
+        ElectDetect_Table = ElectDetectFormatter(raw_data);
 
+        save(fullfile(elect,fname), 'ElectDetect_Table')
+    end
 
+end
 
+%formatting MechDetect folder
+
+for m = 1:size(mech_file,1)
+    %getting monkey name and sess date for file name
+    name_split = strsplit(mech_file(m).name, '_');
+    monkey_name  = name_split{2}(1:end-7);
+    dt_name = name_split{4}(1:end-4);
+    dt_split = strsplit(dt_name, 'T');
+    exp_date = datestr(datenum(dt_split{1}, 'yyyymmdd'));
+    fname = sprintf('%s_%s_MechDetect.mat', monkey_name, exp_date);
+    
+    if exist(fullfile(mech, fname), 'file') ~= 1 || overwrite 
+
+    %loading and formatting data
+        raw_data = readcell(fullfile(mech, mech_file(m).name), ...
+            "FileType","text", 'NumHeaderLines', 1);
 
     end
 
