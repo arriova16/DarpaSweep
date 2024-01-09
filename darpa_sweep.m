@@ -62,10 +62,10 @@ for m = 1:size(mech_file,1)
     %loading and formatting data
         raw_data = readcell(fullfile(mech, mech_file(m).name), ...
             "FileType","text", 'NumHeaderLines', 1);
+        
+        MechDetect_Table = MechDetectFormatter(raw_data);
 
+        save(fullfile(mech,fname), 'MechDetect_Table')
     end
-
-
-
 
 end
