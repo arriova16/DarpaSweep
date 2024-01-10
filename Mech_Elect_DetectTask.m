@@ -118,24 +118,16 @@ end
 
 %% Plotting
  
-dprime_threshold = 1.35;
 SetFont('Arial', 18)
-sigfunny = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
 %plotting Mech Detection pdetect and dprime
 
-%plotting pdetect
 figure;
 subplot(2,2,1); hold on ; title('Mech pDetect')
-x = MechDetect_DT.MechAmp;
-y = MechDetect_DT.pDetect;
-scatter(x,y , 50, [.1 .1 .1], 'filled')
-plot(x,y,'Color', [.1 .1 .1], 'LineStyle', ':')
-%trouble with coeffs plotting
 
-    % xq = linspace(x(1),2);
-    % coeffs incorrect?
-    % yq = sigfunny(coeffs_mech_pd, xq);
-    % plot(xq,yq, 'Color', [.4 .4 .4])
+scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
+plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', ':')
+
+%trouble with coeffs plotting
 
 
 subplot(2,2,2); hold on; title('Mech dPrime')
@@ -146,13 +138,15 @@ plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyl
 
 subplot(2,2,3); hold on; title('Elect pDetect')
 
-scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
+plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle',':')
 
 
 
 subplot(2,2,4); hold on; title('Elect dPrime')
 
-scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
 
 
 
