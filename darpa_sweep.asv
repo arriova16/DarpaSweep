@@ -94,11 +94,9 @@ for i = 1:length(block_struct)
         x_elect = ElectDetect_DetectTable.StimAmp;
         y_elect = ElectDetect_DetectTable.dPrime;
         [ElectDetect_DetectTable] = AnalyzeDetectionTable(block_struct.ElectTable);
-        [~,coeffs_elect, rnorm_elect, residuals_elect, jnd_elect, ~] = FitSigmoid(y_elect,x_elect, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+        [~,coeffs_elect, rnorm_elect, residuals_elect, jnd_elec, ~] = FitSigmoid(y_mech,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
 
 
 end
-
-%% Plotting
 
 
