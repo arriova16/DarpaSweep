@@ -2,14 +2,13 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
+data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
 file_list = dir(data_folder);
 
 %% Loading folders
 %load folders then load files from there 
 %save formatted mat files
 
-tasktype = {'Mech', 'Elect'};
 block_struct = struct(); ii = 1;
 
 %loading electdetect folder
@@ -79,9 +78,12 @@ for i = 1:length(block_struct)
     %create function for analyzing pdetect and dprime
     %then take dprime and pdetect and use charles function for coeffs
 
-        [results] = AnalyzeMechTable(block_struct.MechTable);
+        [MechDetect_DetectTable] = AnalyzeMechTable(block_struct.MechTable);
 
-        [otherresults] = AnalyzeDetectionTable(block_struct.ElectTable);
+       %fitsigmoid
+        [~,coeffs, rnorm, residuals, jnd, ~] = FitSigmoid(MechDetect_DetectTable.MechAmp, MechDetect_DetectTable.dPrime);
+
+%         [ElectDetect_DetectTable] = AnalyzeDetectionTable(block_struct.ElectTable);
     
 
 end

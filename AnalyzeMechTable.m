@@ -34,6 +34,8 @@ function[detection_table] = AnalyzeMechTable(input_table)
     dprime = z_hit-z_fa;
 
     detection_table = table(ux, detection_vector, dprime, 'VariableNames', {'MechAmp', 'pDetect', 'dPrime'});
+   
+    
 end
 
 
