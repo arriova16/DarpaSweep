@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
 file_list = dir(data_folder);
 
 %% Loading folders
@@ -99,22 +99,59 @@ for i = 1:length(data)
     %then take dprime and pdetect and use charles function for coeffs
     
     %analysis for mechanical table
-        [MechDetect_DetectTable] = AnalyzeMechTable(data.MechDetectTable);
-        x_mech = MechDetect_DetectTable.MechAmp;
-        y_mech = MechDetect_DetectTable.dPrime;
-        [~,coeffs_mech, rnorm_mech, residuals_mech, jnd_mech, ~] = FitSigmoid(y_mech,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
-        
+        [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
+        x_mech = MechDetect_DT.MechAmp;
+        y_mech = MechDetect_DT.dPrime;
+        y_mech_pdetect =  MechDetect_DT.pDetect;
+        [~,coeffs_mech_dp, rnorm_mech_dp, residuals_mech_dp, jnd_mech_dp, ~] = FitSigmoid(y_mech,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+        [~,coeffs_mech_pd, rnorm_mech_pd, residuals_mech_pd, jnd_mech_pd, ~] = FitSigmoid(y_mech,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+
         %analysis for electrical table
   
-        [ElectDetect_DetectTable] = AnalyzeDetectionTable(data.ElectDetectTable);
-        x_elect = ElectDetect_DetectTable.StimAmp;
-        y_elect = ElectDetect_DetectTable.dPrime;
+        [ElectDetect_DT] = AnalyzeDetectionTable(data.ElectDetectTable);
+        x_elect = ElectDetect_DT.StimAmp;
+        y_elect = ElectDetect_DT.dPrime;
         [~,coeffs_elect, rnorm_elect, residuals_elect, jnd_elect, ~] = FitSigmoid(y_elect,x_elect, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
 
 
 end
 
 %% Plotting
+ 
+dprime_threshold = 1.35;
+SetFont('Arial', 18)
+sigfunny = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
+%plotting Mech Detection pdetect and dprime
+
+%plotting pdetect
+figure;
+subplot(2,2,1); hold on ; title('Mech pDetect')
+x = MechDetect_DT.MechAmp;
+y = MechDetect_DT.pDetect;
+scatter(x,y , 50, [.1 .1 .1], 'filled')
+plot(x,y,'Color', [.1 .1 .1], 'LineStyle', ':')
+xq = linspace(x(1),2);
+%coeffs incorrect?
+yq = sigfunny(coeffs_mech_pd, xq);
+plot(xq,yq, 'Color', [.4 .4 .4])
+
+
+subplot(2,2,2); hold on; title('Mech dPrime')
+
+
+
+
+
+
+subplot(2,2,3); hold on; title('Elect pDetect')
+
+
+
+
+subplot(2,2,4); hold on; title('Elect dPrime')
+
+
+
 
 
 
