@@ -16,8 +16,8 @@ for i = 1:length(file_list)
     fname_split = strsplit(file_list(i).name, '_');
     block_struct(ii).Animal = fname_split{2}(1:end-7);
     monkey_name = fname_split{2}(1:end-7);
-    dt_name = datestr(datenum(fname_split{4}(1:t_idx-1), 'yyyymmdd'), 1);
     t_idx = find(fname_split{4} == 'T');
+    dt_name = datestr(datenum(fname_split{4}(1:t_idx-1), 'yyyymmdd'), 1);
     block_struct(ii).Date = datestr(datenum(fname_split{4}(1:t_idx-1), 'yyyymmdd'), 1);
 
     % load the data
@@ -40,10 +40,13 @@ for i = 1:length(file_list)
     ii = ii+1;
     
     %saving in matfiles
-   
+    
      fname = sprintf('%s_%s_DarpaSweep.mat', monkey_name, dt_name);
-     save(fullfile(process_loc, fname), 'response_table')
-   
+     
+     if exist(fullfile(process_loc, fname), 'file') ~=1 || overwrite
+     
+         save(fullfile(process_loc, fname), 'response_table')
+     end
 end
 
 
