@@ -1,6 +1,6 @@
 %Working on Formatting the Sweep Detection Task
-tld = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training\SweepDetect';
-process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
+tld = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training\SweepDetect';
+process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep';
 file_list = dir(tld);
 
 %% Loading rsp files and formatting
