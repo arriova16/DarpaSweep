@@ -27,9 +27,11 @@ CatTable = cat(1,sweep_table{:});
 %create pdetect and dprime for each day
 
 for c = 1:length(data)
-    u_icms = unique(data(c).ResponseTable.StimAmp);
-    u_test_amps
-
+   icms_amps = unique(data(c).ResponseTable.StimAmp);
+   mech_amps = unique(data(c).ResponseTable.IndentorAmp);
+   u_icms_amps = unique(data(c).ResponseTable.StimAmp);
+   u_mech_amps = unique(data(c).ResponseTable.IndentorAmp);
+   
 
 
 
