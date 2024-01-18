@@ -101,12 +101,13 @@ for i = 1:length(data)
     %then take dprime and pdetect and use charles function for coeffs
     
     %analysis for mechanical table
+    %go over this look weird
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
         x_mech = MechDetect_DT.MechAmp;
-        y_mech = MechDetect_DT.dPrime;
+        y_mech_dprime = MechDetect_DT.dPrime;
         y_mech_pdetect =  MechDetect_DT.pDetect;
-        [~,coeffs_mech_dp, rnorm_mech_dp, residuals_mech_dp, jnd_mech_dp, ~] = FitSigmoid(y_mech,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
-        [~,coeffs_mech_pd, rnorm_mech_pd, residuals_mech_pd, jnd_mech_pd, ~] = FitSigmoid(y_mech,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+        [~,coeffs_mech_dp, rnorm_mech_dp, residuals_mech_dp, jnd_mech_dp, ~] = FitSigmoid(y_mech_dprime,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+        [~,coeffs_mech_pd, rnorm_mech_pd, residuals_mech_pd, jnd_mech_pd, ~] = FitSigmoid(y_mech_pdetect,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
 
         %analysis for electrical table
   
