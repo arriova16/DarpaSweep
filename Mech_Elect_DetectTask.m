@@ -3,6 +3,8 @@
 %I also want to be able to save those formatted files and analyze them
 
 data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
+% data_folder =
+% 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
 file_list = dir(data_folder);
 
 %% Loading folders
@@ -33,7 +35,7 @@ for e = 1:size(elect_file,1)
     monkey_name = name_split{2}(1:end -7);
     fname = sprintf('%s_%s_ElectDetect.mat', monkey_name, exp_date);
     
-    if exist(fullfile(elect,fname), 'file') ~= 2 || overwrite
+    if exist(fullfile(elect,fname), 'file') ~= 1 || overwrite
         %loading and formatting data
         raw_data = readcell(fullfile(elect, elect_file(e).name), ...
             'FileType','text', 'NumHeaderLines', 1);
@@ -56,7 +58,7 @@ for m = 1:size(mech_file,1)
     exp_date = datestr(datenum(dt_split{1}, 'yyyymmdd'));
     fname = sprintf('%s_%s_MechDetect.mat', monkey_name, exp_date);
     
-    if exist(fullfile(mech, fname), 'file') ~= 2 || overwrite 
+    if exist(fullfile(mech, fname), 'file') ~= 1 || overwrite 
 
     %loading and formatting data
         raw_data = readcell(fullfile(mech, mech_file(m).name), ...
