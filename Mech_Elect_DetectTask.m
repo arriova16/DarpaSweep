@@ -99,7 +99,7 @@ data.ElectDetectTable = cat(1,elect_table{:});
 for i = 1:length(data)
     %create function for analyzing pdetect and dprime
     %then take dprime and pdetect and use charles function for coeffs
-    
+    %create function that includes coeffs 
     %analysis for mechanical table
     %go over this look weird
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
@@ -107,7 +107,8 @@ for i = 1:length(data)
         y_mech_dprime = MechDetect_DT.dPrime;
         y_mech_pdetect =  MechDetect_DT.pDetect;
         [~,coeffs_mech_dp, rnorm_mech_dp, residuals_mech_dp, jnd_mech_dp, ~] = FitSigmoid(y_mech_dprime,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
-        [~,coeffs_mech_pd, rnorm_mech_pd, residuals_mech_pd, jnd_mech_pd, ~] = FitSigmoid(y_mech_pdetect,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+        %error doesn't work for pdetect
+        % [~,coeffs_mech_pd, rnorm_mech_pd, residuals_mech_pd, jnd_mech_pd, ~] = FitSigmoid(y_mech_pdetect,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
 
         %analysis for electrical table
   
@@ -120,7 +121,8 @@ for i = 1:length(data)
 end
 
 %% Plotting
- 
+     % c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
+    % sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
 SetFont('Arial', 18)
 %plotting Mech Detection pdetect and dprime
 

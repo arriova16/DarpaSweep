@@ -1,8 +1,6 @@
 %Getting PDetect and DPrime of MechTable
 function[detection_table] = AnalyzeMechTable(input_table)
 
-    % c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
-    sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
 
     x = input_table.MechAmp;
     y = strcmpi(input_table.Response, 'correct');
