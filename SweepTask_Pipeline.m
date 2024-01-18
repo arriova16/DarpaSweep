@@ -26,6 +26,9 @@ CatTable = cat(1,sweep_table{:});
 
 %% Analysis 
 %ttest of observed
+for b = 1:length(data)
+[detection_table{b}, dprime_table{b},~] = AnalyzeHybridTable(data(b).ResponseTable);
 
 
+end
 
