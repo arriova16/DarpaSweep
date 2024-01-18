@@ -102,20 +102,26 @@ for i = 1:length(data)
     %create function that includes coeffs 
     %analysis for mechanical table
     %go over this look weird
+
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
         x_mech = MechDetect_DT.MechAmp;
         y_mech_dprime = MechDetect_DT.dPrime;
         y_mech_pdetect =  MechDetect_DT.pDetect;
         [~,coeffs_mech_dp, rnorm_mech_dp, residuals_mech_dp, jnd_mech_dp, ~] = FitSigmoid(y_mech_dprime,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+
         %error doesn't work for pdetect
-        % [~,coeffs_mech_pd, rnorm_mech_pd, residuals_mech_pd, jnd_mech_pd, ~] = FitSigmoid(y_mech_pdetect,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+        [~,coeffs_mech_pd, rnorm_mech_pd, residuals_mech_pd, jnd_mech_pd, ~] = FitSigmoid(y_mech_pdetect,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
 
         %analysis for electrical table
   
         [ElectDetect_DT] = AnalyzeDetectionTable(data.ElectDetectTable);
         x_elect = ElectDetect_DT.StimAmp;
         y_elect = ElectDetect_DT.dPrime;
+        y_elect_pd = ElectDetect_DT.pDetect;
         [~,coeffs_elect, rnorm_elect, residuals_elect, jnd_elect, ~] = FitSigmoid(y_elect,x_elect, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+        
+        %same error
+        [~,coeffs_elect_pd, rnorm_elect_pd, residuals_elect_pd, jnd_elect_pd, ~] = FitSigmoid(y_elect_pd,x_elect, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
 
 
 end
