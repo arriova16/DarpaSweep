@@ -1,4 +1,4 @@
-function [detection_table, dprime_table, coeff_table] = AnalyzeDarpaSweep(input_table)
+function [detection_table, dprime_table] = AnalyzeDarpaSwep(input_table)
     icms_amps = input_table.StimAmp;
     mech_amps = input_table.IndentorAmp;
     y = strcmpi(input_table.Response, 'correct');
