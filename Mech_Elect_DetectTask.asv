@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
 
 file_list = dir(data_folder);
@@ -147,11 +147,10 @@ hold on; title('Mech dPrime')
 
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
-x = MechDetect_DT.MechAmp;
-xq = linspace(0, 0.3);
-yq = sigfun(coeffs_mech_dp,xq);
-[~, b] = min(abs(yq-dprime_threshold));
- plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold -1], 'LineStyle','--')
+% xq = linspace(0, 0.1);
+% yq = sigfun(coeffs_mech_dp,xq);
+% [~, b] = min(abs(yq-dprime_threshold));
+%  plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold -1], 'LineStyle','--')
 
 
 
@@ -168,6 +167,21 @@ subplot(2,2,4); hold on; title('Elect dPrime')
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
 
+yn =  ElectDetect_DT.dPrime;
+xn = ElectDetect_DT.StimAmp;
+ynew = 1.35;
+xnew = polyfit(yn, xn, ynew);
+
+
+%doesn't work
+%  tt = linspace(0,50);
+%  tq = sigfun(coeffs_elect,xq);
+%  [~, a] = min(abs(yq-dprime_threshold));
+%  plot([0 tt(a) tt(a)], [dprime_threshold, dprime_threshold-1], 'LineStyle', '--')
+%
+%solving for x
+%      c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
+%     sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
 
 
 
