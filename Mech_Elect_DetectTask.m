@@ -167,7 +167,7 @@ subplot(2,2,4); hold on; title('Elect dPrime')
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
-
+%doesn't work
 t = MechDetect_DT.dPrime;
 tt = linspace(0,50);
 tq = sigfun(coeffs_elect,xq);
