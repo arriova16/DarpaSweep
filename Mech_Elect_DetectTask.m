@@ -2,8 +2,8 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
-% data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
+% data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
+data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
 
 file_list = dir(data_folder);
 
@@ -167,10 +167,10 @@ subplot(2,2,4); hold on; title('Elect dPrime')
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
 
-yn =  ElectDetect_DT.dPrime;
-xn = ElectDetect_DT.StimAmp;
-ynew = 1.35;
-xnew = polyfit(yn, xn, ynew);
+% yn =  ElectDetect_DT.dPrime;
+% xn = ElectDetect_DT.StimAmp;
+% ynew = 1.35;
+% xnew = polyfit(yn, xn, ynew);
 
 
 %doesn't work
