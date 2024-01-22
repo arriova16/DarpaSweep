@@ -2,8 +2,8 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-% data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
-data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\Training';
+% data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
 
 file_list = dir(data_folder);
 
@@ -73,26 +73,40 @@ end
 
 
 %%
+block_struct =struct(); ii=1;
 data = struct();
 
     subf_mech = fullfile(data_folder, 'MechDetect');
-    mech_file_list = dir(fullfile(subf_mech, '*.mat'));
-    mech_table = cell(size(mech_file_list,1),1);
-    for b = 1:size(mech_file_list,1)
-        temp_mech = load(fullfile(mech_file_list(b).folder, mech_file_list(b).name));
-        mech_table{b} = [temp_mech.MechDetect_Table];
-    end
-
     subf_elect = fullfile(data_folder, 'ElectDetect');
     elect_file_list = dir(fullfile(subf_elect, '*.mat'));
+    mech_file_list = dir(fullfile(subf_mech, '*.mat'));
     elect_table = cell(size(elect_file_list,1),1);
-    for c = 1:size(elect_file_list)
-        temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name));
-        elect_table{c} = [temp_elect.ElectDetect_Table];
-    end
+    mech_table = cell(size(mech_file_list,1),1);
 
-data.MechDetectTable = cat(1,mech_table{:});
-data.ElectDetectTable = cat(1,elect_table{:});
+    for b = 1:size(mech_file_list,1)
+      for c = 1:size(elect_file_list)
+         fname_split = strsplit(mech_file_list(b).name, '_');
+         block_struct(ii).Date = fname_split{2};
+         temp_mech = load(fullfile(mech_file_list(b).folder, mech_file_list(b).name));
+         mech_table{b} = [temp_mech.MechDetect_Table];
+         block_struct(ii).MechRT = mech_table{b};
+         temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name));
+         
+         %trouble here- only loading the same days rt
+
+         % elect_table{c} = [temp_elect.ElectDetect_Table];
+         block_struct(ii).ElectRt =[temp_elect.ElectDetect_Table];
+% 
+       
+      end
+       ii = ii+1;
+    end
+% % day by day tables 
+% 
+% 
+% %cat tables
+% data.MechDetectTable = cat(1,mech_table{:});
+% data.ElectDetectTable = cat(1,elect_table{:});
 
 %% putting things into block - will need to concat response tables?
 

@@ -13,7 +13,7 @@ for i  = 1:size(mat_files,1)
     sweep_table{i} = [temp.response_table];
     name_split = strsplit(mat_files(i).name, '_');
     data(ii).Animal = name_split{1};
-    data(ii).Data = name_split{2};
+    data(ii).Date = name_split{2};
     data(ii).ResponseTable = [temp.response_table];
    
 
