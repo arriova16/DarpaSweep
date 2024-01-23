@@ -6,6 +6,8 @@ function output_table = MechDetectFormatter(input_cell_array)
 if num_cols == 15
 
     input_cell_array = input_cell_array(:, [8:10, 12:13, 15]);
+elseif num_cols == 16
+    input_cell_array = input_cell_array(:, [8:10, 12:13, 15]);
 
 end
 
