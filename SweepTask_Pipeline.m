@@ -26,8 +26,32 @@ CatTable = cat(1,sweep_table{:});
 
 %% Analysis
 % Dprime and Pdetect of w and wo icms
+[detection_table, dprime_table, coeff_table] = AnalyzeHybridTable(CatTable);
 
+%% Plotting pdetect and dprimes
 
+SetFont('Arial', 18)
+figure;
+% subplot(1,2,1); 
+hold on
+axis square
+for b = 1:size(detection_table)
+ varnames = detection_table.Properties.VariableNames;
+ % rownames = detection_table.Properties.RowNames;
+ rownames = [1:4];
+ var = [0 10 15 17];
+plot(var, detection_table{1,:},'o-','Color', rgb(66, 66, 66), 'LineWidth', 4)
+plot(var, detection_table{2,:},'o-','Color', rgb(198, 40, 40), 'LineWidth', 4)
+xlabel('ICMS')
+ylabel('pdetect')
+text(15,0.6, 'ICMS', 'Color', rgb(198, 40, 40), 'FontSize', 18)
+text(15,0.5, 'No ICMS', 'Color', rgb(66, 66, 66), 'FontSize', 18)
+% subplot(1,2,2); hold on
+% axis square
+% plot(var, dprime_table{1,:},'o-','Color', rgb(66, 66, 66), 'LineWidth', 4)
+% plot(var, dprime_table{2,:},'o-','Color', rgb(198, 40, 40), 'LineWidth', 4)
+
+end
 %% Analysis 
 %ttest of observed
 

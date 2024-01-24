@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
 
 file_list = dir(data_folder);
@@ -92,7 +92,7 @@ data = struct();
          block_struct(b).MechRT = mech_table{b};
          temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name)); 
           elect_table{c} = [temp_elect.ElectDetect_Table];
-          block_struct(c).ElectRt =elect_table{c};
+          block_struct(c).ElectRT =elect_table{c};
       end
     end
    
@@ -106,8 +106,10 @@ for i = 1:length(data)
     %create function that includes coeffs 
     %go over this looks weird
 
-    %
+    for n =1:length(block_struct)
+
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
+        [dbd_mech_dt{n}]= AnalyzeMechTable(block_struct(n).MechRT);
         x_mech = MechDetect_DT.MechAmp;
         y_mech_dprime = MechDetect_DT.dPrime;
         y_mech_pdetect =  MechDetect_DT.pDetect;
@@ -119,6 +121,7 @@ for i = 1:length(data)
         %analysis for electrical table
   
         [ElectDetect_DT] = AnalyzeDetectionTable(data.ElectDetectTable);
+        [dbd_elect_dt{n}] = AnalyzeDetectionTable(block_struct(n).ElectRT);
         x_elect = ElectDetect_DT.StimAmp;
         y_elect = ElectDetect_DT.dPrime;
         y_elect_pd = ElectDetect_DT.pDetect;
@@ -127,7 +130,7 @@ for i = 1:length(data)
         %same error
 %         [~,coeffs_elect_pd, rnorm_elect_pd, residuals_elect_pd, jnd_elect_pd, ~] = FitSigmoid(y_elect_pd,x_elect, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
 
-
+    end
 end
 
 %% Plotting
@@ -142,7 +145,7 @@ subplot(2,2,1); hold on ; title('Mech pDetect')
 
 scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', ':')
-
+axis square
 % trouble with coeffs plotting
 
 
@@ -151,10 +154,11 @@ hold on; title('Mech dPrime')
 
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
-% xq = linspace(0, 0.1);
-% yq = sigfun(coeffs_mech_dp,xq);
-% [~, b] = min(abs(yq-dprime_threshold));
-%  plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold -1], 'LineStyle','--')
+axis square
+xq = linspace(0, MechDetect_DT.MechAmp(end));
+yq = sigfun(coeffs_mech_dp,xq);
+[~, b] = min(abs(yq-dprime_threshold));
+ plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold -1], 'LineStyle','--')
 
 
 
@@ -163,14 +167,14 @@ subplot(2,2,3); hold on; title('Elect pDetect')
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle',':')
-
+axis square
 
 
 subplot(2,2,4); hold on; title('Elect dPrime')
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
-
+axis square
 % yn =  ElectDetect_DT.dPrime;
 % xn = ElectDetect_DT.StimAmp;
 % ynew = 1.35;
@@ -188,5 +192,5 @@ plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineSt
 %     sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
 
 
-
+%% plotting dprime and pdetect day by day
 
