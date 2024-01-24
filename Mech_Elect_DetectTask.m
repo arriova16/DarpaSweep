@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
+data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
 
 file_list = dir(data_folder);
@@ -90,22 +90,12 @@ data = struct();
          temp_mech = load(fullfile(mech_file_list(b).folder, mech_file_list(b).name));
          mech_table{b} = [temp_mech.MechDetect_Table];
          block_struct(b).MechRT = mech_table{b};
-         temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name));
-         % 
-         % %trouble here- only loading the same days rt
-         % 
+         temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name)); 
           elect_table{c} = [temp_elect.ElectDetect_Table];
           block_struct(c).ElectRt =elect_table{c};
-%       
-
       end
-
     end
    
-% % % day by day tables 
-% % 
-% % 
-% % %cat tables
 data.MechDetectTable = cat(1,mech_table{:});
 data.ElectDetectTable = cat(1,elect_table{:});
 
@@ -116,6 +106,7 @@ for i = 1:length(data)
     %create function that includes coeffs 
     %go over this looks weird
 
+    %
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
         x_mech = MechDetect_DT.MechAmp;
         y_mech_dprime = MechDetect_DT.dPrime;
