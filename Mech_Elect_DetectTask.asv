@@ -167,9 +167,8 @@ axis square
  %this is the problem
  yq = sigfun(coeffs,xq);
  [~, b] = min(abs(yq-dprime_threshold));
-  plot(xq,yq)
- plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold -1], 'LineStyle','--')
- text(0.9,1)
+ plot(xq,yq)
+ plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'LineStyle','--')
  xlabel(sprintf('Amplitude (mm)', GetUnicodeChar('mu')),'FontSize', 18)
  ylabel('d''','FontSize',18)
  ylim([0 5])
@@ -190,13 +189,25 @@ scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
 axis square
 
+ ll = 0.45;
+ mm = 0.9;
 
  tt = linspace(0,x_elect(end));
  tq = sigfun(coeffs_elect,tt);
+
  [~, np] = min(abs(tq-dprime_threshold));
- %tt(np) value = zero coeffs incorrect
-% plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold-1], 'LineStyle', '--')
-plot(tt,tq)
+ plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, 0], 'LineStyle', '--')
+ up = (tt(np));
+ text(30,2,(sprintf('%.2f',up)), 'Color', rgb(66, 66, 66), 'FontSize',18);
+
+  [~, ll_np] = min(abs(tq-ll));
+  plot([0 tt(ll_np) tt(ll_np)], [ll, ll, 0], 'LineStyle', '--')
+  
+  [~, mm_np] = min(abs(tq-mm));
+  plot([0 tt(mm_np) tt(mm_np)], [mm, mm, 0], 'LineStyle', '--')
+ 
+  
+  plot(tt,tq)
  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
  ylabel('d''','FontSize',18)
  ylim([0 5])
