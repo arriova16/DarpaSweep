@@ -112,8 +112,6 @@ for i = 1:length(data)
         % [dbd_mech_dt{n}]= AnalyzeMechTable(block_struct(n).MechRT);
          x_mech = MechDetect_DT.MechAmp;
          y_mech_dprime = MechDetect_DT.dPrime;
-         
-         %coeffs are the issues/ constraints
 
          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
              % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
@@ -125,9 +123,11 @@ for i = 1:length(data)
         % [dbd_elect_dt{n}] = AnalyzeElectTable(block_struct(n).ElectRT);
         x_elect = ElectDetect_DT.StimAmp;
         y_elect = ElectDetect_DT.dPrime;
-        % y_elect_pd = ElectDetect_DT.pDetect;
-        [~,coeffs_elect, rnorm_elect, residuals_elect, jnd_elect, ~] = FitSigmoid(y_elect,x_elect, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
-        % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3
+         
+         %coeffs are the issues/ constraints
+   
+        [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
+     % 'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
  
     end
 end
@@ -138,8 +138,12 @@ end
  %was getting error with above sigmoid because it was expecting 4 but only
  %giving 3
 % sigfun = GetSigmoid(2); 
-    dprime_threshold = 1.35;
-SetFont('Arial', 18)
+% somesig = GetSigmoid(2);
+
+%FIX X AXIS ON PLOTS
+
+dprime_threshold = 1.35;
+ SetFont('Arial', 18)
 %plotting Mech Detection pdetect and dprime
 
 figure;
@@ -150,8 +154,9 @@ scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', ':')
 axis square
 % trouble with coeffs plotting
-
-
+ xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
+ ylabel('pDetect','FontSize',18) 
+ ylim([0 1])
 subplot(2,2,2); 
 hold on; title('Mech dPrime')
 
@@ -162,40 +167,48 @@ axis square
  %this is the problem
  yq = sigfun(coeffs,xq);
  [~, b] = min(abs(yq-dprime_threshold));
-  plot(xq,yq)
- plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold -1], 'LineStyle','--')
+ plot(xq,yq)
+ plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'LineStyle','--')
+ xlabel(sprintf('Amplitude (mm)', GetUnicodeChar('mu')),'FontSize', 18)
+ ylabel('d''','FontSize',18)
+ ylim([0 5])
 
 
+subplot(2,2,3); hold on; title('Elect pDetect')
 
+scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
+plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle',':')
+axis square
+ xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
+ ylabel('pDetect','FontSize',18)
+ylim([0 1])
 
-% subplot(2,2,3); hold on; title('Elect pDetect')
-% 
-% scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
-% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle',':')
-% axis square
-% 
-% 
-% subplot(2,2,4); hold on; title('Elect dPrime')
-% 
-% scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
-% axis square
-% % yn =  ElectDetect_DT.dPrime;
-% % xn = ElectDetect_DT.StimAmp;
-% % ynew = 1.35;
-% % xnew = polyfit(yn, xn, ynew);
-% 
-% 
-% %doesn't work
-%  % tt = linspace(0,50);
-%  % tq = sigfun(coeffs_elect,xq);
-%  % [~, a] = min(abs(yq-dprime_threshold));
-%  % plot([0 tt(a) tt(a)], [dprime_threshold, dprime_threshold-1], 'LineStyle', '--')
-% %
-% %solving for x
-% %      c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
-% %     sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
+ subplot(2,2,4); hold on; title('Elect dPrime')
 
+scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
+axis square
+
+ ll = 0.45;
+ mm = 0.9;
+
+ tt = linspace(0,x_elect(end));
+ tq = sigfun(coeffs_elect,tt);
+
+ [~, np] = min(abs(tq-dprime_threshold));
+ plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, 0], 'LineStyle', '--')
+
+  [~, ll_np] = min(abs(tq-ll));
+  plot([0 tt(ll_np) tt(ll_np)], [ll, ll, 0], 'LineStyle', '--')
+  
+  [~, mm_np] = min(abs(tq-mm));
+  plot([0 tt(mm_np) tt(mm_np)], [mm, mm, 0], 'LineStyle', '--')
+ 
+  
+  plot(tt,tq)
+ xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
+ ylabel('d''','FontSize',18)
+ ylim([0 5])
 
 %% plotting dprime and pdetect day by day
 
