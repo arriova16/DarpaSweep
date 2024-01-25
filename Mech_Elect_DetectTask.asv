@@ -109,39 +109,42 @@ for i = 1:length(data)
     for n =1:length(block_struct)
 
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
-        [dbd_mech_dt{n}]= AnalyzeMechTable(block_struct(n).MechRT);
-        x_mech = MechDetect_DT.MechAmp;
-        y_mech_dprime = MechDetect_DT.dPrime;
-        y_mech_pdetect =  MechDetect_DT.pDetect;
-        [~,coeffs_mech_dp, rnorm_mech_dp, residuals_mech_dp, jnd_mech_dp, ~] = FitSigmoid(y_mech_dprime,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+        % [dbd_mech_dt{n}]= AnalyzeMechTable(block_struct(n).MechRT);
+         x_mech = MechDetect_DT.MechAmp;
+         y_mech_dprime = MechDetect_DT.dPrime;
+         
+         %coeffs are the issues/ constraints
 
-        %error doesn't work for pdetect
-%         [~,coeffs_mech_pd, rnorm_mech_pd, residuals_mech_pd, jnd_mech_pd, ~] = FitSigmoid(y_mech_pdetect,x_mech, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
+         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
+             % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
+
 
         %analysis for electrical table
   
-        [ElectDetect_DT] = AnalyzeDetectionTable(data.ElectDetectTable);
-        [dbd_elect_dt{n}] = AnalyzeDetectionTable(block_struct(n).ElectRT);
+        [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
+        % [dbd_elect_dt{n}] = AnalyzeElectTable(block_struct(n).ElectRT);
         x_elect = ElectDetect_DT.StimAmp;
         y_elect = ElectDetect_DT.dPrime;
-        y_elect_pd = ElectDetect_DT.pDetect;
+        % y_elect_pd = ElectDetect_DT.pDetect;
         [~,coeffs_elect, rnorm_elect, residuals_elect, jnd_elect, ~] = FitSigmoid(y_elect,x_elect, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
-        
-        %same error
-%         [~,coeffs_elect_pd, rnorm_elect_pd, residuals_elect_pd, jnd_elect_pd, ~] = FitSigmoid(y_elect_pd,x_elect, 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3);
-
+        % 
+ 
     end
 end
 
 %% Plotting
 %      c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
-%     sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
+       sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
+ %was getting error with above sigmoid because it was expecting 4 but only
+ %giving 3
+% sigfun = GetSigmoid(2); 
     dprime_threshold = 1.35;
 SetFont('Arial', 18)
 %plotting Mech Detection pdetect and dprime
 
 figure;
 subplot(2,2,1); hold on ; title('Mech pDetect')
+%coeffs incorrect/ maybe constraints wrong
 
 scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', ':')
@@ -155,41 +158,43 @@ hold on; title('Mech dPrime')
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
 axis square
-xq = linspace(0, MechDetect_DT.MechAmp(end));
-yq = sigfun(coeffs_mech_dp,xq);
-[~, b] = min(abs(yq-dprime_threshold));
+ xq = linspace(0, x_mech(end));
+ %this is the problem
+ yq = sigfun(coeffs,xq);
+ [~, b] = min(abs(yq-dprime_threshold));
+  plot(xq,yq)
  plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold -1], 'LineStyle','--')
 
 
 
 
-subplot(2,2,3); hold on; title('Elect pDetect')
-
-scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle',':')
-axis square
-
-
-subplot(2,2,4); hold on; title('Elect dPrime')
-
-scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
-axis square
-% yn =  ElectDetect_DT.dPrime;
-% xn = ElectDetect_DT.StimAmp;
-% ynew = 1.35;
-% xnew = polyfit(yn, xn, ynew);
-
-
-%doesn't work
-%  tt = linspace(0,50);
-%  tq = sigfun(coeffs_elect,xq);
-%  [~, a] = min(abs(yq-dprime_threshold));
-%  plot([0 tt(a) tt(a)], [dprime_threshold, dprime_threshold-1], 'LineStyle', '--')
-%
-%solving for x
-%      c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
-%     sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
+% subplot(2,2,3); hold on; title('Elect pDetect')
+% 
+% scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
+% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle',':')
+% axis square
+% 
+% 
+% subplot(2,2,4); hold on; title('Elect dPrime')
+% 
+% scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
+% axis square
+% % yn =  ElectDetect_DT.dPrime;
+% % xn = ElectDetect_DT.StimAmp;
+% % ynew = 1.35;
+% % xnew = polyfit(yn, xn, ynew);
+% 
+% 
+% %doesn't work
+%  % tt = linspace(0,50);
+%  % tq = sigfun(coeffs_elect,xq);
+%  % [~, a] = min(abs(yq-dprime_threshold));
+%  % plot([0 tt(a) tt(a)], [dprime_threshold, dprime_threshold-1], 'LineStyle', '--')
+% %
+% %solving for x
+% %      c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
+% %     sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
 
 
 %% plotting dprime and pdetect day by day
