@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
+data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
 
 file_list = dir(data_folder);
@@ -106,10 +106,11 @@ for i = 1:length(data)
     %create function that includes coeffs 
     %go over this looks weird
 
-    for n =1:length(block_struct)
+    for d = 1:length(block_struct)
 
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
-        % [dbd_mech_dt{n}]= AnalyzeMechTable(block_struct(n).MechRT);
+        [dbd_mech_dt{d}]= AnalyzeMechTable(block_struct(d).MechRT(d,:));
+        block_struct(d).MechRT_DT = dbd_mech_dt{d};
          x_mech = MechDetect_DT.MechAmp;
          y_mech_dprime = MechDetect_DT.dPrime;
 
@@ -120,7 +121,7 @@ for i = 1:length(data)
         %analysis for electrical table
   
         [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
-        % [dbd_elect_dt{n}] = AnalyzeElectTable(block_struct(n).ElectRT);
+        [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT);
         x_elect = ElectDetect_DT.StimAmp;
         y_elect = ElectDetect_DT.dPrime;
          
@@ -154,7 +155,7 @@ scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', ':')
 axis square
 % trouble with coeffs plotting
- xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
+ xlabel('Amplitude (mm)','FontSize', 18)
  ylabel('pDetect','FontSize',18) 
  ylim([0 1])
 subplot(2,2,2); 
@@ -164,12 +165,12 @@ scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
 axis square
  xq = linspace(0, x_mech(end));
- %this is the problem
  yq = sigfun(coeffs,xq);
  [~, b] = min(abs(yq-dprime_threshold));
- plot(xq,yq)
- plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'LineStyle','--')
- xlabel(sprintf('Amplitude (mm)', GetUnicodeChar('mu')),'FontSize', 18)
+ plot(xq,yq,'Color', [.1 .1 .1])
+ plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(69, 90, 100),'LineStyle','--')
+  text(.07,2,(sprintf('%.2f',xq(b))), 'Color', rgb(26, 35, 126), 'FontSize',18);
+ xlabel('Amplitude (mm)','FontSize', 18)
  ylabel('d''','FontSize',18)
  ylim([0 5])
 
@@ -196,21 +197,24 @@ axis square
  tq = sigfun(coeffs_elect,tt);
 
  [~, np] = min(abs(tq-dprime_threshold));
- plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, 0], 'LineStyle', '--')
+ plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(26, 35, 126),'LineStyle', '--')
  up = (tt(np));
- text(30,2,(sprintf('%.2f',up)), 'Color', rgb(66, 66, 66), 'FontSize',18);
+ text(30,2,(sprintf('%.0f',up)), 'Color', rgb(26, 35, 126), 'FontSize',18);
 
   [~, ll_np] = min(abs(tq-ll));
-  plot([0 tt(ll_np) tt(ll_np)], [ll, ll, 0], 'LineStyle', '--')
+  lp = (tt(ll_np));
+  plot([0 tt(ll_np) tt(ll_np)], [ll, ll, 0],'Color', rgb(103, 58, 183), 'LineStyle', '--')
+  text(30,1,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',18);
   
   [~, mm_np] = min(abs(tq-mm));
-  plot([0 tt(mm_np) tt(mm_np)], [mm, mm, 0], 'LineStyle', '--')
- 
+  plot([0 tt(mm_np) tt(mm_np)], [mm, mm, 0], 'Color', rgb(156, 39, 176),'LineStyle', '--')
+ text(30,1.5,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176), 'FontSize',18);
   
-  plot(tt,tq)
+  
+  plot(tt,tq,'Color',rgb(69, 90, 100))
  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
  ylabel('d''','FontSize',18)
  ylim([0 5])
 
-%% plotting dprime and pdetect day by day
+
 

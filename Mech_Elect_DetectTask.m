@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
+data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
 
 file_list = dir(data_folder);
@@ -106,10 +106,11 @@ for i = 1:length(data)
     %create function that includes coeffs 
     %go over this looks weird
 
-    for n =1:length(block_struct)
+    for d = 1:length(block_struct)
 
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
-        % [dbd_mech_dt{n}]= AnalyzeMechTable(block_struct(n).MechRT);
+%         [dbd_mech_dt{d}]= AnalyzeMechTable(block_struct(d).MechRT(:,:));
+        block_struct(d).MechRT_DT = dbd_mech_dt{d};
          x_mech = MechDetect_DT.MechAmp;
          y_mech_dprime = MechDetect_DT.dPrime;
 
@@ -120,7 +121,7 @@ for i = 1:length(data)
         %analysis for electrical table
   
         [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
-        % [dbd_elect_dt{n}] = AnalyzeElectTable(block_struct(n).ElectRT);
+        [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT);
         x_elect = ElectDetect_DT.StimAmp;
         y_elect = ElectDetect_DT.dPrime;
          
@@ -164,7 +165,6 @@ scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
 axis square
  xq = linspace(0, x_mech(end));
- %this is the problem
  yq = sigfun(coeffs,xq);
  [~, b] = min(abs(yq-dprime_threshold));
  plot(xq,yq,'Color', [.1 .1 .1])
@@ -216,5 +216,5 @@ axis square
  ylabel('d''','FontSize',18)
  ylim([0 5])
 
-%% plotting dprime and pdetect day by day
+
 
