@@ -2,8 +2,9 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
-% data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask\Training';
+%  data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29';
+
+data_folder ='C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 
 file_list = dir(data_folder);
 
@@ -110,7 +111,7 @@ for i = 1:length(data)
 
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
 %         [dbd_mech_dt{d}]= AnalyzeMechTable(block_struct(d).MechRT(:,:));
-        block_struct(d).MechRT_DT = dbd_mech_dt{d};
+%         block_struct(d).MechRT_DT = dbd_mech_dt{d};
          x_mech = MechDetect_DT.MechAmp;
          y_mech_dprime = MechDetect_DT.dPrime;
 
@@ -121,7 +122,7 @@ for i = 1:length(data)
         %analysis for electrical table
   
         [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
-        [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT);
+%         [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT);
         x_elect = ElectDetect_DT.StimAmp;
         y_elect = ElectDetect_DT.dPrime;
          
