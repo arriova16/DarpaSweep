@@ -105,7 +105,7 @@ data.ElectDetectTable = cat(1,elect_table{:});
 for i = 1:length(data)
     %then take dprime and pdetect and use charles function for coeffs
     %create function that includes coeffs 
-    %this doesn't work for wp
+    %go over this looks weird
 
     for d = 1:length(block_struct)
 
@@ -115,8 +115,11 @@ for i = 1:length(data)
          x_mech = MechDetect_DT.MechAmp;
          y_mech_dprime = MechDetect_DT.dPrime;
 
-         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
-             % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
+%          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'CoeffInit', [0,40,NaN,NaN]);
+         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [-20, 200; -5, 5]);
+             % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs',
+             % 3, 'EnableBackup', false);/, 'NumCoeffs', 4,'Constraints', [-4, 500; -5, 5]
+
 
 
         %analysis for electrical table
@@ -140,7 +143,7 @@ end
  %was getting error with above sigmoid because it was expecting 4 but only
  %giving 3
 % sigfun = GetSigmoid(2); 
-% somesig = GetSigmoid(2);
+ somesig = GetSigmoid(2);
 
 %FIX X AXIS ON PLOTS
 
@@ -166,7 +169,9 @@ scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
 axis square
  xq = linspace(0, x_mech(end));
- yq = sigfun(coeffs,xq);
+  yq = somesig(coeffs,xq);
+
+%  yq = sigfun(coeffs,xq);
  [~, b] = min(abs(yq-dprime_threshold));
  plot(xq,yq,'Color', [.1 .1 .1])
  plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(69, 90, 100),'LineStyle','--')
