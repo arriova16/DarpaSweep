@@ -41,7 +41,7 @@ SetFont('Arial', 18)
 figure; hold on; axis square
 
 %better to do array? or easier to plot if array
-%curly braces better
+%curly braces 
 % detection_table{1,:}
 %  tt = table2array(detection_table);
 %  plot(tt(1,:))

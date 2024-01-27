@@ -1,5 +1,5 @@
 %Working on Formatting the Sweep Detection Task
-tld = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\1_22-1_29\SweepDetect';
+tld = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\SweepDetect';
 process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_22and24';
 file_list = dir(tld);
 
