@@ -119,28 +119,28 @@ for i = 1:length(data)
 %        [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
 
          %for wp
-         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,'NumCoeffs', 4,'CoeffInit', [-15,15,NaN,NaN]);
+%          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,'Constraints', [0, 200; -6, 6],'NumCoeffs', 4);
 
              % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
 
 
         %analysis for electrical table
 
-%        
-%         [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
-% %         [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT);
-%         x_elect = ElectDetect_DT.StimAmp;
-%         y_elect = ElectDetect_DT.dPrime;
-%          
-%          %coeffs are the issues/ constraints
-%         %works for pinot
-% %       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
-% 
-%         %wp
-%        [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
-% 
-%      % 'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
-%  
+       
+        [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
+%         [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT);
+        x_elect = ElectDetect_DT.StimAmp;
+        y_elect = ElectDetect_DT.dPrime;
+         
+         %coeffs are the issues/ constraints
+        %works for pinot
+%       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
+
+        %wp
+       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
+
+     % 'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
+ 
     end
 end
 
@@ -149,7 +149,7 @@ end
        sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
  %was getting error with above sigmoid because it was expecting 4 but only
  %giving 3
-% sigfun = GetSigmoid(2); 
+% sigfun = GetSigmoid(3); 
 % somesig = GetSigmoid(2);
 
 %FIX X AXIS ON PLOTS
