@@ -143,75 +143,75 @@ for i = 1:length(data)
  
     end
 end
-% %% day to day anaylsis
-% %need to redo 
-% % need to use function to do
-% for i = 1:length(block_struct)
-%     [u_test_amps, ~, ia] = unique(block_struct(i).MechRT.MechAmp);
-%     p_detect = zeros([length(u_test_amps),1]);
-%     for j = 1:length(u_test_amps)
-%         correct_idx = strcmp(block_struct(i).MechRT.Response(ia == j), 'correct');
-%         p_detect(j) = sum(correct_idx) / length(correct_idx);
-%         
-%     end
-%     % Correct for catch trials
-%     
-%     if any(u_test_amps == 0)
-%         catch_idx = find(u_test_amps == 0);
-%         p_detect(catch_idx) = 1 - p_detect(catch_idx);
-%     end
-%     
-%     % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
-%     dprime = NaN([length(u_test_amps),1]);
-%     pmiss = p_detect(1);
-%     if pmiss == 0 % Correct for 0 false alarm
-%         pmiss = 0.001;
-%     end
-%     for j = 1:length(dprime)-1
-%         phit = p_detect(j+1);
-%         if phit == 1 % Correct for infinite hit rate
-%             phit = .999;
-%         end
-%         dprime(j+1) = norminv(phit) - norminv(pmiss);        
-%     end
-%     
-%     % Make a table & add to struct
-%     block_struct(i).MechRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
-% end
-% %% Elect day by day
-% %need to use function to figure out
-% for i = 1:length(block_struct)
-%     [u_test_amps, ~, ia] = unique(block_struct(i).ElectRT.TestStimAmp);
-%     p_detect = zeros([length(u_test_amps),1]);
-%     for j = 1:length(u_test_amps)
-%         correct_idx = strcmp(block_struct(i).ElectRT.Response(ia == j), 'correct');
-%         p_detect(j) = sum(correct_idx) / length(correct_idx);
-%         
-%     end
-%     % Correct for catch trials
-%     
-%     if any(u_test_amps == 0)
-%         catch_idx = find(u_test_amps == 0);
-%         p_detect(catch_idx) = 1 - p_detect(catch_idx);
-%     end
-%     
-%     % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
-%     dprime = NaN([length(u_test_amps),1]);
-%     pmiss = p_detect(1);
-%     if pmiss == 0 % Correct for 0 false alarm
-%         pmiss = 0.001;
-%     end
-%     for j = 1:length(dprime)-1
-%         phit = p_detect(j+1);
-%         if phit == 1 % Correct for infinite hit rate
-%             phit = .999;
-%         end
-%         dprime(j+1) = norminv(phit) - norminv(pmiss);        
-%     end
-%     
-%     % Make a table & add to struct
-%     block_struct(i).ElectRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
-% end
+%% day to day anaylsis
+%need to redo 
+% need to use function to do
+for i = 1:length(block_struct)
+    [u_test_amps, ~, ia] = unique(block_struct(i).MechRT.MechAmp);
+    p_detect = zeros([length(u_test_amps),1]);
+    for j = 1:length(u_test_amps)
+        correct_idx = strcmp(block_struct(i).MechRT.Response(ia == j), 'correct');
+        p_detect(j) = sum(correct_idx) / length(correct_idx);
+        
+    end
+    % Correct for catch trials
+    
+    if any(u_test_amps == 0)
+        catch_idx = find(u_test_amps == 0);
+        p_detect(catch_idx) = 1 - p_detect(catch_idx);
+    end
+    
+    % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
+    dprime = NaN([length(u_test_amps),1]);
+    pmiss = p_detect(1);
+    if pmiss == 0 % Correct for 0 false alarm
+        pmiss = 0.001;
+    end
+    for j = 1:length(dprime)-1
+        phit = p_detect(j+1);
+        if phit == 1 % Correct for infinite hit rate
+            phit = .999;
+        end
+        dprime(j+1) = norminv(phit) - norminv(pmiss);        
+    end
+    
+    % Make a table & add to struct
+    block_struct(i).MechRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
+end
+%% Elect day by day
+%need to use function to figure out
+for i = 1:length(block_struct)
+    [u_test_amps, ~, ia] = unique(block_struct(i).ElectRT.TestStimAmp);
+    p_detect = zeros([length(u_test_amps),1]);
+    for j = 1:length(u_test_amps)
+        correct_idx = strcmp(block_struct(i).ElectRT.Response(ia == j), 'correct');
+        p_detect(j) = sum(correct_idx) / length(correct_idx);
+        
+    end
+    % Correct for catch trials
+    
+    if any(u_test_amps == 0)
+        catch_idx = find(u_test_amps == 0);
+        p_detect(catch_idx) = 1 - p_detect(catch_idx);
+    end
+    
+    % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
+    dprime = NaN([length(u_test_amps),1]);
+    pmiss = p_detect(1);
+    if pmiss == 0 % Correct for 0 false alarm
+        pmiss = 0.001;
+    end
+    for j = 1:length(dprime)-1
+        phit = p_detect(j+1);
+        if phit == 1 % Correct for infinite hit rate
+            phit = .999;
+        end
+        dprime(j+1) = norminv(phit) - norminv(pmiss);        
+    end
+    
+    % Make a table & add to struct
+    block_struct(i).ElectRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
+end
 
 %% Plotting
 %      c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
@@ -226,15 +226,14 @@ end
 dprime_threshold = 1.35;
  SetFont('Arial', 18)
 %plotting Mech Detection pdetect and dprime
-c = [rgb(66, 66, 66); rgb(198, 40, 40)];
+
 figure;
 subplot(2,2,1); hold on ; title('Mech pDetect')
 %coeffs incorrect/ maybe constraints wrong
 for i = 1:length(block_struct)
 scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', ':')
-% g = 'Color'
-% plot(block_struct(i).MechRT_DetectionRates(:,1), block_struct(i).MechRT_DetectionRates(:,2), 'Color', c,  'LineStyle', ':')
+
 axis square
 % trouble with coeffs plotting
  xlabel('Amplitude (mm)','FontSize', 18)
@@ -300,4 +299,4 @@ axis square
  ylabel('d''','FontSize',18)
  ylim([0 5])
 
-end
+
