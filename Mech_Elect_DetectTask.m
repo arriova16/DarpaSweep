@@ -2,9 +2,9 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-%  data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask';
+%  data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask';
 
-data_folder ='C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
+data_folder ='C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 
 file_list = dir(data_folder);
 
@@ -115,22 +115,32 @@ for i = 1:length(data)
          x_mech = MechDetect_DT.MechAmp;
          y_mech_dprime = MechDetect_DT.dPrime;
 
-         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
+         %works for pinot
+%        [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
+
+         %for wp
+         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,'Constraints', [0, 300; -10, 10],'NumCoeffs', 4);
+
              % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
 
 
         %analysis for electrical table
-  
-        [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
-%         [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT);
-        x_elect = ElectDetect_DT.StimAmp;
-        y_elect = ElectDetect_DT.dPrime;
-         
-         %coeffs are the issues/ constraints
-   
-        [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
-     % 'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
- 
+
+%        
+%         [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
+% %         [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT);
+%         x_elect = ElectDetect_DT.StimAmp;
+%         y_elect = ElectDetect_DT.dPrime;
+%          
+%          %coeffs are the issues/ constraints
+%         %works for pinot
+% %       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
+% 
+%         %wp
+%        [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
+% 
+%      % 'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
+%  
     end
 end
 
@@ -139,7 +149,7 @@ end
        sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
  %was getting error with above sigmoid because it was expecting 4 but only
  %giving 3
-% sigfun = GetSigmoid(2); 
+% sigfun = GetSigmoid(3); 
 % somesig = GetSigmoid(2);
 
 %FIX X AXIS ON PLOTS
@@ -176,46 +186,46 @@ axis square
  ylim([0 5])
 
 
-subplot(2,2,3); hold on; title('Elect pDetect')
-
-scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle',':')
-axis square
- xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
- ylabel('pDetect','FontSize',18)
-ylim([0 1])
-
- subplot(2,2,4); hold on; title('Elect dPrime')
-
-scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
-axis square
-
- ll = 0.45;
- mm = 0.9;
-
- tt = linspace(0,x_elect(end));
- tq = sigfun(coeffs_elect,tt);
-
- [~, np] = min(abs(tq-dprime_threshold));
- plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(26, 35, 126),'LineStyle', '--')
- up = (tt(np));
- text(30,2,(sprintf('%.0f',up)), 'Color', rgb(26, 35, 126), 'FontSize',18);
-
-  [~, ll_np] = min(abs(tq-ll));
-  lp = (tt(ll_np));
-  plot([0 tt(ll_np) tt(ll_np)], [ll, ll, 0],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-  text(30,1,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',18);
-  
-  [~, mm_np] = min(abs(tq-mm));
-  plot([0 tt(mm_np) tt(mm_np)], [mm, mm, 0], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- text(30,1.5,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176), 'FontSize',18);
-  
-  
-  plot(tt,tq,'Color',rgb(69, 90, 100))
- xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
- ylabel('d''','FontSize',18)
- ylim([0 5])
-
+% subplot(2,2,3); hold on; title('Elect pDetect')
+% 
+% scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
+% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle',':')
+% axis square
+%  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
+%  ylabel('pDetect','FontSize',18)
+% ylim([0 1])
+% 
+%  subplot(2,2,4); hold on; title('Elect dPrime')
+% 
+% scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
+% axis square
+% 
+%  ll = 0.45;
+%  mm = 0.9;
+% 
+%  tt = linspace(0,x_elect(end));
+%  tq = sigfun(coeffs_elect,tt);
+% 
+%  [~, np] = min(abs(tq-dprime_threshold));
+%  plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(26, 35, 126),'LineStyle', '--')
+%  up = (tt(np));
+%  text(30,2,(sprintf('%.0f',up)), 'Color', rgb(26, 35, 126), 'FontSize',18);
+% 
+%   [~, ll_np] = min(abs(tq-ll));
+%   lp = (tt(ll_np));
+%   plot([0 tt(ll_np) tt(ll_np)], [ll, ll, 0],'Color', rgb(103, 58, 183), 'LineStyle', '--')
+%   text(30,1,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',18);
+%   
+%   [~, mm_np] = min(abs(tq-mm));
+%   plot([0 tt(mm_np) tt(mm_np)], [mm, mm, 0], 'Color', rgb(156, 39, 176),'LineStyle', '--')
+%  text(30,1.5,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176), 'FontSize',18);
+%   
+%   
+%   plot(tt,tq,'Color',rgb(69, 90, 100))
+%  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
+%  ylabel('d''','FontSize',18)
+%  ylim([0 5])
+% 
 
 
