@@ -3,9 +3,10 @@ function [detection_table] = AnalyzeElectTable(input_table)
     % sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
 
     x = input_table.TestStimAmp;
-%     x = input_table.CondStimAmp;
     y = strcmpi(input_table.Response, 'correct');
+
     [ux, ~, ic] = unique(x);
+    
     detection_vector = zeros(size(ux));
     for d = 1:length(detection_vector)
         if ux(d) == 0

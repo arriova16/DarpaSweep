@@ -137,7 +137,7 @@ for i = 1:length(data)
        
         [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
         [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT(:,:));
-      
+        block_struct(d).ElectDT_daily = dbd_elect_dt{d};
         x_elect = ElectDetect_DT.StimAmp;
         y_elect = ElectDetect_DT.dPrime;
          
@@ -154,32 +154,28 @@ for i = 1:length(data)
 end
 
 %% Plotting
-%      c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
-      sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
+%c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
+sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
  %was getting error with above sigmoid because it was expecting 4 but only
  %giving 3
 % sigfun = GetSigmoid(2); 
-% somesig = GetSigmoid(2);
-
-%FIX X AXIS ON PLOTS
-
+for i = 1:length(block_struct)
 dprime_threshold = 1.35;
  SetFont('Arial', 18)
 %plotting Mech Detection pdetect and dprime
-c = [rgb(66, 66, 66); rgb(198, 40, 40)];
-figure;
-subplot(2,2,1); hold on ; title('Mech pDetect')
-%coeffs incorrect/ maybe constraints wrong
-for i = 1:length(block_struct)
+
+title('Mech pDetect')
+subplot(2,2,1); hold on 
 scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
-plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', ':')
-% g = 'Color'
-% plot(block_struct(i).MechRT_DetectionRates(:,1), block_struct(i).MechRT_DetectionRates(:,2), 'Color', c,  'LineStyle', ':')
+plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', '-')
+
+%plotting day by day
+c = ColorGradient(rgb(207, 216, 220), rgb(84, 110, 122), length(block_struct));
+plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 3)
 axis square
-% trouble with coeffs plotting
- xlabel('Amplitude (mm)','FontSize', 18)
- ylabel('pDetect','FontSize',18) 
- ylim([0 1])
+xlabel('Amplitude (mm)','FontSize', 18)
+ylabel('pDetect','FontSize',18) 
+ylim([0 1])
 
 
 subplot(2,2,2); 
@@ -187,6 +183,8 @@ hold on; title('Mech dPrime')
 
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
+plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 3)
+
 axis square
  xq = linspace(0, x_mech(end));
  yq = sigfun(coeffs,xq);
@@ -203,6 +201,8 @@ subplot(2,2,3); hold on; title('Elect pDetect')
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle',':')
+plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 3)
+
 axis square
  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
  ylabel('pDetect','FontSize',18)
@@ -212,6 +212,8 @@ ylim([0 1])
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle',':')
+plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).ElectDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 3)
+
 axis square
 
  ll = 0.45;
@@ -243,73 +245,3 @@ axis square
 end
 
 
-%% 
-% day to day anaylsis
-% %need to redo 
-% % need to use function to do
-% for i = 1:length(block_struct)
-%     [u_test_amps, ~, ia] = unique(block_struct(i).MechRT.MechAmp);
-%     p_detect = zeros([length(u_test_amps),1]);
-%     for j = 1:length(u_test_amps)
-%         correct_idx = strcmp(block_struct(i).MechRT.Response(ia == j), 'correct');
-%         p_detect(j) = sum(correct_idx) / length(correct_idx);
-%         
-%     end
-%     % Correct for catch trials
-%     
-%     if any(u_test_amps == 0)
-%         catch_idx = find(u_test_amps == 0);
-%         p_detect(catch_idx) = 1 - p_detect(catch_idx);
-%     end
-%     
-%     % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
-%     dprime = NaN([length(u_test_amps),1]);
-%     pmiss = p_detect(1);
-%     if pmiss == 0 % Correct for 0 false alarm
-%         pmiss = 0.001;
-%     end
-%     for j = 1:length(dprime)-1
-%         phit = p_detect(j+1);
-%         if phit == 1 % Correct for infinite hit rate
-%             phit = .999;
-%         end
-%         dprime(j+1) = norminv(phit) - norminv(pmiss);        
-%     end
-%     
-%     % Make a table & add to struct
-%     block_struct(i).MechRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
-% end
-% %% Elect day by day
-% %need to use function to figure out
-% for i = 1:length(block_struct)
-%     [u_test_amps, ~, ia] = unique(block_struct(i).ElectRT.TestStimAmp);
-%     p_detect = zeros([length(u_test_amps),1]);
-%     for j = 1:length(u_test_amps)
-%         correct_idx = strcmp(block_struct(i).ElectRT.Response(ia == j), 'correct');
-%         p_detect(j) = sum(correct_idx) / length(correct_idx);
-%         
-%     end
-%     % Correct for catch trials
-%     
-%     if any(u_test_amps == 0)
-%         catch_idx = find(u_test_amps == 0);
-%         p_detect(catch_idx) = 1 - p_detect(catch_idx);
-%     end
-%     
-%     % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
-%     dprime = NaN([length(u_test_amps),1]);
-%     pmiss = p_detect(1);
-%     if pmiss == 0 % Correct for 0 false alarm
-%         pmiss = 0.001;
-%     end
-%     for j = 1:length(dprime)-1
-%         phit = p_detect(j+1);
-%         if phit == 1 % Correct for infinite hit rate
-%             phit = .999;
-%         end
-%         dprime(j+1) = norminv(phit) - norminv(pmiss);        
-%     end
-%     
-%     % Make a table & add to struct
-%     block_struct(i).ElectRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
-% end
