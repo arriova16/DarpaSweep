@@ -1,4 +1,4 @@
-function [detection_table] = AnalyzeDetectionTable(input_table)
+function [detection_table] = AnalyzeElectTable(input_table)
     % c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
     % sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
 
