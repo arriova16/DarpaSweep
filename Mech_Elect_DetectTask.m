@@ -170,11 +170,11 @@ plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle
 
 %plotting day by day
 c = ColorGradient(rgb(207, 216, 220), rgb(84, 110, 122), length(block_struct));
-plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 3)
+plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 axis square
 xlabel('Amplitude (mm)','FontSize', 18)
 ylabel('pDetect','FontSize',18) 
-ylim([0 1])
+ylim([0 1.02])
 
 
 subplot(2,2,2); 
@@ -182,7 +182,7 @@ hold on; title('Mech dPrime')
 
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
-plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 3)
+plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 
 axis square
  xq = linspace(0, x_mech(end));
@@ -193,25 +193,25 @@ axis square
   text(.07,2,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126), 'FontSize',18);
  xlabel('Amplitude (mm)','FontSize', 18)
  ylabel('d''','FontSize',18)
- ylim([0 5])
+ ylim([0 6])
 
 
 subplot(2,2,3); hold on; title('Elect pDetect')
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle', '-')
-plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 3)
+plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 
 axis square
  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
  ylabel('pDetect','FontSize',18)
-ylim([0 1])
+ylim([0 1.02])
 
  subplot(2,2,4); hold on; title('Elect dPrime')
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
-plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 3)
+plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 
 axis square
 
@@ -239,7 +239,7 @@ axis square
   plot(tt,tq,'Color',rgb(69, 90, 100))
  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
  ylabel('d''','FontSize',18)
- ylim([0 5])
+ ylim([0 6])
 
 end
 
