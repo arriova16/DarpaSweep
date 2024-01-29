@@ -2,9 +2,9 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
- data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask';
+ % data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask';
 
-% data_folder ='C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
+data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 
 file_list = dir(data_folder);
 
@@ -110,18 +110,26 @@ for i = 1:length(data)
     for d = 1:length(block_struct)
 
         [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
-%         [dbd_mech_dt{d}]= AnalyzeMechTable(block_struct(d).MechRT(:,:));
+         [dbd_mech_dt{d}]= AnalyzeMechTable(block_struct(d).MechRT(:,:));
 %         block_struct(d).MechRT_DT = dbd_mech_dt{d};
          x_mech = MechDetect_DT.MechAmp;
          y_mech_dprime = MechDetect_DT.dPrime;
 
          %works for pinot
-       [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
+
+          % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
+          
+       % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
+       %     'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
+       %x-offset completely off/ look at plot first/ dont just plug in
+       %random numbers
+
+        % plot(x_mech, y_mech_dprime)
 
          %for wp
-%          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,'Constraints', [0, 300; -6, 6]);
-
-             % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
+         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
+         'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
+         % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
 
 
         %analysis for electrical table
@@ -134,84 +142,15 @@ for i = 1:length(data)
          
          %coeffs are the issues/ constraints
         %works for pinot
-      [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
+      % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
 
         %wp
-%        [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [0,200,-10, 10]);
-
+       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
+        % plot(x_elect,y_elect)
 %      'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
  
     end
 end
-% %% day to day anaylsis
-% %need to redo 
-% % need to use function to do
-% for i = 1:length(block_struct)
-%     [u_test_amps, ~, ia] = unique(block_struct(i).MechRT.MechAmp);
-%     p_detect = zeros([length(u_test_amps),1]);
-%     for j = 1:length(u_test_amps)
-%         correct_idx = strcmp(block_struct(i).MechRT.Response(ia == j), 'correct');
-%         p_detect(j) = sum(correct_idx) / length(correct_idx);
-%         
-%     end
-%     % Correct for catch trials
-%     
-%     if any(u_test_amps == 0)
-%         catch_idx = find(u_test_amps == 0);
-%         p_detect(catch_idx) = 1 - p_detect(catch_idx);
-%     end
-%     
-%     % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
-%     dprime = NaN([length(u_test_amps),1]);
-%     pmiss = p_detect(1);
-%     if pmiss == 0 % Correct for 0 false alarm
-%         pmiss = 0.001;
-%     end
-%     for j = 1:length(dprime)-1
-%         phit = p_detect(j+1);
-%         if phit == 1 % Correct for infinite hit rate
-%             phit = .999;
-%         end
-%         dprime(j+1) = norminv(phit) - norminv(pmiss);        
-%     end
-%     
-%     % Make a table & add to struct
-%     block_struct(i).MechRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
-% end
-% %% Elect day by day
-% %need to use function to figure out
-% for i = 1:length(block_struct)
-%     [u_test_amps, ~, ia] = unique(block_struct(i).ElectRT.TestStimAmp);
-%     p_detect = zeros([length(u_test_amps),1]);
-%     for j = 1:length(u_test_amps)
-%         correct_idx = strcmp(block_struct(i).ElectRT.Response(ia == j), 'correct');
-%         p_detect(j) = sum(correct_idx) / length(correct_idx);
-%         
-%     end
-%     % Correct for catch trials
-%     
-%     if any(u_test_amps == 0)
-%         catch_idx = find(u_test_amps == 0);
-%         p_detect(catch_idx) = 1 - p_detect(catch_idx);
-%     end
-%     
-%     % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
-%     dprime = NaN([length(u_test_amps),1]);
-%     pmiss = p_detect(1);
-%     if pmiss == 0 % Correct for 0 false alarm
-%         pmiss = 0.001;
-%     end
-%     for j = 1:length(dprime)-1
-%         phit = p_detect(j+1);
-%         if phit == 1 % Correct for infinite hit rate
-%             phit = .999;
-%         end
-%         dprime(j+1) = norminv(phit) - norminv(pmiss);        
-%     end
-%     
-%     % Make a table & add to struct
-%     block_struct(i).ElectRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
-% end
 
 %% Plotting
 %      c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
@@ -301,3 +240,75 @@ axis square
  ylim([0 5])
 
 end
+
+
+%% 
+% day to day anaylsis
+% %need to redo 
+% % need to use function to do
+% for i = 1:length(block_struct)
+%     [u_test_amps, ~, ia] = unique(block_struct(i).MechRT.MechAmp);
+%     p_detect = zeros([length(u_test_amps),1]);
+%     for j = 1:length(u_test_amps)
+%         correct_idx = strcmp(block_struct(i).MechRT.Response(ia == j), 'correct');
+%         p_detect(j) = sum(correct_idx) / length(correct_idx);
+%         
+%     end
+%     % Correct for catch trials
+%     
+%     if any(u_test_amps == 0)
+%         catch_idx = find(u_test_amps == 0);
+%         p_detect(catch_idx) = 1 - p_detect(catch_idx);
+%     end
+%     
+%     % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
+%     dprime = NaN([length(u_test_amps),1]);
+%     pmiss = p_detect(1);
+%     if pmiss == 0 % Correct for 0 false alarm
+%         pmiss = 0.001;
+%     end
+%     for j = 1:length(dprime)-1
+%         phit = p_detect(j+1);
+%         if phit == 1 % Correct for infinite hit rate
+%             phit = .999;
+%         end
+%         dprime(j+1) = norminv(phit) - norminv(pmiss);        
+%     end
+%     
+%     % Make a table & add to struct
+%     block_struct(i).MechRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
+% end
+% %% Elect day by day
+% %need to use function to figure out
+% for i = 1:length(block_struct)
+%     [u_test_amps, ~, ia] = unique(block_struct(i).ElectRT.TestStimAmp);
+%     p_detect = zeros([length(u_test_amps),1]);
+%     for j = 1:length(u_test_amps)
+%         correct_idx = strcmp(block_struct(i).ElectRT.Response(ia == j), 'correct');
+%         p_detect(j) = sum(correct_idx) / length(correct_idx);
+%         
+%     end
+%     % Correct for catch trials
+%     
+%     if any(u_test_amps == 0)
+%         catch_idx = find(u_test_amps == 0);
+%         p_detect(catch_idx) = 1 - p_detect(catch_idx);
+%     end
+%     
+%     % Compute d' from p(detect) where  d' = norminv(p(hit)) - norminv(p(false alarm))
+%     dprime = NaN([length(u_test_amps),1]);
+%     pmiss = p_detect(1);
+%     if pmiss == 0 % Correct for 0 false alarm
+%         pmiss = 0.001;
+%     end
+%     for j = 1:length(dprime)-1
+%         phit = p_detect(j+1);
+%         if phit == 1 % Correct for infinite hit rate
+%             phit = .999;
+%         end
+%         dprime(j+1) = norminv(phit) - norminv(pmiss);        
+%     end
+%     
+%     % Make a table & add to struct
+%     block_struct(i).ElectRT_DetectionRates = array2table([u_test_amps, p_detect, dprime], 'VariableNames', {'Amplitude', 'pDetect', 'dPrime'});
+% end
