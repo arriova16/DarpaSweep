@@ -1,6 +1,6 @@
 %Working on Formatting the Sweep Detection Task
-tld = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\SweepDetect';
-process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_22and24';
+tld = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\SweepDetect';
+process_loc = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 file_list = dir(tld);
 
 %% Loading rsp files and formatting
@@ -24,6 +24,8 @@ for i = 1:length(file_list)
     temp = readcell(fullfile(tld, file_list(i).name), "FileType",'text', 'NumHeaderLines',1);
      
     if size(temp,2) == 37
+        temp = temp(:, [25:27, 29, 30, 32, 33, 34, 37]);
+    elseif size(temp,2) == 38
         temp = temp(:, [25:27, 29, 30, 32, 33, 34, 37]);
 
     end
