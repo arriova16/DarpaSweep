@@ -146,7 +146,7 @@ for i = 1:length(data)
       % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
 
         %wp
-       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,20,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
+       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
         plot(x_elect,y_elect)
 %      'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
  
@@ -190,10 +190,10 @@ axis square
  [~, b] = min(abs(yq-dprime_threshold));
  plot(xq,yq,'Color', [.1 .1 .1])
  plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(69, 90, 100),'LineStyle','--')
-  text(.07,2,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126), 'FontSize',18);
+  text(.07,1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126), 'FontSize',18);
  xlabel('Amplitude (mm)','FontSize', 18)
  ylabel('d''','FontSize',18)
- ylim([-1 6])
+ ylim([0 6])
 
 
 subplot(2,2,3); hold on; title('Elect pDetect')
@@ -239,7 +239,7 @@ axis square
   plot(tt,tq,'Color',rgb(69, 90, 100))
  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
  ylabel('d''','FontSize',18)
- ylim([-1 6])
+ ylim([0 6])
 
 end
 

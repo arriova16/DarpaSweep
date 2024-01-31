@@ -26,6 +26,7 @@ function [detection_table, dprime_table] = AnalyzeSweepTable(input_table)
     for d2 = 1:length(u_mech_amps)
         ux2_str{d2} = num2str(u_mech_amps(d2));
     end
+
     detection_table = array2table(detection_table,...
         'VariableNames', ux1_str, 'RowNames', ux2_str);
     dprime_table = detection_table;

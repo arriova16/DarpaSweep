@@ -24,29 +24,22 @@ end
 
 CatTable = cat(1,sweep_table{:});
 
+
 %% Analysis
-
-% Dprime and Pdetect of w and wo icms
-[detection_table, dprime_table] = AnalyzeSweepTable(CatTable);
-
-
-
-%% Plotting pdetect of mech
-
-
-plot(dprime_table(:,1),dprime_table(:,)
-
-
-
-
-
-%% probability formula
+%probability formula
 % P(A)+P(B) - P(A)*(and)P(B)
 % P(A) = probability of Mechanical
 % P(B) = Probability of Electrical
 
 
 
+
+
+% Dprime and Pdetect of w and wo icms
+[detection_table, dprime_table] = AnalyzeSweepTable(CatTable);
+
+
+%% Plotting pdetect of mech
 
 
 
