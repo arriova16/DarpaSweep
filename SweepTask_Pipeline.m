@@ -1,5 +1,5 @@
 
-tld = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
+tld = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
 file_list = dir(tld);
 %% loading matfiles
 %need to load 
@@ -65,23 +65,39 @@ end
 DetectionRates = array2table([u_test_amps_big, p_detect_big, dprime_big], 'VariableNames', ['TestAmps', pd_strings_big, dp_strings_big]);
 %fix this function in rewrite
 % [detection_table, dprime_table] = AnalyzeSweepTable(CatTable);
+%% need coeffs?
+
+
+
 %% probability formula
 % P(A)+P(B) - P(A)*(and)P(B)
 % P(A) = probability of Mechanical- is this just mechanical
 % P(B) = Probability of Electrical- is this electrical with mechanical
-
+% DONT HARD CODE!!!
+clf; hold on
+plot([0,1],[0,1], 'LineStyle','--','color', [.6,.6,.6])
 for d = 1:size(DetectionRates,2)
     DT = table2array(DetectionRates);
    
-    p17 = (0.5709 + 0.8) - (0.5709 .* 0.8);
-    p18 = (0.5709 + 0.8554) - (0.5709 .* 0.8554);
-    p19 = (0.5709 + 0.9176) - (0.5709 .* 0.9176);
+    p17 = (DT(2,2) + DT(1,3)) - (DT(2,2) .*  DT(1,3));
+    p18 = (DT(2,2) + DT(1,4)) - (DT(2,2) .* DT(1,4));
+    p19 = (DT(2,2) + DT(1,5)) - (DT(2,2) .*  DT(1,5));
 
     datapts = [p17 p18 p19];
     %work on plots?
-     plot(datapts, DT(2,2:5))
-
+     scatter(datapts, DT(2,3:5), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
+     xlim([0 1])
+     ylim([0 1])
+    xlabel('Pdetect(disjoint)')
+    ylabel('pDetect', 'FontSize', 18)
+    axis square
 end
+
+
+
+
+
+
 
 
 
