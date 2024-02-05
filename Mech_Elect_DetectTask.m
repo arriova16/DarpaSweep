@@ -2,9 +2,10 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-  % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask';
+process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_22and24';
 
-data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
+% data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 
 file_list = dir(data_folder);
 
@@ -87,6 +88,7 @@ data = struct();
     for b = 1:size(mech_file_list,1)
       for c = 1:size(elect_file_list)
          fname_split = strsplit(mech_file_list(b).name, '_');
+         monkey_name = fname_split{1};
          block_struct(b).Date = fname_split{2};
          temp_mech = load(fullfile(mech_file_list(b).folder, mech_file_list(b).name));
          mech_table{b} = [temp_mech.MechDetect_Table];
@@ -94,11 +96,21 @@ data = struct();
          temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name)); 
           elect_table{c} = [temp_elect.ElectDetect_Table];
           block_struct(c).ElectRT =elect_table{c};
+
+
       end
     end
    
 data.MechDetectTable = cat(1,mech_table{:});
 data.ElectDetectTable = cat(1,elect_table{:});
+
+
+save_fname = sprintf('%s_ME_comb.mat', monkey_name);
+if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+
+    save(fullfile(process_loc, save_fname), 'data')
+end
+
 
 %% putting things into block - will need to concat response tables?
 
@@ -117,7 +129,7 @@ for i = 1:length(data)
 
          %works for pinot
 
-          % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
+          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
           
        % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
        %     'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
@@ -127,8 +139,8 @@ for i = 1:length(data)
         % plot(x_mech, y_mech_dprime)
 
          %for wp
-         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
-         'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
+         % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
+         % 'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
          % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
 
 
@@ -143,11 +155,11 @@ for i = 1:length(data)
          
          %coeffs are the issues/ constraints
         %works for pinot
-      % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
+      [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN]);
 
-        %wp
-       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
-        plot(x_elect,y_elect)
+       %  %wp
+       % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
+       %  plot(x_elect,y_elect)
 %      'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
  
     end

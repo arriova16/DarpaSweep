@@ -1,5 +1,6 @@
 
 tld = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
+process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_22and24';
 file_list = dir(tld);
 %% loading matfiles
 %need to load 
@@ -13,6 +14,7 @@ for i  = 1:size(mat_files,1)
     temp = load(fullfile(mat_files(i).folder, mat_files(i).name));
     sweep_table{i} = [temp.response_table];
     name_split = strsplit(mat_files(i).name, '_');
+    animal = name_split{1};
     data(ii).Animal = name_split{1};
     data(ii).Date = name_split{2};
     data(ii).ResponseTable = [temp.response_table];
@@ -23,6 +25,11 @@ end
 
 
 CatTable = cat(1,sweep_table{:});
+
+save_fname = sprintf('%s_Sweep_comb.mat', animal);
+if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+    save(fullfile(process_loc, save_fname), 'CatTable')
+end
 
 %% Analysis
 
@@ -63,10 +70,11 @@ for u = 1:length(u_icms_big)
 end
 
 DetectionRates = array2table([u_test_amps_big, p_detect_big, dprime_big], 'VariableNames', ['TestAmps', pd_strings_big, dp_strings_big]);
+
+
 %fix this function in rewrite
 % [detection_table, dprime_table] = AnalyzeSweepTable(CatTable);
 %% need coeffs?
-
 
 
 %% probability formula
@@ -78,7 +86,7 @@ clf; hold on
 plot([0,1],[0,1], 'LineStyle','--','color', [.6,.6,.6])
 for d = 1:size(DetectionRates,2)
     DT = table2array(DetectionRates);
-   
+   %
     p17 = (DT(2,2) + DT(1,3)) - (DT(2,2) .*  DT(1,3));
     p18 = (DT(2,2) + DT(1,4)) - (DT(2,2) .* DT(1,4));
     p19 = (DT(2,2) + DT(1,5)) - (DT(2,2) .*  DT(1,5));
