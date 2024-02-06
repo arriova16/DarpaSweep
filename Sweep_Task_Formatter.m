@@ -1,4 +1,5 @@
 %Working on Formatting the Sweep Detection Task
+%this should be a function
 tld = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask\SweepDetect';
 process_loc = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 file_list = dir(tld);
