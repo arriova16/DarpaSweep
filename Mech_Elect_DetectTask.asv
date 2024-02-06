@@ -129,7 +129,7 @@ for i = 1:length(data)
 
          %works for pinot
 
-          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
+          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],  'PlotFit', true);
           
        % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
            % 'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);

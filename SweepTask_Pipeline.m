@@ -73,8 +73,6 @@ DetectionRates = array2table([u_test_amps_big, p_detect_big, dprime_big], 'Varia
 
 
 %fix this function in rewrite
-% [detection_table, dprime_table] = AnalyzeSweepTable(CatTable);
-%% need coeffs?
 
 
 %% probability formula
