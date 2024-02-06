@@ -72,11 +72,8 @@ op_detect = zeros([length(u_mech),length(u_icms)]);
 pp_detect = NaN([length(u_mech), length(u_icms)]);
 
 for u = 1:length(u_icms)
-    %initalize array, number going to 3 decimal pt?
-    op_detect = ones([length(u_mech),1]) * 1e-3;
-    pp_detect = ones([length(u_mech),1]) * 1e-3;
+    op_detect = one([length(u_test_amps),1]) * 1e-3;
 
-    for 
 
 
 end
