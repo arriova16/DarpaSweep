@@ -76,7 +76,12 @@ for u = 1:length(u_icms)
     op_detect = ones([length(u_mech),1]) * 1e-3;
     pp_detect = ones([length(u_mech),1]) * 1e-3;
 
-    for 
+    for j = 1:length(u_mech)
+       trial_idx = ia == j & [block_struct.SweepDetectTable.StimAmp] == u_icms(u);
+       % correct_idx = 
+
+
+    end
 
 
 end
