@@ -63,30 +63,51 @@ DetectionRates = array2table([u_test_amps_big, p_detect_big, dprime_big], 'Varia
 
 
 %% predicted vs observed pdetect
-
+    stuff_block = struct();
 u_icms = unique(block_struct.SweepDetectTable.StimAmp);
 [u_mech, ~, ia] = unique(block_struct.SweepDetectTable.IndentorAmp);
 [op_strings,pp_string] = deal(cell(1, length(u_icms)));
 
-op_detect = zeros([length(u_mech),length(u_icms)]);
-pp_detect = NaN([length(u_mech), length(u_icms)]);
+op_detect_try = zeros([length(u_mech),length(u_icms)]);
+pp_detect = zeros([length(u_mech), length(u_icms)]);
 
 for u = 1:length(u_icms)
     %initalize array, number going to 3 decimal pt?
     op_detect = ones([length(u_mech),1]) * 1e-3;
-    pp_detect = ones([length(u_mech),1]) * 1e-3;
+    pp_detect = NaN([length(u_mech),1]) * 1e-3;
 
     for j = 1:length(u_mech)
        trial_idx = ia == j & [block_struct.SweepDetectTable.StimAmp] == u_icms(u);
-       % correct_idx = 
-
+       correct_idx = strcmp(block_struct.SweepDetectTable.Response(trial_idx), 'correct');
+       if u_mech(j) == 0
+           op_detect(j) = 1 - (sum(correct_idx) / sum(trial_idx));
+       else
+           op_detect(j) = sum(correct_idx) / sum(trial_idx);
+       end
 
     end
+op_detect_try(:,u) = op_detect;
 
-
+op_strings{u} = sprintf('ICMS_%d', u_icms(u));
 end
 
 
+sweep_pdetect = array2table([u_mech, op_detect_try], 'VariableNames',['MechAmps', op_strings]);
+
+% sweep_probabilty formula
+% P(A)+P(B) - P(A)*(and)P(B)
+% P(A) = probability of Mechanical- just mechanical
+% P(B) = Probability of Electrical- just electrical 
+%predicted is from the formula / observed is icms w/ mechnical
+for t = 1:size(sweep_pdetect,2)
+    mech = sweep_pdetect(2,2);
+    ele = sweep_pdetect(1,3:5);
+    
+ 
+
+
+
+end
 
 
 
@@ -132,8 +153,8 @@ end
 [MechDetect_DT] = AnalyzeMechTable(block_struct.MechDetectTable);
 x_mech = MechDetect_DT.MechAmp;
 y_mech_dprime = MechDetect_DT.dPrime;
- [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4,'Constraints', [0, 200; -5, 5]);
-
+%pinot
+ [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
 
 
 %Elect table dt
@@ -141,13 +162,15 @@ y_mech_dprime = MechDetect_DT.dPrime;
 [ElectDetect_DT] = AnalyzeElectTable(block_struct.ElectDetectTable);
 x_elect = ElectDetect_DT.StimAmp;
 y_elect = ElectDetect_DT.dPrime;
-[~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN], 'PlotFit', true);
+%pinot
+[~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
 
 
 %% pdetect plots
 
 %c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
-sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
+% sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
+sigfun = GetSigmoid(3);
 dprime_threshold = 1.35;
  SetFont('Arial', 18)
 
@@ -215,7 +238,7 @@ axis square
 
   text(0.7, .4, 'Mech+Elec19', 'Color',rgb(26, 35, 126), 'FontSize',15)
   text(0.7, .35, 'Mech+Elec18', 'Color',rgb(156, 39, 176), 'FontSize',15)
-  text(0.7, .3, 'Mech+Elec17', 'Color', rgb(103, 58, 183), 'FontSize',15)
+  text(0.7, .3, 'Mech+Elec16', 'Color', rgb(103, 58, 183), 'FontSize',15)
   text(0.7, .25, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
 
      xlim([0 1])
