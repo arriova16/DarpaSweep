@@ -102,9 +102,9 @@ sweep_pdetect = array2table([u_mech, op_detect_try], 'VariableNames',['MechAmps'
 for t = 1:size(sweep_pdetect,2)
     mech = sweep_pdetect(2,2);
     ele = sweep_pdetect(1,3:5);
-    for e = 1:numel(ele)
+    for e = 1:size(ele,2)
      pE(e) = ele{1,e};
-     pre = (mech + pE(e)) -  (mech .*)
+     pre(e) = (mech + pE{1,e}) -  (mech .* pE{1,e});
     
 
     end
