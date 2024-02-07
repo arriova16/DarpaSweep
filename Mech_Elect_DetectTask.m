@@ -2,10 +2,10 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask';
+% data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
 % process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_22and24';
 
-% data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
+data_folder ='C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 
 file_list = dir(data_folder);
 
@@ -129,7 +129,7 @@ for i = 1:length(data)
 
          %works for pinot
 
-          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
+%           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
           
        % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
            % 'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
@@ -139,8 +139,8 @@ for i = 1:length(data)
         % plot(x_mech, y_mech_dprime)
 
          %for wp
-         % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
-         % 'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
+         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
+         'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
          % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
 
 
@@ -155,11 +155,11 @@ for i = 1:length(data)
          
          %coeffs are the issues/ constraints
         %works for pinot
-      [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
+%       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
 
        %  %wp
-       % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
-           % 3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
+       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
+           3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
         % plot(x_elect,y_elect)
 %      'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
 % CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
