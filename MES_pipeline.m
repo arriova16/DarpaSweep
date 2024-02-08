@@ -62,19 +62,19 @@ end
 DetectionRates = array2table([u_test_amps_big, p_detect_big, dprime_big], 'VariableNames', ['TestAmps', pd_strings_big, dp_strings_big]);
 
 
-%% predicted vs observed pdetect
+%% observed pdetect
     stuff_block = struct();
 u_icms = unique(block_struct.SweepDetectTable.StimAmp);
 [u_mech, ~, ia] = unique(block_struct.SweepDetectTable.IndentorAmp);
 [op_strings,pp_string] = deal(cell(1, length(u_icms)));
 
 op_detect_try = zeros([length(u_mech),length(u_icms)]);
-pp_detect = zeros([length(u_mech), length(u_icms)]);
+pp_detect_tot = NaN([length(u_mech), length(u_icms)]);
 
 for u = 1:length(u_icms)
     %initalize array, number going to 3 decimal pt?
     op_detect = ones([length(u_mech),1]) * 1e-3;
-    pp_detect = NaN([length(u_mech),1]) * 1e-3;
+    pp_detect = NaN([length(u_mech),1]);
 
     for j = 1:length(u_mech)
        trial_idx = ia == j & [block_struct.SweepDetectTable.StimAmp] == u_icms(u);
@@ -88,67 +88,69 @@ for u = 1:length(u_icms)
     end
 op_detect_try(:,u) = op_detect;
 
+
+
 op_strings{u} = sprintf('ICMS_%d', u_icms(u));
 end
 
 
 sweep_pdetect = array2table([u_mech, op_detect_try], 'VariableNames',['MechAmps', op_strings]);
 
+%% predicted pdetect
 % sweep_probabilty formula
 % P(A)+P(B) - P(A)*(and)P(B)
 % P(A) = probability of Mechanical- just mechanical
 % P(B) = Probability of Electrical- just electrical 
 %predicted is from the formula / observed is icms w/ mechnical
-for t = 1:size(sweep_pdetect,2)
-    mech = sweep_pdetect(2,2);
-    ele = sweep_pdetect(1,3:5);
-    for e = 1:size(ele,2)
-     pE(e) = num2str(ele{1,e});
-     pre(e) = (mech + pE{1,e}) -  (mech .* pE{1,e});
-    
 
-    end
-
+mech_amps = op_detect_try(2,1);
+icms_amps = op_detect_try(1,2:end);
+for m = 1:length(icms_amps)
+  
+    predict{m} = (mech_amps + icms_amps(m)) - (mech_amps .* icms_amps(m)); 
+      % for n = 1:length(predict)   
+      %   predict_dprime{n} =  norminv(predict(n)) - norminv(icms_amps(m));
 
 
+
+    % end
 end
 
 
-
-%% sweep_probabilty formula
-% P(A)+P(B) - P(A)*(and)P(B)
-% P(A) = probability of Mechanical- is this just mechanical
-% P(B) = Probability of Electrical- is this electrical with mechanical
-% DONT HARD CODE!!!
- hold on
-plot([0,1],[0,1], 'LineStyle','--','color', [.6,.6,.6])
-for d = 1:size(DetectionRates,2)
-    DT = table2array(DetectionRates);
-   %
-    p17 = (DT(2,2) + DT(1,3)) - (DT(2,2) .*  DT(1,3));
-    p18 = (DT(2,2) + DT(1,4)) - (DT(2,2) .* DT(1,4));
-    p19 = (DT(2,2) + DT(1,5)) - (DT(2,2) .*  DT(1,5));
-    mech = (DT(2,2));
-
-    datapts = [mech p17 p18 p19];
-
-    %work on plots?
-    ll_c = rgb(103, 58, 183);
-    up_c = rgb(26, 35, 126);
-    mm_c  = rgb(156, 39, 176);
-    scatter(p17, DT(2,3), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
-    scatter(p18, DT(2,4), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
-    scatter(p19, DT(2,5), 'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
-    plot([0 mech mech], [mech mech 0],'LineStyle','--')
-    
-
-   % scatter(datapts, DT(2,2:5), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
-     xlim([0 1])
-     ylim([0 1])
-    xlabel('Pdetect(disjoint)')
-    ylabel('pDetect', 'FontSize', 18)
-    axis square
-end
+% %% sweep_probabilty formula
+% % P(A)+P(B) - P(A)*(and)P(B)
+% % P(A) = probability of Mechanical- is this just mechanical
+% % P(B) = Probability of Electrical- is this electrical with mechanical
+% % DONT HARD CODE!!!
+%  hold on
+% plot([0,1],[0,1], 'LineStyle','--','color', [.6,.6,.6])
+% for d = 1:size(DetectionRates,2)
+%     DT = table2array(DetectionRates);
+%    %
+%     p17 = (DT(2,2) + DT(1,3)) - (DT(2,2) .*  DT(1,3));
+%     p18 = (DT(2,2) + DT(1,4)) - (DT(2,2) .* DT(1,4));
+%     p19 = (DT(2,2) + DT(1,5)) - (DT(2,2) .*  DT(1,5));
+%     mech = (DT(2,2));
+% 
+%     datapts = [mech p17 p18 p19];
+% 
+%     %work on plots?
+%     ll_c = rgb(103, 58, 183);
+%     up_c = rgb(26, 35, 126);
+%     mm_c  = rgb(156, 39, 176);
+%     scatter(p17, DT(2,3), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
+%     scatter(p18, DT(2,4), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
+%     scatter(p19, DT(2,5), 'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
+%     plot([0 mech mech], [mech mech 0],'LineStyle','--')
+% 
+% 
+%    % scatter(datapts, DT(2,2:5), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
+%      xlim([0 1])
+%      ylim([0 1])
+%     xlabel('Pdetect(disjoint)')
+%     ylabel('pDetect', 'FontSize', 18)
+%     axis square
+% end
 
 %%  
 
