@@ -88,6 +88,7 @@ for u = 1:length(u_icms)
     end
 op_detect_try(:,u) = op_detect;
 
+
 op_strings{u} = sprintf('ICMS_%d', u_icms(u));
 end
 
@@ -99,31 +100,27 @@ sweep_pdetect = array2table([u_mech, op_detect_try], 'VariableNames',['MechAmps'
 % P(A) = probability of Mechanical- just mechanical
 % P(B) = Probability of Electrical- just electrical 
 %predicted is from the formula / observed is icms w/ mechnical
-%nothing worked
-mech_amps = op_detect_try(:,1);
+
 mech_catch = op_detect_try(2,1);
 icms_FA = op_detect_try(1,2:end);
-for m = 1:length(icms_FA)
-   pp_dprime = NaN([length(mech_amps), length(icms_FA)]);
 
-    predict{m} = (mech_catch + icms_FA(m)) - (mech_catch .* icms_FA(m));  
-    predict_pdetect = cell2mat(predict);
-    mech_row = NaN([length(mech_amps),1]);
-   
-    FA = max([icms_FA(1), 1e-3]);
+for m = 1:length(icms_FA) 
+    predict(m) = (mech_catch + icms_FA(m)) - (mech_catch .* icms_FA(m));
+ end
+ 
+   FA = max([icms_FA(1), 1e-3]);
 
-    for j = 1:size(mech_row)-1
-        phit = predict_pdetect(j+1);
-         if phit == 1 % Correct for infinite hit rate
-             phit = .999;
-         elseif phit == 0
-             phit = 1e-3;
-          end
-    mech_row(j+1) = norminv(phit) - norminv(FA);
+    for j = 1:size(icms_FA)
+         phit = predict(j+1);
+        if phit == 1 % Correct for infinite hit rate
+            phit = .999;
+        elseif phit == 0
+            phit = 1e-3;
+        end
+        icms_FA(j) = norminv(phit) - norminv(FA);
     end
-
-      pp_dprime(:,m) = mech_row;
-end
+ 
+    dprime_predicted = icms_FA;
 
 
 %% plotting
