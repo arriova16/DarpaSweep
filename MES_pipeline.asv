@@ -1,5 +1,5 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
+sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
 file_list = dir(sweep_df);
 
  %% Loading mat files
@@ -72,7 +72,7 @@ op_detect_try = zeros([length(u_mech),length(u_icms)]);
 pp_detect_tot = NaN([length(u_mech), length(u_icms)]);
 
 for u = 1:length(u_icms)
-    %initalize array, number going to 3 decimal pt?
+    %initalize array, number going to 3 decimal pt? 
     op_detect = ones([length(u_mech),1]) * 1e-3;
     pp_detect = NaN([length(u_mech),1]);
 
@@ -94,7 +94,8 @@ end
 
 sweep_pdetect = array2table([u_mech, op_detect_try], 'VariableNames',['MechAmps', op_strings]);
 
-%% predicted pdetect
+%% predicted pdetect and dprime
+
 % sweep_probabilty formula
 % P(A)+P(B) - P(A)*(and)P(B)
 % P(A) = probability of Mechanical- just mechanical
@@ -103,7 +104,7 @@ sweep_pdetect = array2table([u_mech, op_detect_try], 'VariableNames',['MechAmps'
 
 mech_catch = op_detect_try(2,1);
 icms_FA = op_detect_try(1,2:end);
-
+pre_icms = u_icms(2:end,:);
 for m = 1:length(icms_FA) 
     predict(m) = (mech_catch + icms_FA(m)) - (mech_catch .* icms_FA(m));
  end
@@ -121,71 +122,8 @@ for m = 1:length(icms_FA)
     end
  
     dprime_predicted = icms_FA;
+    
 
-
-%% plotting
-DT = table2array(DetectionRates);
-
-dprime_mech = DT(2,6);
-
-predict_dprime_dpts = [dprime_mech, pdprime_17, pdprime_18, pdprime_19];
-obs_dprime_dpt = DT(2,6:end);
- hold on
- plot([0,2],[0,2], 'LineStyle','--','color', [.6,.6,.6])
-
- %fix this
- scatter(pdprime_17, DT(2,7), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
- scatter(pdprime_18, DT(2,8), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
- scatter(pdprime_19, DT(2,9), 'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
- scatter(dprime_mech, dprime_mech, 'filled', 'MarkerEdgeColor',rgb(233, 30, 99), 'MarkerFaceColor',rgb(233, 30, 99))
-  plot([0 dprime_mech dprime_mech], [dprime_mech dprime_mech 0],'LineStyle','--', 'Color', rgb(233, 30, 99))
-
-  text(0.7, .4, 'Mech+Elec19', 'Color',rgb(26, 35, 126), 'FontSize',15)
-  text(0.7, .35, 'Mech+Elec18', 'Color',rgb(156, 39, 176), 'FontSize',15)
-  text(0.7, .3, 'Mech+Elec16', 'Color', rgb(103, 58, 183), 'FontSize',15)
-  text(0.7, .25, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
-
-     xlim([0 2])
- 
-    xlabel('dPrime(disjoint)')
-    ylabel('dPrime', 'FontSize', 18)
-    axis square
-
-
- %% sweep_probabilty formula
-% % P(A)+P(B) - P(A)*(and)P(B)
-% % P(A) = probability of Mechanical- is this just mechanical
-% % P(B) = Probability of Electrical- is this electrical with mechanical
-% % DONT HARD CODE!!!
- hold on
-plot([0,1],[0,1], 'LineStyle','--','color', [.6,.6,.6])
-for d = 1:size(DetectionRates,2)
-   
-   %
-    p17 = (DT(2,2) + DT(1,3)) - (DT(2,2) .*  DT(1,3));
-    p18 = (DT(2,2) + DT(1,4)) - (DT(2,2) .* DT(1,4));
-    p19 = (DT(2,2) + DT(1,5)) - (DT(2,2) .*  DT(1,5));
-    mech = (DT(2,2));
-
-    datapts = [mech p17 p18 p19];
-
-    %work on plots?
-    ll_c = rgb(103, 58, 183);
-    up_c = rgb(26, 35, 126);
-    mm_c  = rgb(156, 39, 176);
-    scatter(p17, DT(2,3), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
-    scatter(p18, DT(2,4), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
-    scatter(p19, DT(2,5), 'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
-    plot([0 mech mech], [mech mech 0],'LineStyle','--')
-
-
-   % scatter(datapts, DT(2,2:5), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
-     xlim([0 1])
-     ylim([0 1])
-    xlabel('Pdetect(disjoint)')
-    ylabel('pDetect', 'FontSize', 18)
-    axis square
-end
 
 %%  
 
@@ -194,48 +132,52 @@ end
 [MechDetect_DT] = AnalyzeMechTable(block_struct.MechDetectTable);
 x_mech = MechDetect_DT.MechAmp;
 y_mech_dprime = MechDetect_DT.dPrime;
+y_mech_pdetect = MechDetect_DT.pDetect;
 %pinot
+%dprime
  [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
-
+ %pdetect
+[~,coeffs_mech_pdetect, ~,~,~, warn__mech_pdetect] = FitSigmoid(x_mech, y_mech_pdetect, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
 
 %Elect table dt
 
 [ElectDetect_DT] = AnalyzeElectTable(block_struct.ElectDetectTable);
 x_elect = ElectDetect_DT.StimAmp;
 y_elect = ElectDetect_DT.dPrime;
+y_elect_pdetect = ElectDetect_DT.pDetect;
 %pinot
-[~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
+%dprime
+ [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
+%pdetect
+[~,coeffs_elect_pdetect,~, ~, ~, warn_elect_pdetect] = FitSigmoid(x_elect,y_elect_pdetect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
 
 
-%% pdetect plots
-
-%c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
-% sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
+%% dprime plots
 sigfun = GetSigmoid(3);
 dprime_threshold = 1.35;
- SetFont('Arial', 18)
+SetFont('Arial',18)
 
- subplot(1,3,1); hold on  
- title('Mech dPrime')
+subplot(1,3,1); hold on
+title('Mech d''')
 
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
 
- xq = linspace(0, x_mech(end));
- yq = sigfun(coeffs,xq);
- [~, b] = min(abs(yq-dprime_threshold));
- plot(xq,yq,'Color', [.1 .1 .1])
- plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
-  text(.07,1,(sprintf('%.3f',xq(b))), 'Color', rgb(233, 30, 99), 'FontSize',18);
- xlabel('Amplitude (mm)','FontSize', 18)
- ylabel('d''','FontSize',18)
- ylim([0 6])
-
- axis square
+xq = linspace(0, x_mech(end));
+yq = sigfun(coeffs,xq);
+[~, b] = min(abs(yq-dprime_threshold));
+plot(xq,yq,'Color', [.1 .1 .1])
+plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
+text(.07,1,(sprintf('%.3f',xq(b))), 'Color', rgb(233, 30, 99), 'FontSize',18);
+xlabel('Amplitude (mm)','FontSize', 18)
+ylabel('d''','FontSize',18)
+ylim([0 6])
 
 
- subplot(1,3,2); hold on
- title('Elec dPrime')
+axis square
+
+subplot(1,3,2); hold on
+title('Elec d''')
  scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
 
@@ -267,46 +209,89 @@ axis square
  ylabel('d''','FontSize',18)
  ylim([0 6])
 
- subplot(1,3,3);  hold on
- title('Sweep dprime')
 
-  hold on
- plot([0,2],[0,2], 'LineStyle','--','color', [.6,.6,.6])
+axis square
 
- %fix this
- scatter(pdprime_17, DT(2,7), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
- scatter(pdprime_18, DT(2,8), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
- scatter(pdprime_19, DT(2,9), 'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
- scatter(dprime_mech, dprime_mech, 'filled', 'MarkerEdgeColor',rgb(233, 30, 99), 'MarkerFaceColor',rgb(233, 30, 99))
-  plot([0 dprime_mech dprime_mech], [dprime_mech dprime_mech 0],'LineStyle','--', 'Color', rgb(233, 30, 99))
+subplot(1,3,3); hold on
+title('Sweep d''')
 
-  text(0.7, .4, 'Mech+Elec19', 'Color',rgb(26, 35, 126), 'FontSize',15)
-  text(0.7, .30, 'Mech+Elec18', 'Color',rgb(156, 39, 176), 'FontSize',15)
-  text(0.7, .2, 'Mech+Elec16', 'Color', rgb(103, 58, 183), 'FontSize',15)
-  text(0.7, .1, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
+hold on
+plot([0,2],[0,2], 'LineStyle','--','color', [.6,.6,.6])
 
-     xlim([0 2])
+
+scatter(dprime_predicted(1),dprime_big(2,2),'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
+scatter(dprime_predicted(2),dprime_big(2,3),'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
+scatter(dprime_predicted(3),dprime_big(2,4),'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
+plot([0 dprime_big(2,1) dprime_big(2,1)], [dprime_big(2,1) dprime_big(2,1) 0],'LineStyle','--', 'Color', rgb(233, 30, 99))
+
+text(0.7, .4, (sprintf('Mech+Elec %.0f', tt(np))), 'Color',rgb(26, 35, 126), 'FontSize',15)
+text(0.7, .30, (sprintf('Mech+Elec %.0f', tt(mm_np))), 'Color',rgb(156, 39, 176), 'FontSize',15)
+text(0.7, .2, (sprintf('Mech+Elec %.0f', tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',15)
+text(0.7, .1, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
+
+xlim([0 2])
  
-    xlabel('dPrime(disjoint)')
-    ylabel('dPrime', 'FontSize', 18)
-    axis square
+xlabel('dPrime(disjoint)')
+ylabel('dPrime', 'FontSize', 18)
+
+axis square
+
+%% pdetect plots
+sigfun = GetSigmoid(3);
+dprime_threshold = 1.35;
+SetFont('Arial',18)
+
+subplot(1,3,1); hold on
+title('Mech pdetect')
+scatter(x_mech,y_mech_pdetect, 50, [.1 .1 .1], 'filled')
+plot(x_mech, y_mech_pdetect,'Color', [.1 .1 .1], 'LineStyle', '-')
+% plot([0 xq(b) xq(b)], [p_detect_big(2,1) p_detect_big(2,1) 0], ...
+%     'LineStyle','--', 'Color', rgb(233, 30, 99))
+
+% xq = linspace(0, x_mech(end));
+% yq = sigfun(coeffs_mech_pdetect,xq);
+% [~, b] = min(abs(yq-dprime_threshold));
+% plot(xq,yq,'Color', [.1 .1 .1])
+% plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
+% text(.07,1,(sprintf('%.3f',xq(b))), 'Color', rgb(233, 30, 99), 'FontSize',18);
 
 
- % plot([0,1],[0,1], 'LineStyle','--','color', [.6,.6,.6])
- % %fix this
- % scatter(p17, DT(2,3), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
- % scatter(p18, DT(2,4), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
- % scatter(p19, DT(2,5), 'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
- % scatter(mech, mech, 'filled', 'MarkerEdgeColor',rgb(233, 30, 99), 'MarkerFaceColor',rgb(233, 30, 99))
- %  plot([0 mech mech], [mech mech 0],'LineStyle','--', 'Color', rgb(233, 30, 99))
- % 
- %  text(0.7, .4, 'Mech+Elec19', 'Color',rgb(26, 35, 126), 'FontSize',15)
- %  text(0.7, .35, 'Mech+Elec18', 'Color',rgb(156, 39, 176), 'FontSize',15)
- %  text(0.7, .3, 'Mech+Elec16', 'Color', rgb(103, 58, 183), 'FontSize',15)
- %  text(0.7, .25, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
- % 
- %     xlim([0 1])
- % 
- %    xlabel('Pdetect(disjoint)')
- %    ylabel('pDetect', 'FontSize', 18)
- %    axis square
+xlabel('Amplitude (mm)','FontSize', 18)
+ylabel('pdetect','FontSize',18)
+ylim([0 1])
+
+axis square
+
+subplot(1,3,2); hold on
+title('Elec pDetect')
+
+scatter(x_elect,y_elect_pdetect, 50, [.1 .1 .1], 'filled')
+plot(x_elect, y_elect_pdetect,'Color', [.1 .1 .1], 'LineStyle', '-')
+
+
+ xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
+ ylabel('pdetect','FontSize',18)
+axis square
+
+
+subplot(1,3,3); hold on
+title('Sweep pDetect')
+
+plot([0,2],[0,2], 'LineStyle','--','color', [.6,.6,.6])
+scatter(predict(1),p_detect_big(2,2), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
+scatter(predict(2),p_detect_big(2,3), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
+scatter(predict(3),p_detect_big(2,4), 'filled', 'MarkerEdgeColor', rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
+plot([0 p_detect_big(2,1) p_detect_big(2,1)], [p_detect_big(2,1) p_detect_big(2,1) 0], ...
+    'LineStyle','--', 'Color', rgb(233, 30, 99))
+text(0.7, .4, (sprintf('Mech+Elec %.0f', tt(np))), 'Color',rgb(26, 35, 126), 'FontSize',15)
+text(0.7, .30, (sprintf('Mech+Elec %.0f', tt(mm_np))), 'Color',rgb(156, 39, 176), 'FontSize',15)
+text(0.7, .2, (sprintf('Mech+Elec %.0f', tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',15)
+text(0.7, .1, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
+
+xlim([0 1])
+ 
+xlabel('pDetect(disjoint)')
+ylabel('pDetect', 'FontSize', 18)
+
+axis square
+
