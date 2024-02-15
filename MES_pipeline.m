@@ -1,5 +1,5 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
+sweep_df = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig';
 file_list = dir(sweep_df);
 
  %% Loading mat files
@@ -43,16 +43,22 @@ for u = 1:length(u_icms_big)
     end
     p_detect_big(:,u) = p_detect;
     % Compute d'
+    %dprime wrong- no longer the same dprime formula- needs to be changed-
+    %all have the same FA point.
     pmiss_big = max([p_detect(1), 1e-3]);
+  
     for j = 1:length(dprime)-1
-        phit_big = p_detect(j+1);
+         phit_big = p_detect(j+1);
         if phit_big == 1 % Correct for infinite hit rate
             phit_big = .999;
         elseif phit_big == 0
             phit_big = 1e-3;
         end
         dprime(j+1) = norminv(phit_big) - norminv(pmiss_big);
+       
+
     end
+  
     dprime_big(:,u) = dprime;
     % Make strings
     pd_strings_big{u} = sprintf('pDetect_%d', u_icms_big(u));
@@ -61,7 +67,22 @@ end
 
 DetectionRates = array2table([u_test_amps_big, p_detect_big, dprime_big], 'VariableNames', ['TestAmps', pd_strings_big, dp_strings_big]);
 
+%% plotting detection table for check
+%fix this/fewer lines
+hold on
+plot(DetectionRates{:,1}, DetectionRates{:,2},'o-', 'MarkerSize', 5,'Color',rgb(229, 115, 115), 'LineWidth', 4);
+plot(DetectionRates{:,1}, DetectionRates{:,3},'o-', 'MarkerSize', 5,'Color',rgb(229, 115, 115), 'LineWidth', 4);
+plot(DetectionRates{:,1}, DetectionRates{:,4},'o-', 'MarkerSize', 5,'Color',rgb(211, 47, 47), 'LineWidth', 4);
+plot(DetectionRates{:,1}, DetectionRates{:,5},'o-', 'MarkerSize', 5,'Color',rgb(183, 28, 28), 'LineWidth', 4);
 
+text(.02,0.15, '0','Color',rgb(229, 115, 115), 'FontSize', 18)
+text(.02,0.2, '16','Color',rgb(229, 115, 115), 'FontSize', 18)
+text(.02,0.25, '17','Color',rgb(211, 47, 47), 'FontSize', 18)
+text(.02,0.3, '18','Color',rgb(183, 28, 28), 'FontSize', 18)
+xlabel('Amplitude (mm)','FontSize', 18)
+ylabel('p(Detected)','FontSize',18)
+ylim([0 1])
+axis square
 %% observed pdetect
     stuff_block = struct();
 u_icms = unique(block_struct.SweepDetectTable.StimAmp);
@@ -103,15 +124,15 @@ sweep_pdetect = array2table([u_mech, op_detect_try], 'VariableNames',['MechAmps'
 %predicted is from the formula / observed is icms w/ mechnical
 
 mech_catch = op_detect_try(2,1);
-icms_FA = op_detect_try(1,2:end);
-pre_icms = u_icms(2:end,:);
+icms_FA = op_detect_try(1,:);
+
 for m = 1:length(icms_FA) 
     predict(m) = (mech_catch + icms_FA(m)) - (mech_catch .* icms_FA(m));
- end
- 
-   FA = max([icms_FA(1), 1e-3]);
+end
 
-    for j = 1:size(icms_FA)
+FA = max([icms_FA(1), 1e-3]);
+
+    for j = 1:size(icms_FA)-1
          phit = predict(j+1);
         if phit == 1 % Correct for infinite hit rate
             phit = .999;
@@ -120,11 +141,9 @@ for m = 1:length(icms_FA)
         end
         icms_FA(j) = norminv(phit) - norminv(FA);
     end
- 
+
     dprime_predicted = icms_FA;
-    
-
-
+% drpime = using wrong mechanical / instead of using just mechanical- use just FA
 %%  
 
 
@@ -218,11 +237,12 @@ title('Sweep d''')
 hold on
 plot([0,2],[0,2], 'LineStyle','--','color', [.6,.6,.6])
 
+% scatter(dprime_predicted(1),dprime_big(2,1),'filled', 'MarkerEdgeColor', [.4 .4 .4], 'MarkerFaceColor', [.4 .4 .4])
+scatter(dprime_predicted(2),dprime_big(2,2),'filled', 'MarkerEdgeColor', rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
+scatter(dprime_predicted(3),dprime_big(2,3),'filled', 'MarkerEdgeColor',rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
+scatter(dprime_predicted(4),dprime_big(2,4),'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
 
-scatter(dprime_predicted(1),dprime_big(2,2),'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
-scatter(dprime_predicted(2),dprime_big(2,3),'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
-scatter(dprime_predicted(3),dprime_big(2,4),'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
-plot([0 dprime_big(2,1) dprime_big(2,1)], [dprime_big(2,1) dprime_big(2,1) 0],'LineStyle','--', 'Color', rgb(233, 30, 99))
+% plot([0 dprime_zero dprime_zero], [dprime_zero dprime_zero 0],'LineStyle','--', 'Color', rgb(233, 30, 99))
 
 text(0.7, .4, (sprintf('Mech+Elec %.0f', tt(np))), 'Color',rgb(26, 35, 126), 'FontSize',15)
 text(0.7, .30, (sprintf('Mech+Elec %.0f', tt(mm_np))), 'Color',rgb(156, 39, 176), 'FontSize',15)
@@ -230,7 +250,7 @@ text(0.7, .2, (sprintf('Mech+Elec %.0f', tt(ll_np))), 'Color', rgb(103, 58, 183)
 text(0.7, .1, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
 
 xlim([0 2])
- 
+ ylim([0 2])
 xlabel('dPrime(disjoint)')
 ylabel('dPrime', 'FontSize', 18)
 
@@ -285,7 +305,8 @@ plot([0 p_detect_big(2,1) p_detect_big(2,1)], [p_detect_big(2,1) p_detect_big(2,
     'LineStyle','--', 'Color', rgb(233, 30, 99))
 text(0.7, .4, (sprintf('Mech+Elec %.0f', tt(np))), 'Color',rgb(26, 35, 126), 'FontSize',15)
 text(0.7, .30, (sprintf('Mech+Elec %.0f', tt(mm_np))), 'Color',rgb(156, 39, 176), 'FontSize',15)
-text(0.7, .2, (sprintf('Mech+Elec %.0f', tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',15)
+text(0.7, .2, 'Mech+Elec 26', 'Color', rgb(103, 58, 183), 'FontSize',15)
+% (sprintf('Mech+Elec %.0f', tt(ll_np)))
 text(0.7, .1, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
 
 xlim([0 1])

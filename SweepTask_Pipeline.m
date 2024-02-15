@@ -1,6 +1,6 @@
 
-tld = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
-process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_22and24';
+tld = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig';
+process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep';
 file_list = dir(tld);
 %% loading matfiles
 %need to load 

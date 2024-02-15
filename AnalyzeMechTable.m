@@ -15,12 +15,10 @@ function[detection_table] = AnalyzeMechTable(input_table)
 
         else
             detection_vector(d) = mean(y(ic == d));
-
         end
     end
 
     %Make d'
-
     if detection_vector(1) < 1e-3
         z_fa = norminv(1e-3);
     else

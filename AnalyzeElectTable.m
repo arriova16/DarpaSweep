@@ -17,6 +17,8 @@ function [detection_table] = AnalyzeElectTable(input_table)
     end
     
     % Make d'
+    z_fa = max([detection_vector(1), 1e-3]);
+    
     if detection_vector(1) < 1e-3
         z_fa = norminv(1e-3);
     else
