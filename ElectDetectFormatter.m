@@ -4,6 +4,8 @@ function output_table = ElectDetectFormatter(input_cell_array)
 
 if num_cols == 10 
     input_cell_array = input_cell_array(:, [1:3,5:6, 8, 10]);
+elseif num_cols ==11
+    input_cell_array = input_cell_array(:, [1:3,5:6, 8, 10]);
 end
 
 

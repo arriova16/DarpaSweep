@@ -7,7 +7,7 @@ function[detection_table] = AnalyzeMechTable(input_table)
     y = strcmpi(input_table.Response, 'correct');
 
     [ux, ~, ic] = unique(x);
-
+%trouble starts here
     detection_vector = zeros(size(ux));
     for d = 1:length(detection_vector)
         if ux(d) == 0

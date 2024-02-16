@@ -2,8 +2,8 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
- process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
+ % process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig';
 
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 
@@ -105,14 +105,16 @@ data.MechDetectTable = cat(1,mech_table{:});
 data.ElectDetectTable = cat(1,elect_table{:});
 
 
-save_fname = sprintf('%s_ME_comb.mat', monkey_name);
-if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-
-    save(fullfile(process_loc, save_fname), 'data')
-end
-
+% save_fname = sprintf('%s_ME_comb.mat', monkey_name);
+% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+% 
+%     save(fullfile(process_loc, save_fname), 'data')
+% end
+% 
 
 %% putting things into block - will need to concat response tables?
+%coding not rounding correctly- if pdetect is zero then dprime should be
+%negative but its 4
 
 for i = 1:length(data)
     for d = 1:length(block_struct)
