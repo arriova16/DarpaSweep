@@ -1,6 +1,6 @@
 %Working on Formatting the Sweep Detection Task
 %this should be a function
-tld = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask\SweepDetect';
+tld = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask\SweepDetect';
 process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep';
 file_list = dir(tld);
 

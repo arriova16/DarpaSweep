@@ -22,7 +22,7 @@ mat_file = dir(fullfile(subf, '*.mat'));
  end
 
  %% Sweep Analysis
-
+%create function
 u_icms_big = unique(block_struct.SweepDetectTable.StimAmp);
 [u_test_amps_big, ~, ia] = unique(block_struct.SweepDetectTable.IndentorAmp);
 [pd_strings_big, dp_strings_big] = deal(cell(1, length(u_icms_big)));
@@ -125,7 +125,7 @@ sweep_pdetect = array2table([u_mech, op_detect_try], 'VariableNames',['MechAmps'
 
 mech = op_detect_try(2,1);
 icms_FA = op_detect_try(1,:);
-empty_icms = NaN([size(icms_FA)]);
+empty_icms = zeros([length(icms_FA),1]);
 
 for m = 1:length(icms_FA) 
    predict(m) = (mech + icms_FA(m)) - (mech .* icms_FA(m));
@@ -134,6 +134,7 @@ end
 FA = max([icms_FA(1), 1e-3]);
 
     % for j = 1:size(icms_FA)-1
+    %incorrect (values too high) 
      for j = 1:size(empty_icms)-1
          phit = predict(j+1);
         if phit == 1 % Correct for infinite hit rate
@@ -141,7 +142,7 @@ FA = max([icms_FA(1), 1e-3]);
         elseif phit == 0
             phit = 1e-3;
         end
-        empty_icms(j) = norminv(phit) - norminv(FA);
+        empty_icms(j+1) = norminv(phit) - norminv(FA);
     end
 
     dprime_predicted = empty_icms;
