@@ -15,24 +15,11 @@ if any(u_mechamps == 0)
     catch_idx = find(u_mechamps == 0);
     p_detect(catch_idx) = 1 - p_detect(catch_idx);
 end
-dprime = NaN([length(u_mechamps), 1]);
-pmiss = p_detect(1);
 
-% line that was missing
-if pmiss == 0
-    pmiss = 0.001;
-end
-for j = 1:length(dprime)-1
-    phit = p_detect(j+1);
-    if phit == 1
-        phit = .999;
-    end
-    dprime(j+1) = norminv(phit)- norminv(pmiss);
-end
 
-detection_table = table(u_mechamps, p_detect, dprime, 'VariableNames', {'MechAmp', 'pDetect', 'dPrime'});
 
 end
+
 
 
 % 
@@ -64,7 +51,9 @@ end
 % 
 %     detection_table = table(ux, detection_vector, dprime, 'VariableNames', {'MechAmp', 'pDetect', 'dPrime'});
       
- 
+   
+end
+    
 
 
 
