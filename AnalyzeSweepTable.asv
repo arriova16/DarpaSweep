@@ -1,14 +1,4 @@
 function [detection_table, dprime_table] = AnalyzeSweepTable(input_table)
-
-icms_amps = input_table.StimAmp;
-mech_amps = input_table.IndentorAmp;
-y = strcmpi(input_table.Response, 'correct');
-
-
-
-
-
-
     % % c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
     % % sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4); 
     % icms_amps = input_table.StimAmp;
