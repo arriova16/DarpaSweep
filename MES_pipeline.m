@@ -157,9 +157,12 @@ y_mech_dprime = MechDetect_DT.dPrime;
 y_mech_pdetect = MechDetect_DT.pDetect;
 %pinot
 %dprime
- [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
- %pdetect
-[~,coeffs_mech_pdetect, ~,~,~, warn__mech_pdetect] = FitSigmoid(x_mech, y_mech_pdetect, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
+%  [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
+%  %pdetect
+% [~,coeffs_mech_pdetect, ~,~,~, warn__mech_pdetect] = FitSigmoid(x_mech, y_mech_pdetect, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
+% wp
+  [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
+   'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
 
 %Elect table dt
 
@@ -167,11 +170,15 @@ y_mech_pdetect = MechDetect_DT.pDetect;
 x_elect = ElectDetect_DT.StimAmp;
 y_elect = ElectDetect_DT.dPrime;
 y_elect_pdetect = ElectDetect_DT.pDetect;
-%pinot
-%dprime
- [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
-%pdetect
-[~,coeffs_elect_pdetect,~, ~, ~, warn_elect_pdetect] = FitSigmoid(x_elect,y_elect_pdetect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
+% %pinot
+% %dprime
+%  [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
+% %pdetect
+% [~,coeffs_elect_pdetect,~, ~, ~, warn_elect_pdetect] = FitSigmoid(x_elect,y_elect_pdetect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
+
+%wp
+[~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
+           3,'CoeffInit', [1,25,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
 
 
 %% dprime plots
@@ -246,12 +253,12 @@ scatter(dprime_predicted(3),dprime_big(2,3),'filled', 'MarkerEdgeColor',rgb(156,
 scatter(dprime_predicted(4),dprime_big(2,4),'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
 plot([0 dprime_big(2,1) dprime_big(2,1)], [dprime_big(2,1) dprime_big(2,1) 0],'LineStyle','--', 'Color', rgb(233, 30, 99))
 
-text(3, 2.5, (sprintf('Mech+Elec %.0f', tt(np))), 'Color',rgb(26, 35, 126), 'FontSize',15)
-text(3, 2.25, (sprintf('Mech+Elec %.0f', tt(mm_np))), 'Color',rgb(156, 39, 176), 'FontSize',15)
-text(3, 2, (sprintf('Mech+Elec %.0f', tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',15)
-text(3, 1.75, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
-xlim([0 4.1])
- ylim([0 4.1])
+text(2, 2, (sprintf('Mech+Elec %.0f', tt(np))), 'Color',rgb(26, 35, 126), 'FontSize',15)
+text(2, 1.75, (sprintf('Mech+Elec %.0f', tt(mm_np))), 'Color',rgb(156, 39, 176), 'FontSize',15)
+text(2, 1.5, (sprintf('Mech+Elec %.0f', tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',15)
+text(2, 1.25, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
+xlim([0 3])
+ ylim([0 3])
 xlabel('dPrime(disjoint)')
 ylabel('dPrime', 'FontSize', 18)
 
@@ -306,7 +313,7 @@ plot([0 p_detect_big(2,1) p_detect_big(2,1)], [p_detect_big(2,1) p_detect_big(2,
     'LineStyle','--', 'Color', rgb(233, 30, 99))
 text(0.7, .4, (sprintf('Mech+Elec %.0f', tt(np))), 'Color',rgb(26, 35, 126), 'FontSize',15)
 text(0.7, .30, (sprintf('Mech+Elec %.0f', tt(mm_np))), 'Color',rgb(156, 39, 176), 'FontSize',15)
-text(0.7, .2, 'Mech+Elec 26', 'Color', rgb(103, 58, 183), 'FontSize',15)
+text(0.7, .2,(sprintf('Mech+Elec %.0f', tt(ll_np))), rgb(103, 58, 183), 'FontSize',15)
 % (sprintf('Mech+Elec %.0f', tt(ll_np)))
 text(0.7, .1, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
 
