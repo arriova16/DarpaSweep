@@ -2,8 +2,8 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_22and24\SweepTask';
-  process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
+  % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
 
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 
@@ -105,11 +105,11 @@ data.MechDetectTable = cat(1,mech_table{:});
 data.ElectDetectTable = cat(1,elect_table{:});
 
 
-save_fname = sprintf('%s_ME_comb.mat', monkey_name);
-if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-
-    save(fullfile(process_loc, save_fname), 'data')
-end
+% save_fname = sprintf('%s_ME_comb.mat', monkey_name);
+% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+% 
+%     save(fullfile(process_loc, save_fname), 'data')
+% end
 
 
 %% putting things into block - will need to concat response tables?
@@ -136,8 +136,8 @@ for i = 1:length(data)
         % plot(x_mech, y_mech_dprime)
 
          %for wp
-%          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
-%          'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
+         % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
+         % 'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
          % % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
 
 
@@ -155,8 +155,8 @@ for i = 1:length(data)
        [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
 
        %  %wp
-%        [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
-%            3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
+       % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
+           % 3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
        %  % plot(x_elect,y_elect)
 %      'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
 % CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
@@ -181,15 +181,16 @@ scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', '-')
 
 %plotting day by day
-% c = ColorGradient(rgb(207, 216, 220), rgb(33, 33, 33), length(block_struct));
+c = ColorGradient(rgb(207, 216, 220), rgb(33, 33, 33), length(block_struct));
 % colormap(flipud(parula))
-c = flipud(parula(length(block_struct)));
+% c = flipud(parula(length(block_struct)));
 plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 axis square
 xlabel('Amplitude (mm)','FontSize', 18)
 ylabel('pDetect','FontSize',18) 
 ylim([0 1.02])
-
+text(0.05,.3, 'First Session', 'Color', rgb(207, 216, 220), 'FontSize', 18)
+text(0.05,.23, 'Latest Session', 'Color',rgb(33, 33, 33), 'FontSize',18)
 
 subplot(2,2,2); 
 hold on; title('Mech dPrime')
@@ -253,12 +254,15 @@ axis square
  % text(30,2,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176), 'FontSize',18);
 
   
-  plot(tt,tq,'Color',rgb(69, 90, 100))
+ plot(tt,tq,'Color',rgb(69, 90, 100))
  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
  ylabel('d''','FontSize',18)
  ylim([-.6 5])
  
- colorbar('Direction', 'reverse', 'Ticks', [0,1,3],'TickLabels',{'Newest', 'Oldest'})
+
+ % cb = colorbar('Direction', 'reverse', 'Ticks', [0,1,3],'TickLabels',{'Newest', 'Oldest'});
+ % cb.cmap = c;
+ % colormap(c)
 % legend('Newest','Oldest','Location','southeast')
 % legend('boxoff')
 end
