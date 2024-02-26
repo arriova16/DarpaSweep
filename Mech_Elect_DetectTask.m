@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
+data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask';
   % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
 
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
@@ -126,7 +126,7 @@ for i = 1:length(data)
  
          %works for pinot
 
-          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
+%           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
           
        % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
        %     'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
@@ -136,8 +136,8 @@ for i = 1:length(data)
         % plot(x_mech, y_mech_dprime)
 
          %for wp
-         % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
-         % 'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
+         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
+         'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
          % % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
 
 
@@ -152,11 +152,11 @@ for i = 1:length(data)
          
          %coeffs are the issues/ constraints
         %works for pinot
-       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
+%        [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
 
        %  %wp
-       % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
-           % 3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
+       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
+           3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
        %  % plot(x_elect,y_elect)
 %      'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
 % CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
@@ -167,15 +167,17 @@ end
 %% Plotting
 %c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
 sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
-
+SetFont('Arial', 18)
  %was getting error with above sigmoid because it was expecting 4 but only
  %giving 3
  siggyfun = GetSigmoid(3); 
 for i = 1:length(block_struct)
 dprime_threshold = 1.35;
- SetFont('Arial', 18)
+ 
 %plotting Mech Detection pdetect and dprime
 subplot(2,2,1); hold on 
+SetFont('Arial', 18)
+
 title('Mech pDetect')
 scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color', [.1 .1 .1], 'LineStyle', '-')
@@ -186,14 +188,17 @@ c = ColorGradient(rgb(207, 216, 220), rgb(33, 33, 33), length(block_struct));
 % c = flipud(parula(length(block_struct)));
 plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 axis square
-xlabel('Amplitude (mm)','FontSize', 18)
-ylabel('pDetect','FontSize',18) 
+xlabel('Amplitude (mm)')
+ylabel('pDetect') 
 ylim([0 1.02])
-text(0.05,.3, 'First Session', 'Color', rgb(207, 216, 220), 'FontSize', 18)
-text(0.05,.23, 'Latest Session', 'Color',rgb(33, 33, 33), 'FontSize',18)
+text(0.05,.3, 'First Session', 'Color', rgb(207, 216, 220))
+text(0.05,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
+ xticks(0:.02:.12)
+ xtickangle(0)
 
 subplot(2,2,2); 
 hold on; title('Mech dPrime')
+SetFont('Arial', 18)
 
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
@@ -204,25 +209,30 @@ axis square
  yq = siggyfun(coeffs,xq);
  [~, b] = min(abs(yq-dprime_threshold));
  plot(xq,yq,'Color', [.1 .1 .1])
- plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(69, 90, 100),'LineStyle','--')
-  text(.07,0,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126), 'FontSize',18);
- xlabel('Amplitude (mm)','FontSize', 18)
- ylabel('d''','FontSize',18)
- ylim([-.6 5])
-
+ plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
+  text(.07,0,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
+ xlabel('Amplitude (mm)')
+ ylabel('d''')
+ ylim([-1 5])
+%  xlim([0 .12])
+ xticks(0:.02:.12)
+xtickangle(0)
 
 subplot(2,2,3); hold on; title('Elect pDetect')
+
+SetFont('Arial', 18)
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color', [.1 .1 .1], 'LineStyle', '-')
 plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 
 axis square
- xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
- ylabel('pDetect','FontSize',18)
+ xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
+ ylabel('pDetect')
 ylim([0 1.02])
 
  subplot(2,2,4); hold on; title('Elect dPrime')
+SetFont('Arial', 18)
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
@@ -237,27 +247,27 @@ axis square
  tq = siggyfun(coeffs_elect,tt);
 
  [~, np] = min(abs(tq-dprime_threshold));
- plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(26, 35, 126),'LineStyle', '--')
+ plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
  up = (tt(np));
- text(30,1,(sprintf('%.0f',up)), 'Color', rgb(26, 35, 126), 'FontSize',18);
+ text(30,1,(sprintf('%.0f',up)), 'Color', rgb(26, 35, 126));
  % text(30,2.5,(sprintf('%.0f',up)), 'Color', rgb(26, 35, 126), 'FontSize',18);
 % 
   [~, ll_np] = min(abs(tq-ll));
   lp = (tt(ll_np));
-  plot([0 tt(ll_np) tt(ll_np)], [ll, ll, 0],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-  text(30,.5,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',18);
+  plot([0 tt(ll_np) tt(ll_np)], [ll, ll, -.1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
+  text(30,.5,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183));
   % text(30,1.5,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',18);
 
   [~, mm_np] = min(abs(tq-mm));
-  plot([0 tt(mm_np) tt(mm_np)], [mm, mm, 0], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- text(30,0,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176), 'FontSize',18);
+  plot([0 tt(mm_np) tt(mm_np)], [mm, mm,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
+ text(30,0,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176));
  % text(30,2,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176), 'FontSize',18);
 
   
  plot(tt,tq,'Color',rgb(69, 90, 100))
- xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
- ylabel('d''','FontSize',18)
- ylim([-.6 5])
+ xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
+ ylabel('d''')
+ ylim([-1 5])
  
 
  % cb = colorbar('Direction', 'reverse', 'Ticks', [0,1,3],'TickLabels',{'Newest', 'Oldest'});
