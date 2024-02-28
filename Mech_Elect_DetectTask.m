@@ -126,15 +126,18 @@ for i = 1:length(data)
          y_mech_dprime = MechDetect_DT.dPrime;
          y_mech_pdetect = MechDetect_DT.pDetect;
          %works for pinot
-
-           % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
+         plot(x_mech, y_mech_pdetect)
+         % pdetect
+           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect,'CoeffInit', [100,0.2,NaN,NaN],  'PlotFit', true);
+           % dprime
+           % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
           
        % % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
            % 'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
        %x-offset completely off/ look at plot first/ dont just plug in
        %random numbers
 
-        % plot(x_mech, y_mech_pdetect)
+        
 
          %for wp
          % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
