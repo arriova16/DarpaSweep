@@ -2,8 +2,8 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask';
-  % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
+process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 
@@ -18,11 +18,13 @@ file_list = dir(data_folder);
 %loading electdetect folder
 elect = fullfile(data_folder, 'ElectDetect');
 elect_file = dir(fullfile(elect, '*rsp'));
-    
+
 %loading mechdetect folder
 mech = fullfile(data_folder, 'MechDetect');
 mech_file = dir(fullfile(mech, '*rsp'));
 
+electrode_split = strsplit(data_folder, '\');
+electrode_num = electrode_split{7}(11:end);
 
 %formatting electdetect files name
 for e = 1:size(elect_file,1)
@@ -84,7 +86,7 @@ data = struct();
     mech_file_list = dir(fullfile(subf_mech, '*.mat'));
     elect_table = cell(size(elect_file_list,1),1);
     mech_table = cell(size(mech_file_list,1),1);
-
+    
     for b = 1:size(mech_file_list,1)
       for c = 1:size(elect_file_list)
          fname_split = strsplit(mech_file_list(b).name, '_');
@@ -100,12 +102,11 @@ data = struct();
 
       end
     end
-   
-data.MechDetectTable = cat(1,mech_table{:});
-data.ElectDetectTable = cat(1,elect_table{:});
+%only concat the last 2 days
+data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
+data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 
-
-% save_fname = sprintf('%s_ME_comb.mat', monkey_name);
+% save_fname = sprintf('%s_%s_ME.mat', monkey_name, electrode_num);
 % if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
 % 
 %     save(fullfile(process_loc, save_fname), 'data')
@@ -123,21 +124,21 @@ for i = 1:length(data)
          block_struct(d).MechDT_daily = dbd_mech_dt{d};
          x_mech = MechDetect_DT.MechAmp;
          y_mech_dprime = MechDetect_DT.dPrime;
- 
+         y_mech_pdetect = MechDetect_DT.pDetect;
          %works for pinot
 
-%           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
+           % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
           
-       % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
-       %     'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
+       % % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
+           % 'NumCoeffs', 4, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
        %x-offset completely off/ look at plot first/ dont just plug in
        %random numbers
 
-        % plot(x_mech, y_mech_dprime)
+        % plot(x_mech, y_mech_pdetect)
 
          %for wp
-         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
-         'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
+         % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
+         % 'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
          % % 'PlotFit', true, 'CoeffInit', [1,15,NaN,NaN], 'NumCoeffs', 3, 'EnableBackup', false);
 
 
@@ -152,11 +153,11 @@ for i = 1:length(data)
          
          %coeffs are the issues/ constraints
         %works for pinot
-%        [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
+       % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
 
        %  %wp
-       [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
-           3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
+       % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
+           % 3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
        %  % plot(x_elect,y_elect)
 %      'NumCoeffs', 4,'Constraints', [0, 500; -10, 10]'CoeffInit', [0,200,NaN,NaN]
 % CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
