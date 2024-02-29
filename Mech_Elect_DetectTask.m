@@ -14,9 +14,13 @@ for m = 3:size(file_list,1)
     electrode_list = dir(fullfile(data_folder, file_list(m).name,'Electrode*'));
     for e = 1:size(electrode_list,1)
         electrode_idx = electrode_list(e).name(11:end);
-        % if contains(electrode_idx, 'and')
-        %     and_idx = strfind()
-        % 
+        if contains(electrode_idx, 'and')
+            and_idx = strfind(electrode_idx,'and');
+            ee = [str2double(electrode_idx(1:and_idx-1)), str2double(electrode_idx(and_idx+3:end))];
+        else
+            ee = [str2double(electrode_idx)];
+        end
+        
     end
 end
 
