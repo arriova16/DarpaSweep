@@ -2,57 +2,32 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-% data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask';
+% data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
 % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 data_folder = 'B:\ProjectFolders\DARPA\Data\RawData';
-file_list = dir(data_folder);
+monkey_list = dir(data_folder);
 
-% data = struct(); ii = 1;
-for m = 3:size(file_list,1)
-    electrode_list = dir(fullfile(data_folder, file_list(m).name,'Electrode*'));
+for m = 3:size(monkey_list,1)
+    electrode_list = dir(fullfile(data_folder, monkey_list(m).name,'Electrode*'));
     for e = 1:size(electrode_list,1)
-        electrode_idx = electrode_list(e).name(11:end);
-        if contains(electrode_idx, 'and')
-            and_idx = strfind(electrode_idx,'end');
-            ee = [str2double(electrode_idx(1:and_idx-1)), str2double()]
-        % 
+        %looking into task folder
+        sweep_tld = fullfile(data_folder, monkey_list(m).name, electrode_list(e).name, 'SweepTask');
+        %mechnical folder
+        elect = fullfile(sweep_tld, 'ElectDetect');
+        mech = fullfile(sweep_tld, 'MechDetect');
+        
+        elect_file = dir(fullfile(elect, '*rsp'));
+        mech_file = dir(fullfile(mech, '*rsp'));
+ 
     end
 end
 
-% monkey_name = {'Pinot', 'Whistlepig'};
 
-% monkey_files = fullfile(data_folder, monkey_name);
-% for m = 1:size(monkey_files,2)
-%      electrode_list = fullfile(data_folder,monkey_files(m),'Electrode*'); 
-%      % for i = 1:size(electrode_list)
-%      % 
-%      % 
-%      % end
-% end
-
-%% Loading folders
-%load folders then load files from there 
-%save formatted mat files
-
-
-
-%loading electdetect folder
-elect = fullfile(data_folder, 'ElectDetect');
-elect_file = dir(fullfile(elect, '*rsp'));
-
-%loading mechdetect folder
-mech = fullfile(data_folder, 'MechDetect');
-mech_file = dir(fullfile(mech, '*rsp'));
-
-electrode_split = strsplit(data_folder, '\');
-electrode_num = electrode_split{7}(11:end);
 
 %formatting electdetect files name
 for e = 1:size(elect_file,1)
-
-    %getting monkey name and sess date for file name
 
     name_split = strsplit(elect_file(e).name, '_');
     us_idx = find(elect_file(e).name == '_', 1, 'last');
@@ -73,8 +48,6 @@ for e = 1:size(elect_file,1)
     end
 
 end
-
-%formatting MechDetect folder
 
 for m = 1:size(mech_file,1)
     %getting monkey name and sess date for file name
@@ -169,7 +142,7 @@ for i = 1:length(data)
           
 
          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'Constraints', [0,200;-5, 5], 'PlotFit', true);
-
+% 
 
 
         %analysis for electrical table
