@@ -94,10 +94,11 @@ data = struct();
          temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name)); 
           elect_table{c} = [temp_elect.ElectDetect_Table];
           block_struct(c).ElectRT =elect_table{c};
-
+        
 
       end
     end
+%     block_struct(:,10) = block_struct(:,1);
 %only concat the last 2 days
 data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
 data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
@@ -125,7 +126,7 @@ for i = 1:length(data)
          %works for pinot
          plot(x_mech, y_mech)
          % pdetect
-           % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'CoeffInit', [100,0.2,NaN,NaN],  'PlotFit', true);
+           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4, 'CoeffInit', [200,0.02,NaN,NaN],  'PlotFit', true);
            % dprime
            % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
           
@@ -141,7 +142,7 @@ for i = 1:length(data)
          % 'NumCoeffs', 3, 'CoeffInit', [400,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
           
 
-         [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'Constraints', [0,200;-5, 5], 'PlotFit', true);
+%          [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'Constraints', [0,200;-5, 5], 'PlotFit', true);
 % 
 
 
@@ -158,13 +159,13 @@ for i = 1:length(data)
 %         dprime
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
 %         pdetect
-         % [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect,'Constraints', [0,200;-5, 5], 'PlotFit', true);
+%          [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
 
        %  %wp
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
            % 3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
        %  % plot(x_elect,y_elect)
-          [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect,'CoeffInit', [.2,30,NaN, NaN], 'PlotFit', true);
+%           [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect,'CoeffInit', [.2,30,NaN, NaN], 'PlotFit', true);
 
     end
 end
