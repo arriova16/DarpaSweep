@@ -2,27 +2,27 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-% data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
+data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
 % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData';
-monkey_list = dir(data_folder);
+% data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData';
+% monkey_list = dir(data_folder);
 
-for m = 3:size(monkey_list,1)
-    electrode_list = dir(fullfile(data_folder, monkey_list(m).name,'Electrode*'));
-    for e = 1:size(electrode_list,1)
+% % for m = 3:size(monkey_list,1)
+%     electrode_list = dir(fullfile(data_folder, monkey_list(m).name,'Electrode*'));
+%     for e = 1:size(electrode_list,1)
         %looking into task folder
-        sweep_tld = fullfile(data_folder, monkey_list(m).name, electrode_list(e).name, 'SweepTask');
+%         sweep_tld = fullfile(data_folder, monkey_list(m).name, electrode_list(e).name, 'SweepTask');
         %mechnical folder
-        elect = fullfile(sweep_tld, 'ElectDetect');
-        mech = fullfile(sweep_tld, 'MechDetect');
+        elect = fullfile(data_folder, 'ElectDetect');
+        mech = fullfile(data_folder, 'MechDetect');
         
         elect_file = dir(fullfile(elect, '*rsp'));
         mech_file = dir(fullfile(mech, '*rsp'));
- 
-    end
-end
+%  
+%     end
+% end
 
 
 
@@ -76,8 +76,8 @@ end
 block_struct =struct();
 data = struct();
 
-    subf_mech = fullfile(sweep_tld, 'MechDetect');
-    subf_elect = fullfile(sweep_tld, 'ElectDetect');
+    subf_mech = fullfile(data_folder, 'MechDetect');
+    subf_elect = fullfile(data_folder, 'ElectDetect');
     elect_file_list = dir(fullfile(subf_elect, '*.mat'));
     mech_file_list = dir(fullfile(subf_mech, '*.mat'));
     elect_table = cell(size(elect_file_list,1),1);
