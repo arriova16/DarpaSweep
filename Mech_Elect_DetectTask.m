@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
 % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
@@ -200,8 +200,10 @@ ylabel('pDetect')
 ylim([0 1])
 text(0.05,.3, 'First Session', 'Color', rgb(207, 216, 220))
 text(0.05,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
-%  xticks(0:.02:.12)
- xtickangle(0)
+text(0.05, .17, 'Last Two Days', 'Color',rgb(198, 40, 40))
+% xticks(0:.02:.12)
+ % xtickangle(0)
+ xlim([0 .07])
  % xq = linspace(0, x_mech(end));
  % yq = siggyfun(coeffs,xq);
  % [~, b] = min(abs(yq-dprime_threshold));
@@ -215,9 +217,9 @@ hold on; title('Mech dPrime')
 SetFont('Arial', 18)
 
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
+plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', rgb(198, 40, 40), 'LineStyle', '-')
 plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
-
+xlim([0 .07])
 axis square
 
 
@@ -235,9 +237,9 @@ SetFont('Arial', 18)
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color',rgb(198, 40, 40), 'LineStyle', '-')
 plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
- ll = 0.15;
- mm = 0.4;
-
+ % ll = 0.15;
+ % mm = 0.4;
+xlim([0 30])
  tt = linspace(0,x_elect(end));
  tq = siggyfun(coeffs_elect,tt);
 
@@ -268,7 +270,7 @@ ylim([0 1])
 SetFont('Arial', 18)
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
+plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', rgb(198, 40, 40), 'LineStyle', '-')
 plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 
 axis square
@@ -278,8 +280,6 @@ axis square
  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
  ylabel('d''')
  ylim([-1 5])
- 
+ xlim([0 30])
 
 end
-
-
