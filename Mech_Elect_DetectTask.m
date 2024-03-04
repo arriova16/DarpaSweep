@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask';
 % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
@@ -14,7 +14,8 @@ data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\
 %     for e = 1:size(electrode_list,1)
         %looking into task folder
 %         sweep_tld = fullfile(data_folder, monkey_list(m).name, electrode_list(e).name, 'SweepTask');
-        %mechnical folder
+
+
         elect = fullfile(data_folder, 'ElectDetect');
         mech = fullfile(data_folder, 'MechDetect');
         
@@ -33,15 +34,15 @@ for e = 1:size(elect_file,1)
     us_idx = find(elect_file(e).name == '_', 1, 'last');
     dt_string = elect_file(e).name(us_idx(1)+1:end-4);
     dt_split = strsplit(dt_string, 'T');
-    exp_date = datestr(datenum(dt_split{1}, 'yyyymmdd'));
+    % exp_date = datestr(datenum(dt_split{1}, 'yyyymmdd'));
     monkey_name = name_split{2}(1:end -7);
-    fname = sprintf('%s_%s_ElectDetect.mat', monkey_name, exp_date);
-    
+    fname = sprintf('%s_%s_ElectDetect.mat', monkey_name,dt_split{1});
+
     if exist(fullfile(elect,fname), 'file') ~= 1 || overwrite
         %loading and formatting data
         raw_data = readcell(fullfile(elect, elect_file(e).name), ...
             'FileType','text', 'NumHeaderLines', 1);
-     
+
         ElectDetect_Table = ElectDetectFormatter(raw_data);
 
         save(fullfile(elect,fname), 'ElectDetect_Table')
@@ -55,15 +56,15 @@ for m = 1:size(mech_file,1)
     monkey_name  = name_split{2}(1:end-7);
     dt_name = name_split{4}(1:end-4);
     dt_split = strsplit(dt_name, 'T');
-    exp_date = datestr(datenum(dt_split{1}, 'yyyymmdd'));
-    fname = sprintf('%s_%s_MechDetect.mat', monkey_name, exp_date);
-    
+    %exp_date = datestr(datenum(dt_split{1}, 'yyyymmdd'));
+    fname = sprintf('%s_%s_MechDetect.mat', monkey_name, dt_split{1});
+
     if exist(fullfile(mech, fname), 'file') ~= 1 || overwrite 
 
     %loading and formatting data
         raw_data = readcell(fullfile(mech, mech_file(m).name), ...
             "FileType","text", 'NumHeaderLines', 1);
-        
+
         MechDetect_Table = MechDetectFormatter(raw_data);
 
         save(fullfile(mech,fname), 'MechDetect_Table')
@@ -98,8 +99,8 @@ data = struct();
 
       end
     end
-%     block_struct(:,10) = block_struct(:,1);
 %only concat the last 2 days
+% block_struct(:,8) = block_struct(:,1);
 data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
 data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 
@@ -159,7 +160,7 @@ for i = 1:length(data)
 %         dprime
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
 %         pdetect
-%          [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
+         [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
 
        %  %wp
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
@@ -201,12 +202,12 @@ text(0.05,.3, 'First Session', 'Color', rgb(207, 216, 220))
 text(0.05,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
 %  xticks(0:.02:.12)
  xtickangle(0)
- xq = linspace(0, x_mech(end));
- yq = siggyfun(coeffs,xq);
- [~, b] = min(abs(yq-dprime_threshold));
- plot(xq,yq,'Color', rgb(198, 40, 40))
- plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
-   text(.07,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
+ % xq = linspace(0, x_mech(end));
+ % yq = siggyfun(coeffs,xq);
+ % [~, b] = min(abs(yq-dprime_threshold));
+ % plot(xq,yq,'Color', rgb(198, 40, 40))
+ % plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
+ %   text(.07,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
 
 
 subplot(2,2,2); 
@@ -240,24 +241,24 @@ plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Co
  tt = linspace(0,x_elect(end));
  tq = siggyfun(coeffs_elect,tt);
 
- [~, np] = min(abs(tq-dprime_threshold));
- plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(26, 35, 126),'LineStyle', '--')
- up = (tt(np));
- text(30,.25,(sprintf('%.0f',up)), 'Color', rgb(26, 35, 126));
+ % [~, np] = min(abs(tq-dprime_threshold));
+ % plot([0 tt(np) tt(np)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(26, 35, 126),'LineStyle', '--')
+ % up = (tt(np));
+ % text(30,.25,(sprintf('%.0f',up)), 'Color', rgb(26, 35, 126));
  % text(30,2.5,(sprintf('%.0f',up)), 'Color', rgb(26, 35, 126), 'FontSize',18);
 % 
-  [~, ll_np] = min(abs(tq-ll));
-  lp = (tt(ll_np));
-  plot([0 tt(ll_np) tt(ll_np)], [ll, ll, 0],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-  text(30,.15,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183));
-  % text(30,1.5,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',18);
+ %  [~, ll_np] = min(abs(tq-ll));
+ %  lp = (tt(ll_np));
+ %  plot([0 tt(ll_np) tt(ll_np)], [ll, ll, 0],'Color', rgb(103, 58, 183), 'LineStyle', '--')
+ %  text(30,.15,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183));
+ %  % text(30,1.5,(sprintf('%.0f',tt(ll_np))), 'Color', rgb(103, 58, 183), 'FontSize',18);
+ % 
+ %  [~, mm_np] = min(abs(tq-mm));
+ %  plot([0 tt(mm_np) tt(mm_np)], [mm, mm,0], 'Color', rgb(156, 39, 176),'LineStyle', '--')
+ % text(30,.2,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176));
+ % % text(30,2,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176), 'FontSize',18);
 
-  [~, mm_np] = min(abs(tq-mm));
-  plot([0 tt(mm_np) tt(mm_np)], [mm, mm,0], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- text(30,.2,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176));
- % text(30,2,(sprintf('%.0f',tt(mm_np))), 'Color', rgb(156, 39, 176), 'FontSize',18);
-
-   plot(tt,tq,'Color',rgb(198, 40, 40))
+   % plot(tt,tq,'Color',rgb(198, 40, 40))
 axis square
  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
  ylabel('pDetect')
