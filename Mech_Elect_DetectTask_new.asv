@@ -79,8 +79,8 @@ for m = 1:length(monkey_list)
             fname_split = strsplit(mech_file_list(b).name, '_');
             monkey_name = fname_split{1};
             block_struct(ii).Monkey = monkey_name;
-            block_struct(ii).Date = datetime(fname_split{2}, 'yyyy-MM-dd');
-            block_struct(ii).Electrode = fname_split{4};
+            % block_struct(ii).Date = fname_split{2};
+            % block_struct(ii).Electrode = fname_split{4};
             
        %      block_struct(b).Date = fname_split{2};
        %      temp_mech = load(fullfile(mech_file_list(b).folder, mech_file_list(b).name));
