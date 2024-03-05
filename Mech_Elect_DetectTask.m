@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_12and22\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_31and41\SweepTask';
 % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
@@ -76,7 +76,8 @@ end
 %%
 block_struct =struct();
 data = struct();
-
+        % sweep_tld = fullfile(tld, monkey_list(m).name, electrode_list(e).name, 'SweepTask');
+% 
     subf_mech = fullfile(data_folder, 'MechDetect');
     subf_elect = fullfile(data_folder, 'ElectDetect');
     elect_file_list = dir(fullfile(subf_elect, '*.mat'));
@@ -101,8 +102,8 @@ data = struct();
     end
 %only concat the last 2 days
 % block_struct(:,8) = block_struct(:,1);
-data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
-data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
+% data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
+% data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 
 % save_fname = sprintf('%s_%s_ME.mat', monkey_name, electrode_num);
 % if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
@@ -117,17 +118,17 @@ data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 
 for i = 1:length(data)
     for d = 1:length(block_struct)
-        [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
+        % [MechDetect_DT] = AnalyzeMechTable(data.MechDetectTable);
           [dbd_mech_dt{d}]= AnalyzeMechTable(block_struct(d).MechRT(:,:));
          block_struct(d).MechDT_daily = dbd_mech_dt{d};
-         x_mech = MechDetect_DT.MechAmp;
+         % x_mech = MechDetect_DT.MechAmp;
 %          y_mech_dprime = MechDetect_DT.dPrime;
-         y_mech = MechDetect_DT.pDetect;
+         % y_mech = MechDetect_DT.pDetect;
 
          %works for pinot
-         plot(x_mech, y_mech)
+         % plot(x_mech, y_mech)
          % pdetect
-           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4, 'CoeffInit', [200,0.02,NaN,NaN],  'PlotFit', true);
+           % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4, 'CoeffInit', [200,0.02,NaN,NaN],  'PlotFit', true);
            % dprime
            % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
           
@@ -150,17 +151,17 @@ for i = 1:length(data)
         %analysis for electrical table
 
        
-        [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
+        % [ElectDetect_DT] = AnalyzeElectTable(data.ElectDetectTable);
         [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT(:,:));
         block_struct(d).ElectDT_daily = dbd_elect_dt{d};
-        x_elect = ElectDetect_DT.StimAmp;
-        y_elect = ElectDetect_DT.pDetect;
-         
+        % x_elect = ElectDetect_DT.StimAmp;
+        % y_elect = ElectDetect_DT.pDetect;
+        % 
         %works for pinot
 %         dprime
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', 3,'CoeffInit', [.5,15,NaN,NaN],'PlotFit', true);
 %         pdetect
-         [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
+         % [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
 
        %  %wp
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
@@ -170,6 +171,8 @@ for i = 1:length(data)
 
     end
 end
+
+plot(block_struct.ElectDT_daily.StimAmp,block_struct.ElectDT_daily.pDetect)
 
 %% Plotting
 %c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
