@@ -10,8 +10,9 @@ for m = 1:length(monkey_list) %monkey names
     for e = 1:size(electrode_list,1)
          %go through each folder
         sweep_tld = fullfile(tld, monkey_list(m).name, electrode_list(e).name, 'SweepTask');
+        split_sweep = strsplit(sweep_tld, '\');
+        electrode_sweep = split_sweep{7};
         
-       
          elect = fullfile(sweep_tld, 'ElectDetect');
          mech = fullfile(sweep_tld, 'MechDetect');
         
@@ -23,7 +24,7 @@ for m = 1:length(monkey_list) %monkey names
         us_idx = find(elect_file(ef).name == '_', 1, 'last');
         dt_string = elect_file(ef).name(us_idx(1)+1:end-4);
         dt_split = strsplit(dt_string, 'T');
-        fname = sprintf('%s_%s_ElectDetect.mat', monkey_list(m).name, dt_split{1});
+        fname = sprintf('%s_%s_%s_ElectDetect.mat', monkey_list(m).name, dt_split{1},electrode_sweep);
          
             if exist(fullfile(elect,fname), 'file') ~= 1 || overwrite
                 %loading and formatting data
@@ -39,7 +40,7 @@ for m = 1:length(monkey_list) %monkey names
         name_split = strsplit(mech_file(mf).name, '_');
         dt_name = name_split{4}(1:end-4);
         dt_split = strsplit(dt_name, 'T');
-        fname = sprintf('%s_%s_MechDetect.mat',  monkey_list(m).name, dt_split{1});
+        fname = sprintf('%s_%s_%s_MechDetect.mat',  monkey_list(m).name, dt_split{1},electrode_sweep);
             if exist(fullfile(mech, fname), 'file') ~= 1 || overwrite 
     
             %loading and formatting data
