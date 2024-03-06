@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_31and41\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 
 % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
@@ -206,8 +206,8 @@ ylim([0 1])
 text(0.05,.3, 'First Session', 'Color', rgb(207, 216, 220))
 text(0.05,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
 text(0.05, .17, 'Last Two Days', 'Color',rgb(198, 40, 40))
- xticks(0:.02:.1)
- xtickangle(0)
+% xticks(0:.02:.12)
+ % xtickangle(0)
  xlim([0 .1])
  % xq = linspace(0, x_mech(end));
  % yq = siggyfun(coeffs,xq);

@@ -23,6 +23,7 @@ for m = 1:length(monkey_list) %monkey names
         name_split = strsplit(elect_file(ef).name, '_');
         us_idx = find(elect_file(ef).name == '_', 1, 'last');
         dt_string = elect_file(ef).name(us_idx(1)+1:end-4);
+
         dt_split = strsplit(dt_string, 'T');
         fname = sprintf('%s_%s_%s_ElectDetect.mat', monkey_list(m).name, dt_split{1},electrode_sweep);
          
@@ -86,8 +87,12 @@ for m = 1:length(monkey_list)
                 ee = [str2double(electrode_numbers(1:and_idx-1)), str2double(electrode_numbers(and_idx+3:end))];
             end
             block_struct(ii).Electrode = ee;
-            block_struct(ii).Date = fname_split{2};
- 
+            date_split = str2double(fname_split{2});
+            
+            %doesn't work with array of dates?
+            block_struct(ii).Date = datetime(date_split, 'ConvertFrom', 'yyyyMMdd', 'Format', 'yyyy-MM-dd');
+            % block_struct(ii).Date = dt_try;
+              
             temp_mech = load(fullfile(mech_file_list(b).folder, mech_file_list(b).name));
             mech_table{b} = [temp_mech.MechDetect_Table];
             block_struct(ii).MechRT = mech_table{b};
@@ -106,5 +111,20 @@ for m = 1:length(monkey_list)
 
     end
 end
-%%
+%% getting cat data
+
+
+%% Analysis for quads
+% ii=1;
+for d = 1:length(block_struct)
+    [dbd_mech_dt{d}] = AnalyzeMechTable(block_struct(d).MechRT(:,:));
+    block_struct(d).MechDT_daily = dbd_mech_dt{d};
+
+    
+    [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT(:,:));
+    block_struct(d).ElectDT_daily = dbd_elect_dt{d};
+
+end
+
+%% plotting for quads
 
