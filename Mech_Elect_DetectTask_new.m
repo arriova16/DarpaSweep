@@ -23,8 +23,8 @@ for m = 1:length(monkey_list) %monkey names
         name_split = strsplit(elect_file(ef).name, '_');
         us_idx = find(elect_file(ef).name == '_', 1, 'last');
         dt_string = elect_file(ef).name(us_idx(1)+1:end-4);
-
         dt_split = strsplit(dt_string, 'T');
+    
         fname = sprintf('%s_%s_%s_ElectDetect.mat', monkey_list(m).name, dt_split{1},electrode_sweep);
          
             if exist(fullfile(elect,fname), 'file') ~= 1 || overwrite
@@ -78,8 +78,9 @@ for m = 1:length(monkey_list)
         elect_table = cell(size(elect_file_list,1),1);
         mech_table = cell(size(mech_file_list,1),1);
        for b = 1:size(mech_file_list,1)
-        for c = 1:size(elect_file_list)
+        for c = 1:size(elect_file_list,1)
             fname_split = strsplit(mech_file_list(b).name, '_');
+
             block_struct(ii).Monkey = fname_split{1};
             electrode_numbers = fname_split{4};
             if contains(electrode_numbers, 'and')
@@ -90,9 +91,9 @@ for m = 1:length(monkey_list)
             date_split = str2double(fname_split{2});
             
             %doesn't work with array of dates?
-            block_struct(ii).Date = datetime(date_split, 'ConvertFrom', 'yyyyMMdd', 'Format', 'yyyy-MM-dd');
-            % block_struct(ii).Date = dt_try;
-              
+            date_try = datestr(datetime(date_split, 'ConvertFrom', 'yyyyMMdd', 'Format', 'yyyy-MM-dd'));
+            block_struct(ii).Date = date_try;
+   %incorrectly added for elecRT files
             temp_mech = load(fullfile(mech_file_list(b).folder, mech_file_list(b).name));
             mech_table{b} = [temp_mech.MechDetect_Table];
             block_struct(ii).MechRT = mech_table{b};
@@ -111,20 +112,46 @@ for m = 1:length(monkey_list)
 
     end
 end
-%% getting cat data
+%% data struct from block struct
+data_struct = struct(); 
+%getting unique electrodes from block_struct
+electrode_stuffed = vertcat(block_struct(:).Electrode);
+u_electrode = unique(electrode_stuffed,'rows');
+
+for m = 1:length(block_struct)
+    for i = 1:size(u_electrode,1)
+        data_struct(i).Electrode = u_electrode(i,:);
+        
+        if block_struct(m).Electrode == data_struct(i).Electrode
+            data_struct(i).Monkey = block_struct(m).Monkey;
+        end
+        
+        
+        %getting all of the daily rt for each task to go into one cell per
+        %electrode
+        
+        % if block_struct(m).Electrode == block_struct(m).Electrode
+        %     data_struct(i).MechRT = cat(1,block_struct(m).MechRT);
+        % end
+
+    end
+end
+
+
+
 
 
 %% Analysis for quads
 % ii=1;
-for d = 1:length(block_struct)
-    [dbd_mech_dt{d}] = AnalyzeMechTable(block_struct(d).MechRT(:,:));
-    block_struct(d).MechDT_daily = dbd_mech_dt{d};
-
-    
-    [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT(:,:));
-    block_struct(d).ElectDT_daily = dbd_elect_dt{d};
-
-end
+% for d = 1:length(block_struct)
+%     [dbd_mech_dt{d}] = AnalyzeMechTable(block_struct(d).MechRT(:,:));
+%     block_struct(d).MechDT_daily = dbd_mech_dt{d};
+% 
+% 
+%     [dbd_elect_dt{d}] = AnalyzeElectTable(block_struct(d).ElectRT(:,:));
+%     block_struct(d).ElectDT_daily = dbd_elect_dt{d};
+% 
+% end
 
 %% plotting for quads
 
