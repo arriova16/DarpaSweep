@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_31and41\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 
 % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
@@ -104,8 +104,8 @@ data = struct();
     end
 %only concat the last 2 days
 % block_struct(:,8) = block_struct(:,1);
-data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
-data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
+data.ElectDetectTable = cat(1,block_struct(2:end).ElectRT);
+data.MechDetectTable = cat(1, block_struct(2:end).MechRT);
 
 % save_fname = sprintf('%s_%s_ME.mat', monkey_name, electrode_num);
 % if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
@@ -208,7 +208,7 @@ text(0.05,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
 text(0.05, .17, 'Last Two Days', 'Color',rgb(198, 40, 40))
  xticks(0:.02:.1)
  xtickangle(0)
- xlim([0 .1])
+ xlim([0.005 .01])
  % xq = linspace(0, x_mech(end));
  % yq = siggyfun(coeffs,xq);
  % [~, b] = min(abs(yq-dprime_threshold));
@@ -224,7 +224,7 @@ SetFont('Arial', 18)
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', rgb(198, 40, 40), 'LineStyle', '-')
 plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
-xlim([0 .1])
+xlim([.005 .01])
 axis square
 
 

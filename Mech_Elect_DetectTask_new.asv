@@ -98,16 +98,23 @@ for m = 1:length(monkey_list)
             temp_mech = load(fullfile(mech_file_list(b).folder, mech_file_list(b).name));
             mech_table{b} = [temp_mech.MechDetect_Table];
             block_struct(ii).MechRT = mech_table{b};
-
-
-            for c = 1:size(elect_file_list,1)
             
-                % Find the index of elect_file_list that matches the mech
+            
+            for c = 1:size(elect_file_list,1)
+                elect_fname_split = strsplit(elect_file_list(c).name, '_');
+                elect_date_split = str2double(fname_split{2});
+                date_try_elect = datestr(datetime(elect_date_split, 'ConvertFrom', 'yyyyMMdd', 'Format', 'yyyy-MM-dd'));
+               block_struct(ii).elect_date = date_try_elect;
+        
+             
+
+
+                % % Find the index of elect_file_list that matches the mech
                 % file date
-
+                %error in looping through. dates not aligning. 
                
-
-
+            
+                % cell2table(repmat(date_try_elect, [size(temp_elect,1),1]), 'VariableNames', {'Date'});
                 temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name));
                 elect_table{c} = [temp_elect.ElectDetect_Table];
                 block_struct(ii).ElectRT =elect_table{c};
