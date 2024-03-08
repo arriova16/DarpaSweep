@@ -64,12 +64,12 @@ end
 %% Loading mat files and creating block_struct (gotta fix this later)
 
 
-block_struct = struct();ii=1;
+block_struct = struct(); ii=1;
 monkeys = {'Pinot', 'Whistlepig'};
 for m = 1:length(monkey_list)
     electrode_list = dir(fullfile(tld,monkey_list(m).name, 'Electrode*'));
     for e = 1:size(electrode_list,1)
-        sweep_tld = fullfile(tld, monkey_list(m).name, electrode_list(e).name, 'SweepTask');  
+        sweep_tld = fullfile(tld, monkey_list(m).name, electrode_list(e).name, 'SweepTask');
         %go through mech and elec folders
         subf_mech = fullfile(sweep_tld, 'MechDetect');
         subf_elect = fullfile(sweep_tld, 'ElectDetect');
@@ -77,8 +77,9 @@ for m = 1:length(monkey_list)
         mech_file_list = dir(fullfile(subf_mech, '*.mat'));
         elect_table = cell(size(elect_file_list,1),1);
         mech_table = cell(size(mech_file_list,1),1);
-       for b = 1:size(mech_file_list,1)
-        for c = 1:size(elect_file_list,1)
+        for b = 1:size(mech_file_list,1)
+
+            % Get the date of the current mech file
             fname_split = strsplit(mech_file_list(b).name, '_');
 
             block_struct(ii).Monkey = fname_split{1};
@@ -89,26 +90,33 @@ for m = 1:length(monkey_list)
             end
             block_struct(ii).Electrode = ee;
             date_split = str2double(fname_split{2});
-            
+
             %doesn't work with array of dates?
             date_try = datestr(datetime(date_split, 'ConvertFrom', 'yyyyMMdd', 'Format', 'yyyy-MM-dd'));
             block_struct(ii).Date = date_try;
-   %incorrectly added for elecRT files
+            %incorrectly added for elecRT files
             temp_mech = load(fullfile(mech_file_list(b).folder, mech_file_list(b).name));
             mech_table{b} = [temp_mech.MechDetect_Table];
             block_struct(ii).MechRT = mech_table{b};
 
 
+            for c = 1:size(elect_file_list,1)
+            
+                % Find the index of elect_file_list that matches the mech
+                % file date
 
-            temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name)); 
-            elect_table{c} = [temp_elect.ElectDetect_Table];
-            block_struct(ii).ElectRT =elect_table{c};
+               
 
-             
-        end  
-                    
-        ii = ii+1;
-       end
+
+                temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name));
+                elect_table{c} = [temp_elect.ElectDetect_Table];
+                block_struct(ii).ElectRT =elect_table{c};
+
+
+            end %mech file loop
+
+            ii = ii+1;
+        end
 
     end
 end
