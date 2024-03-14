@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
+data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_31and41\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 
 % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
@@ -104,8 +104,8 @@ data = struct();
     end
 %only concat the last 2 days
 % block_struct(:,8) = block_struct(:,1);
-data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
-data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
+data.ElectDetectTable = cat(1,block_struct(end-2:end).ElectRT);
+data.MechDetectTable = cat(1, block_struct(end-2:end).MechRT);
 
 % save_fname = sprintf('%s_%s_ME.mat', monkey_name, electrode_num);
 % if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
@@ -165,7 +165,7 @@ for i = 1:length(data)
 %         dprime incorrect
        % [~,coeffs_elect_dprime,~, ~, ~, warn_elect_dprime] = FitSigmoid(x_elect,y_elect_dprime ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN], 'PlotFit', true);
 %         pdetect
-       [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN], 'PlotFit', true);
+       [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [.3,15,NaN,NaN], 'PlotFit', true);
 
        %  %wp
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
@@ -295,7 +295,7 @@ plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,3}, 'Co
 
 plot(tt,elect_dprime_coeffs,'Color',rgb(84, 110, 122))
 
-lp = 0.3;
+lp = 0.2;
 mp = 0.45;
 
 [~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));

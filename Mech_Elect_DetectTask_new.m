@@ -1,6 +1,6 @@
 %%New Mech Elect Detect Task
 %going from raw data and saving as mat files
-tld = 'B:\ProjectFolders\DARPA\Data\RawData';
+tld = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData';
 
 
 monkey_list = dir(tld); monkey_list = monkey_list(3:end);
