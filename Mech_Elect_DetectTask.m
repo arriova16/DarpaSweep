@@ -2,10 +2,10 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_31and41\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 
-% process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
+% process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 %%
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 % data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData';
@@ -107,11 +107,11 @@ data = struct();
 data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
 data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 
-% save_fname = sprintf('%s_%s_ME.mat', monkey_name, electrode_num);
-% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-% 
-%     save(fullfile(process_loc, save_fname), 'data')
-% end
+save_fname = sprintf('%s_ME.mat', monkey_name);
+if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+
+    save(fullfile(process_loc, save_fname), 'data')
+end
 
 
 %% putting things into block - will need to concat response tables?
