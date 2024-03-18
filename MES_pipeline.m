@@ -1,5 +1,5 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'C:\Users\Somlab\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
+sweep_df = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_12and13';
 file_list = dir(sweep_df);
 
  %% Loading mat files
@@ -200,172 +200,173 @@ ec = sigfun(coeffs_elect,tt);
 elect_fa = ElectDetect_DT{1,2};
 elect_dprime_coeffs = norminv(ec)- norminv(elect_fa);
 
-%% dprime plots
-sigfun = GetSigmoid(3);
-dprime_threshold = 1.35;
-SetFont('Arial',18)
-
-subplot(1,3,1); hold on
-title('Mech d''')
-
-scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
-
-xq = linspace(0, x_mech(end));
-yq = sigfun(coeffs,xq);
-[~, b] = min(abs(mech_dprime_coeffs-dprime_threshold));
-% plot(xq,yq,'Color', [.1 .1 .1])
-plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
-text(.07,1,'0.028', 'Color', rgb(233, 30, 99), 'FontSize',18);
-% text(.07,1,(sprintf('%.3f',xq(b))), 'Color', rgb(233, 30, 99), 'FontSize',18);
-
-xlabel('Amplitude (mm)','FontSize', 18)
-ylabel('d''','FontSize',18)
-ylim([0 4.1])
-
-
-axis square
-
-subplot(1,3,2); hold on
-title('Elec d''')
- scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
-
-axis square
-
-lp = 0.3;
-mp = 0.45;
-
-[~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
-plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
-text(25,2,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
-
-[~, ll_p] = min(abs(elect_dprime_coeffs-lp));
-plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-text(25,1,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
-
-[~, mm_p] = min(abs(elect_dprime_coeffs-mp));
-plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- text(25,1.5,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
-
-axis square
-xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
-ylabel('d''')
-ylim([-1 5])
-xlim([0 30])
-
-
-axis square
-
-subplot(1,3,3); hold on
-title('Sweep d''')
-
-plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
-
-% scatter(dprime_predicted(1),dprime_big(2,1),'filled', 'MarkerEdgeColor', [.4 .4 .4], 'MarkerFaceColor', [.4 .4 .4])
-scatter(dprime_predicted(2),dprime_big(2,2),'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
-scatter(dprime_predicted(3),dprime_big(2,3),'filled', 'MarkerEdgeColor',rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
-scatter(dprime_predicted(4),dprime_big(2,4),'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
-plot([0 dprime_big(2,1) dprime_big(2,1)], [dprime_big(2,1) dprime_big(2,1) 0],'LineStyle','--', 'Color', rgb(233, 30, 99))
-
-% text(2, 2, 'Mech+Elec 19', 'Color',rgb(26, 35, 126), 'FontSize',15)
-text(2, 2, (sprintf('Mech+Elec %.0f', tt(up))), 'Color',rgb(26, 35, 126), 'FontSize',15)
-
-% text(2, 1.75, 'Mech+Elec 18', 'Color',rgb(156, 39, 176), 'FontSize',15)
-text(2, 1.75, (sprintf('Mech+Elec %.0f', tt(mm_p))), 'Color',rgb(156, 39, 176), 'FontSize',15)
-
-% text(2, 1.5, 'Mech+Elec 17', 'Color', rgb(103, 58, 183), 'FontSize',15)
-text(2, 1.5, (sprintf('Mech+Elec %.0f', tt(ll_p))), 'Color', rgb(103, 58, 183), 'FontSize',15)
-
-text(2, 1.25, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
-xlim([0 3.2])
- ylim([0 3.2])
-xlabel('Predicted (dPrime)')
-ylabel('Observed (dPrime)', 'FontSize', 18)
-
-axis square
-
-%% pdetect plots
-sigfun = GetSigmoid(4);
-dprime_threshold = 1.35;
-SetFont('Arial',18)
-
-subplot(1,3,1); hold on
-title('Mech pdetect')
-scatter(x_mech,y_mech_pdetect, 50, [.1 .1 .1], 'filled')
-plot(x_mech, y_mech_pdetect,'Color', [.1 .1 .1], 'LineStyle', '-')
-% plot([0 xq(b) xq(b)], [p_detect_big(2,1) p_detect_big(2,1) 0], ...
-%     'LineStyle','--', 'Color', rgb(233, 30, 99))
-
-xq = linspace(0, x_mech(end));
-yq = sigfun(coeffs,xq);
-[~, b] = min(abs(yq-dprime_threshold));
-plot(xq,yq,'Color', [.1 .1 .1])
-plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
-text(.07,1,(sprintf('%.3f',xq(b))), 'Color', rgb(233, 30, 99), 'FontSize',18);
-
-
-xlabel('Amplitude (mm)')
-ylabel('pdetect')
-ylim([0 1])
-
-axis square
-
-subplot(1,3,2); hold on
-title('Elec pDetect')
-
-scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color',rgb(198, 40, 40), 'LineStyle', '-')
-% plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
-
-xlim([0 30])
-tt = linspace(0,x_elect(end));
-tq = sigfun(coeffs_elect,tt);
-plot(tt,tq,'Color',rgb(84, 110, 122))
-
-axis square
-xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
-ylabel('pDetect')
-ylim([0 1])
-
-
-% subplot(2,2,4); hold on; title('Elect dPrime')
-% SetFont('Arial', 18)
-
-scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', rgb(198, 40, 40), 'LineStyle', '-')
-% plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
-
-
-% scatter(x_elect,y_elect_pdetect, 50, [.1 .1 .1], 'filled')
-% plot(x_elect, y_elect_pdetect,'Color', [.1 .1 .1], 'LineStyle', '-')
+ %% dprime plots
+% sigfun = GetSigmoid(3);
+% dprime_threshold = 1.35;
+% SetFont('Arial',18)
+% 
+% subplot(1,3,1); hold on
+% title('Mech d''')
+% 
+% scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+% plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
+% 
+% xq = linspace(0, x_mech(end));
+% yq = sigfun(coeffs,xq);
+% [~, b] = min(abs(mech_dprime_coeffs-dprime_threshold));
+% % plot(xq,yq,'Color', [.1 .1 .1])
+% plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
+% text(.07,1,'0.028', 'Color', rgb(233, 30, 99), 'FontSize',18);
+% % text(.07,1,(sprintf('%.3f',xq(b))), 'Color', rgb(233, 30, 99), 'FontSize',18);
+% 
+% xlabel('Amplitude (mm)','FontSize', 18)
+% ylabel('d''','FontSize',18)
+% ylim([0 4.1])
 % 
 % 
-%  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
-%  ylabel('pdetect','FontSize',18)
 % axis square
 % 
-
-subplot(1,3,3); hold on
-title('Sweep pDetect')
-
-plot([0,2],[0,2], 'LineStyle','--','color', [.6,.6,.6])
-scatter(predict(1),p_detect_big(2,2), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
-scatter(predict(2),p_detect_big(2,3), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
-scatter(predict(3),p_detect_big(2,4), 'filled', 'MarkerEdgeColor', rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
-plot([0 p_detect_big(2,1) p_detect_big(2,1)], [p_detect_big(2,1) p_detect_big(2,1) 0], ...
-    'LineStyle','--', 'Color', rgb(233, 30, 99))
-text(0.7, .4, (sprintf('Mech+Elec %.0f', tt(up))), 'Color',rgb(26, 35, 126), 'FontSize',15)
-text(0.7, .30,(sprintf('Mech+Elec %.0f', tt(mm_p))), 'Color',rgb(156, 39, 176), 'FontSize',15)
-text(0.7, .2,(sprintf('Mech+Elec %.0f', tt(ll_p))), 'Color',rgb(103, 58, 183), 'FontSize',15)
-text(0.7, .1, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
-
-xlim([0 1])
- 
-xlabel('Predicted (pDetect)')
-ylabel('Observed (pDetect)', 'FontSize', 18)
-
-axis square
+% subplot(1,3,2); hold on
+% title('Elec d''')
+%  scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
+% 
+% axis square
+% 
+% lp = 0.3;
+% mp = 0.45;
+% 
+% [~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
+% plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
+% text(25,2,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
+% 
+% [~, ll_p] = min(abs(elect_dprime_coeffs-lp));
+% plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
+% text(25,1,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+% 
+% [~, mm_p] = min(abs(elect_dprime_coeffs-mp));
+% plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
+%  text(25,1.5,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+% 
+% 
+% axis square
+% xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
+% ylabel('d''')
+% ylim([-1 5])
+% xlim([0 30])
+% 
+% 
+% axis square
+% 
+% subplot(1,3,3); hold on
+% title('Sweep d''')
+% 
+% plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
+% 
+% % scatter(dprime_predicted(1),dprime_big(2,1),'filled', 'MarkerEdgeColor', [.4 .4 .4], 'MarkerFaceColor', [.4 .4 .4])
+% scatter(dprime_predicted(2),dprime_big(2,2),'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
+% scatter(dprime_predicted(3),dprime_big(2,3),'filled', 'MarkerEdgeColor',rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
+% scatter(dprime_predicted(4),dprime_big(2,4),'filled', 'MarkerEdgeColor',rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
+% plot([0 dprime_big(2,1) dprime_big(2,1)], [dprime_big(2,1) dprime_big(2,1) 0],'LineStyle','--', 'Color', rgb(233, 30, 99))
+% 
+% % text(2, 2, 'Mech+Elec 19', 'Color',rgb(26, 35, 126), 'FontSize',15)
+% text(2, 2, (sprintf('Mech+Elec %.0f', tt(up))), 'Color',rgb(26, 35, 126), 'FontSize',15)
+% 
+% % text(2, 1.75, 'Mech+Elec 18', 'Color',rgb(156, 39, 176), 'FontSize',15)
+% text(2, 1.75, (sprintf('Mech+Elec %.0f', tt(mm_p))), 'Color',rgb(156, 39, 176), 'FontSize',15)
+% 
+% % text(2, 1.5, 'Mech+Elec 17', 'Color', rgb(103, 58, 183), 'FontSize',15)
+% text(2, 1.5, (sprintf('Mech+Elec %.0f', tt(ll_p))), 'Color', rgb(103, 58, 183), 'FontSize',15)
+% 
+% text(2, 1.25, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
+% xlim([0 3.2])
+%  ylim([0 3.2])
+% xlabel('Predicted (dPrime)')
+% ylabel('Observed (dPrime)', 'FontSize', 18)
+% 
+% axis square
+% 
+% %% pdetect plots
+% sigfun = GetSigmoid(4);
+% dprime_threshold = 1.35;
+% SetFont('Arial',18)
+% 
+% subplot(1,3,1); hold on
+% title('Mech pdetect')
+% scatter(x_mech,y_mech_pdetect, 50, [.1 .1 .1], 'filled')
+% plot(x_mech, y_mech_pdetect,'Color', [.1 .1 .1], 'LineStyle', '-')
+% % plot([0 xq(b) xq(b)], [p_detect_big(2,1) p_detect_big(2,1) 0], ...
+% %     'LineStyle','--', 'Color', rgb(233, 30, 99))
+% 
+% xq = linspace(0, x_mech(end));
+% yq = sigfun(coeffs,xq);
+% [~, b] = min(abs(yq-dprime_threshold));
+% plot(xq,yq,'Color', [.1 .1 .1])
+% plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
+% text(.07,1,(sprintf('%.3f',xq(b))), 'Color', rgb(233, 30, 99), 'FontSize',18);
+% 
+% 
+% xlabel('Amplitude (mm)')
+% ylabel('pdetect')
+% ylim([0 1])
+% 
+% axis square
+% 
+% subplot(1,3,2); hold on
+% title('Elec pDetect')
+% 
+% scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
+% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color',rgb(198, 40, 40), 'LineStyle', '-')
+% % plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
+% 
+% xlim([0 30])
+% tt = linspace(0,x_elect(end));
+% tq = sigfun(coeffs_elect,tt);
+% plot(tt,tq,'Color',rgb(84, 110, 122))
+% 
+% axis square
+% xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
+% ylabel('pDetect')
+% ylim([0 1])
+% 
+% 
+% % subplot(2,2,4); hold on; title('Elect dPrime')
+% % SetFont('Arial', 18)
+% 
+% scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', rgb(198, 40, 40), 'LineStyle', '-')
+% % plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
+% 
+% 
+% % scatter(x_elect,y_elect_pdetect, 50, [.1 .1 .1], 'filled')
+% % plot(x_elect, y_elect_pdetect,'Color', [.1 .1 .1], 'LineStyle', '-')
+% % 
+% % 
+% %  xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')),'FontSize', 18)
+% %  ylabel('pdetect','FontSize',18)
+% % axis square
+% % 
+% 
+% subplot(1,3,3); hold on
+% title('Sweep pDetect')
+% 
+% plot([0,2],[0,2], 'LineStyle','--','color', [.6,.6,.6])
+% scatter(predict(1),p_detect_big(2,2), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
+% scatter(predict(2),p_detect_big(2,3), 'filled', 'MarkerEdgeColor', rgb(156, 39, 176), 'MarkerFaceColor',rgb(156, 39, 176))
+% scatter(predict(3),p_detect_big(2,4), 'filled', 'MarkerEdgeColor', rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
+% plot([0 p_detect_big(2,1) p_detect_big(2,1)], [p_detect_big(2,1) p_detect_big(2,1) 0], ...
+%     'LineStyle','--', 'Color', rgb(233, 30, 99))
+% text(0.7, .4, (sprintf('Mech+Elec %.0f', tt(up))), 'Color',rgb(26, 35, 126), 'FontSize',15)
+% text(0.7, .30,(sprintf('Mech+Elec %.0f', tt(mm_p))), 'Color',rgb(156, 39, 176), 'FontSize',15)
+% text(0.7, .2,(sprintf('Mech+Elec %.0f', tt(ll_p))), 'Color',rgb(103, 58, 183), 'FontSize',15)
+% text(0.7, .1, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
+% 
+% xlim([0 1])
+% 
+% xlabel('Predicted (pDetect)')
+% ylabel('Observed (pDetect)', 'FontSize', 18)
+% 
+% axis square
 
 %% new plots 6 plots
 
@@ -373,32 +374,34 @@ SetFont('Arial',18)
 
 
 subplot(2,3,1); hold on
-title('Mech pdetect')
+title('Mech pDetect')
 scatter(x_mech,y_mech_pdetect, 50, [.1 .1 .1], 'filled')
-plot(x_mech, y_mech_pdetect,'Color', [.1 .1 .1], 'LineStyle', '-')
+plot(x_mech, y_mech_pdetect,'Color', rgb(33, 33, 33), 'LineStyle', '-')
 
 xq = linspace(0, x_mech(end));
 yq = sigfun(coeffs,xq);
 %sig plot
-plot(xq,yq,'Color', [.1 .1 .1])
+plot(xq,yq,'Color', rgb(183, 28, 28))
 
 
 
 xlabel('Amplitude (mm)')
-ylabel('pdetect')
+ylabel('pDetect')
 ylim([0 1])
 
 axis square
 
 subplot(2,3,2); hold on
+
 title('Elec pDetect')
+
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color',rgb(198, 40, 40), 'LineStyle', '-')
+plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color',rgb(33, 33, 33), 'LineStyle', '-')
 
 tt = linspace(0,x_elect(end));
 tq = sigfun(coeffs_elect,tt);
 %sigmoid 
-plot(tt,tq,'Color',rgb(198, 40, 40))
+plot(tt,tq,'Color',rgb(183, 28, 28))
 
 xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
 ylabel('pDetect')
@@ -415,15 +418,15 @@ scatter(predict(2),p_detect_big(2,3), 'filled', 'MarkerEdgeColor', rgb(156, 39, 
 scatter(predict(3),p_detect_big(2,4), 'filled', 'MarkerEdgeColor', rgb(26, 35, 126), 'MarkerFaceColor',rgb(26, 35, 126))
 plot([0 p_detect_big(2,1) p_detect_big(2,1)], [p_detect_big(2,1) p_detect_big(2,1) 0], ...
     'LineStyle','--', 'Color', rgb(233, 30, 99))
-% text(0.7, .4, (sprintf('Mech+Elec %.0f', tt(up))), 'Color',rgb(26, 35, 126), 'FontSize',15)
-% text(0.7, .30,(sprintf('Mech+Elec %.0f', tt(mm_p))), 'Color',rgb(156, 39, 176), 'FontSize',15)
-% text(0.7, .2,(sprintf('Mech+Elec %.0f', tt(ll_p))), 'Color',rgb(103, 58, 183), 'FontSize',15)
-% text(0.7, .1, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
 
 
 
+ylim([0 1])
+xlim([0 1])
 xlabel('Predicted (pDetect)')
 ylabel('Observed (pDetect)')
+
+
 
 
 axis square
@@ -434,14 +437,19 @@ title('Mech d''')
 
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
-% xq = linspace(0, x_mech(end));
-% dpm = sigfun(mech_dprime_coeffs,xq);
-% [~, m] = min(abs(mech_dprime_coeffs-dprime_threshold));
-% plot(xq,dpm,'Color',rgb(198, 40, 40))
-% plot([0 xq(m) xq(m)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
+mq = linspace(0, x_mech(end));
+[~, m] = min(abs(mech_dprime_coeffs-dprime_threshold));
+
+plot([0 mq(m) mq(m)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
+text(.04,1,(sprintf('%.3f', mq(m))), 'Color', rgb(233, 30, 99));
+
+%incorrect 
+dpm = sigfun(mech_dprime_coeffs,mq);
+plot(mq,mech_dprime_coeffs,'Color',rgb(183, 28, 28))
 
 
-% text(.07,1,'0.028', 'Color', rgb(233, 30, 99));
+
+
 
 xlabel('Amplitude (mm)')
 ylabel('d''')
@@ -453,16 +461,35 @@ axis square
 subplot(2,3,5); hold on
 title('Elec d''')
 
- scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
+lp = 0.3;
+mp = 0.45;
+
+[~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
+plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
+text(25,2,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
+
+[~, ll_p] = min(abs(elect_dprime_coeffs-lp));
+plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
+text(25,1,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+
+[~, mm_p] = min(abs(elect_dprime_coeffs-mp));
+plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
+ text(25,1.5,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+
+
+plot(tt,elect_dprime_coeffs,'Color',rgb(183, 28, 28))
 
 
 
 xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
 ylabel('d''')
-ylim([-1 5])
+ylim([0 4])
 xlim([0 30])
 axis square
+
+
 
 
 subplot(2,3,6); hold on
@@ -475,6 +502,15 @@ plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
 
 
 
+% text(2, 2, 'Mech+Elec 19', 'Color',rgb(26, 35, 126), 'FontSize',15)
+text(2.5, 2, (sprintf('Mech+Elec %.0f', tt(up))), 'Color',rgb(26, 35, 126), 'FontSize',15)
+
+% text(2, 1.75, 'Mech+Elec 18', 'Color',rgb(156, 39, 176), 'FontSize',15)
+text(2.5, 1.75, (sprintf('Mech+Elec %.0f', tt(mm_p))), 'Color',rgb(156, 39, 176), 'FontSize',15)
+
+% text(2, 1.5, 'Mech+Elec 17', 'Color', rgb(103, 58, 183), 'FontSize',15)
+text(2.5, 1.5, (sprintf('Mech+Elec %.0f', tt(ll_p))), 'Color', rgb(103, 58, 183), 'FontSize',15)
+text(2.5, 1.25, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
 
 
 xlim([0 3.2])
