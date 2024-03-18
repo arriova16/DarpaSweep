@@ -2,10 +2,10 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_31and41\SweepTask';
+data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 
-process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
+process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_12and13';
 %%
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 % data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData';
@@ -99,7 +99,9 @@ data = struct();
          temp_elect = load(fullfile(elect_file_list(c).folder, elect_file_list(c).name)); 
           elect_table{c} = [temp_elect.ElectDetect_Table];
           block_struct(c).ElectRT =elect_table{c};
-        
+        data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
+        data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
+% 
 
       end
     end
@@ -108,11 +110,11 @@ data = struct();
 data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
 data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 % 
-save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
-if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-
-    save(fullfile(process_loc, save_fname), 'data')
-end
+% save_fname = sprintf('%s_ME.mat', monkey_name);
+% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+% 
+%     save(fullfile(process_loc, save_fname), 'data')
+% end
 
 
 %% putting things into block - will need to concat response tables?

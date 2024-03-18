@@ -1,6 +1,6 @@
 
-tld = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_31and41\SweepTask';
-process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
+tld = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
+process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_12and13\SweepTask';
 file_list = dir(tld);
 %% loading matfiles
 %need to load 
@@ -11,26 +11,27 @@ mat_files = dir(fullfile(subf, '*.mat'));
 sweep_table = cell(size(mat_files,1),1);
 
 for i  = 1:size(mat_files,1)
-    name_split = strsplit(mat_files(i).name, '_');
-    animal = name_split{1};
-    electrode = name_split{4};
-    data(ii).Animal = name_split{1};
-    data(ii).Date = name_split{2};
 
+    
     temp = load(fullfile(mat_files(i).folder, mat_files(i).name));
-    sweep_table{i} = [temp.SweepDetect_Table];
-
-    data(ii).ResponseTable = sweep_table{i};
-
-    ii = ii+1;
+%     sweep_table{i} = [temp.response_table];
+%     name_split = strsplit(mat_files(i).name, '_');
+%     animal = name_split{1};
+%     data(ii).Animal = name_split{1};
+%     data(ii).Date = name_split{2};
+%     data(ii).ResponseTable = [temp.response_table];
+%    
+% 
+%     ii = ii+1;
 end
-
-CatTable = cat(1,sweep_table{:});
-
-save_fname = sprintf('%s_%s_Sweep_comb.mat', animal, electrode);
-if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-    save(fullfile(process_loc, save_fname), 'CatTable')
-end
+% 
+% 
+% CatTable = cat(1,sweep_table{:});
+% % 
+% save_fname = sprintf('%s_Sweep_comb.mat', animal);
+% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+%     save(fullfile(process_loc, save_fname), 'CatTable')
+% end
 
 %% Analysis
 

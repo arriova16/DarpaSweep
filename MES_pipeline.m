@@ -1,5 +1,5 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot';
+sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
 file_list = dir(sweep_df);
 
  %% Loading mat files
@@ -7,8 +7,7 @@ file_list = dir(sweep_df);
  block_struct = struct(); ii =1;
 %need to figure out how to avoid this and go straight to matfiles
 
-subf = fullfile(sweep_df, 'DarpaSweep');
-mat_file = dir(fullfile(subf, '*.mat'));
+mat_file = dir(fullfile(sweep_df, '*.mat'));
 
 %loading tables 
  for i = 1:size(mat_file,1)
