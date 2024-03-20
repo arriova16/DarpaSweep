@@ -2,10 +2,10 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_31and41\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_41and42\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 
-process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
+% process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
 %%
 % data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
 % data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData';
@@ -105,14 +105,16 @@ data = struct();
     end
 %only concat the last 2 days
 % block_struct(:,8) = block_struct(:,1);
-data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
-data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
+% data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
+% data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
+data.ElectDetectTable = cat(1,block_struct.ElectRT);
+data.MechDetectTable = cat(1, block_struct.MechRT);
 % 
-save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
-if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-
-    save(fullfile(process_loc, save_fname), 'data')
-end
+% save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
+% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+% 
+%     save(fullfile(process_loc, save_fname), 'data')
+% end
 
 
 %% putting things into block - will need to concat response tables?
@@ -210,6 +212,8 @@ SetFont('Arial', 18)
  %was getting error with above sigmoid because it was expecting 4 but only
  %giving 3
  siggyfun = GetSigmoid(4); 
+
+ sgtitle(sprintf('%s %s', monkey_name, monkey_electrode), 'FontSize', 30)
 for i = 1:length(block_struct)
 dprime_threshold = 1.35;
 
@@ -231,7 +235,7 @@ xlabel('Amplitude (mm)')
 ylabel('pDetect') 
 ylim([0 1])
 
-xlim([0 .03])
+xlim([0 .06])
 xticks(0:.01:.1)
 xtickangle(0)
 xq = linspace(0, x_mech(end));
@@ -262,7 +266,7 @@ plot(xq,mech_dprime_coeffs,'Color',rgb(84, 110, 122))
 xlabel('Amplitude (mm)')
 ylabel('d''')
 ylim([-1 5])
-xlim([0 .03])
+xlim([0 .06])
 xticks(0:.01:.1)
 xtickangle(0)
 axis square
@@ -285,7 +289,7 @@ axis square
 xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
 ylabel('pDetect')
 ylim([0 1])
-
+xlim([0 35])
 
 subplot(2,2,4); hold on; title('Elect dPrime')
 SetFont('Arial', 18)
@@ -301,20 +305,20 @@ mp = 0.45;
 
 [~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
 plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
-text(25,2,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
+text(25,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
 
 [~, ll_p] = min(abs(elect_dprime_coeffs-lp));
 plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-text(25,1,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+text(25,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
 
 [~, mm_p] = min(abs(elect_dprime_coeffs-mp));
 plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- text(25,1.5,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+ text(25,1.4,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
 
 axis square
 xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
 ylabel('d''')
 ylim([-1 5])
-xlim([0 30])
+xlim([0 35])
 
 end

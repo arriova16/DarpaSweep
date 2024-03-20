@@ -1,6 +1,6 @@
 %%New Mech Elect Detect Task
 %going from raw data and saving as mat files
-tld = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData';
+tld = 'B:\ProjectFolders\DARPA\Data\RawData';
 monkey_list = dir(tld);
 monkey_list = monkey_list(3:end);
 
@@ -14,9 +14,11 @@ for m = 1:length(monkey_list) %monkey names
         sweep_tld = fullfile(tld, monkey_list(m).name, electrode_list(e).name, 'SweepTask');
         %not a good way to save electrodes
         split_sweep = strsplit(sweep_tld, '\');
-%         electrode_sweep = split_sweep{7};
-        electrode_sweep = split_sweep{11};
-        
+        %in office
+        electrode_sweep = split_sweep{7};
+        %home
+        % % electrode_sweep = split_sweep{11};
+
          elect = fullfile(sweep_tld, 'ElectDetect');
          mech = fullfile(sweep_tld, 'MechDetect');
         sweep = fullfile(sweep_tld,'SweepDetect');
