@@ -2,77 +2,10 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_41and42\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_21and42\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 
 % process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
-%%
-% data_folder ='B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrodde_3and15\SweepTask';
-% data_folder = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData';
-% monkey_list = dir(data_folder);
-
-% % for m = 3:size(monkey_list,1)
-%     electrode_list = dir(fullfile(data_folder, monkey_list(m).name,'Electrode*'));
-%     for e = 1:size(electrode_list,1)
-%         looking into task folder
-%         sweep_tld = fullfile(data_folder, monkey_list(m).name, electrode_list(e).name, 'SweepTask');
-% 
-% 
-%         elect = fullfile(data_folder, 'ElectDetect');
-%         mech = fullfile(data_folder, 'MechDetect');
-% 
-%         elect_file = dir(fullfile(elect, '*rsp'));
-%         mech_file = dir(fullfile(mech, '*rsp'));
-% 
-%     end
-% end
-% 
-% 
-% 
-% formatting electdetect files name
-% for e = 1:size(elect_file,1)
-% 
-%     name_split = strsplit(elect_file(e).name, '_');
-%     us_idx = find(elect_file(e).name == '_', 1, 'last');
-%     dt_string = elect_file(e).name(us_idx(1)+1:end-4);
-%     dt_split = strsplit(dt_string, 'T');
-%     exp_date = datestr(datenum(dt_split{1}, 'yyyymmdd'));
-%     monkey_name = name_split{2}(1:end -7);
-%     fname = sprintf('%s_%s_ElectDetect.mat', monkey_name,dt_split{1});
-% 
-%     if exist(fullfile(elect,fname), 'file') ~= 1 || overwrite
-%         loading and formatting data
-%         raw_data = readcell(fullfile(elect, elect_file(e).name), ...
-%             'FileType','text', 'NumHeaderLines', 1);
-% 
-%         ElectDetect_Table = ElectDetectFormatter(raw_data);
-% 
-%         save(fullfile(elect,fname), 'ElectDetect_Table')
-%     end
-% 
-% end
-% 
-% for m = 1:size(mech_file,1)
-%     getting monkey name and sess date for file name
-%     name_split = strsplit(mech_file(m).name, '_');
-%     monkey_name  = name_split{2}(1:end-7);
-%     dt_name = name_split{4}(1:end-4);
-%     dt_split = strsplit(dt_name, 'T');
-%     exp_date = datestr(datenum(dt_split{1}, 'yyyymmdd'));
-%     fname = sprintf('%s_%s_MechDetect.mat', monkey_name, dt_split{1});
-% 
-%     if exist(fullfile(mech, fname), 'file') ~= 1 || overwrite 
-% 
-%     loading and formatting data
-%         raw_data = readcell(fullfile(mech, mech_file(m).name), ...
-%             "FileType","text", 'NumHeaderLines', 1);
-% 
-%         MechDetect_Table = MechDetectFormatter(raw_data);
-% 
-%         save(fullfile(mech,fname), 'MechDetect_Table')
-%     end
-% 
-% end
 
 
 %%
