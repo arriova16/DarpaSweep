@@ -2,10 +2,10 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_21and42\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_41and42\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 
-% process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
+process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 
 
 %%
@@ -38,10 +38,10 @@ data = struct();
     end
 %only concat the last 2 days
 % block_struct(:,8) = block_struct(:,1);
-% data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
-% data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
-data.ElectDetectTable = cat(1,block_struct.ElectRT);
-data.MechDetectTable = cat(1, block_struct.MechRT);
+data.ElectDetectTable = cat(1,block_struct(end-1:end).ElectRT);
+data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
+% data.ElectDetectTable = cat(1,block_struct.ElectRT);
+% data.MechDetectTable = cat(1, block_struct.MechRT);
 % 
 % save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
 % if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
@@ -66,7 +66,7 @@ for i = 1:length(data)
          %works for pinot
           plot(x_mech, y_mech)
          % pdetect
-           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4, 'CoeffInit', [200,.01,NaN,NaN],  'PlotFit', true);
+           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4, 'CoeffInit', [800,.01,NaN,NaN],  'PlotFit', true);
            % dprime
            % [~,coeffs_mech_dprime, ~,~,~, warn_mech_dprime] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4, 'CoeffInit', [200,.01,NaN,NaN],  'PlotFit', true);
           
@@ -101,12 +101,12 @@ for i = 1:length(data)
 %         dprime incorrect
        % [~,coeffs_elect_dprime,~, ~, ~, warn_elect_dprime] = FitSigmoid(x_elect,y_elect_dprime ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN], 'PlotFit', true);
 %         pdetect
-       [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN], 'PlotFit', true);
+       [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [.2,15,NaN,NaN], 'PlotFit', true);
 
        %  %wp
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
            % 3,'CoeffInit', [1,17,NaN, NaN], 'EnableBackup', false, 'PlotFit', true);
-       %  % plot(x_elect,y_elect)
+        % plot(x_elect,y_elect)
 %           [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect,'CoeffInit', [.2,30,NaN, NaN], 'PlotFit', true);
 
     end
@@ -238,15 +238,19 @@ mp = 0.45;
 
 [~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
 plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
-text(25,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
-
-[~, ll_p] = min(abs(elect_dprime_coeffs-lp));
-plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-text(25,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+% text(25,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
 
 [~, mm_p] = min(abs(elect_dprime_coeffs-mp));
 plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- text(25,1.4,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+ % text(25,1.4,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+
+[~, ll_p] = min(abs(elect_dprime_coeffs-lp));
+plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
+% text(25,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+
+C = ColorGradient(rgb(106, 27, 154),rgb(186, 104, 200));
+
+text(25, 1.4, {sprintf('%.0f',tt(up)), sprintf('%.0f',tt(mm_p)),sprintf('%.0f',tt(ll_p))}, 'Color', {198, 40, 40, 156, 39, 176,187, 222, 251});
 
 axis square
 xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
