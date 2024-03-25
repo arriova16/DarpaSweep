@@ -2,10 +2,10 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
+% data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_41and42\SweepTask';
 data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_41and42\SweepTask';
-% data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
 
-process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
+% process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
 
 
 %%
@@ -101,7 +101,8 @@ for i = 1:length(data)
 %         dprime incorrect
        % [~,coeffs_elect_dprime,~, ~, ~, warn_elect_dprime] = FitSigmoid(x_elect,y_elect_dprime ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN], 'PlotFit', true);
 %         pdetect
-       [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [.2,15,NaN,NaN], 'PlotFit', true);
+       % [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
+       [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
 
        %  %wp
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
@@ -168,7 +169,7 @@ xlabel('Amplitude (mm)')
 ylabel('pDetect') 
 ylim([0 1])
 
-xlim([0 .06])
+xlim([0 .02])
 xticks(0:.01:.1)
 xtickangle(0)
 xq = linspace(0, x_mech(end));
@@ -177,9 +178,9 @@ yq = siggyfun(coeffs,xq);
 plot(xq,yq,'Color',rgb(84, 110, 122))
 % plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
 % text(.02,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
-text(0.02,.3, 'First Session', 'Color', rgb(207, 216, 220))
-text(0.02,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
-text(0.02, .17, 'Last Two Days', 'Color',rgb(198, 40, 40))
+text(0.01,.3, 'First Session', 'Color', rgb(207, 216, 220))
+text(0.01,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
+text(0.01, .17, 'Last Two Days', 'Color',rgb(198, 40, 40))
 
 subplot(2,2,2); 
 hold on; title('Mech dPrime')
@@ -198,8 +199,10 @@ plot(xq,mech_dprime_coeffs,'Color',rgb(84, 110, 122))
 
 xlabel('Amplitude (mm)')
 ylabel('d''')
-ylim([-1 5])
-xlim([0 .06])
+ylim([-.5 3])
+xlim([0 .02])
+% xlim([0 
+endddd = MechDetect_DT(end,1);
 xticks(0:.01:.1)
 xtickangle(0)
 axis square
@@ -238,24 +241,24 @@ mp = 0.45;
 
 [~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
 plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
-% text(25,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
+text(25,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
 
 [~, mm_p] = min(abs(elect_dprime_coeffs-mp));
 plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- % text(25,1.4,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+ text(25,1.3,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
 
 [~, ll_p] = min(abs(elect_dprime_coeffs-lp));
 plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-% text(25,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+text(25,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
 
-C = ColorGradient(rgb(106, 27, 154),rgb(186, 104, 200));
+% C = ColorGradient(rgb(106, 27, 154),rgb(186, 104, 200));
 
-text(25, 1.4, {sprintf('%.0f',tt(up)), sprintf('%.0f',tt(mm_p)),sprintf('%.0f',tt(ll_p))}, 'Color', {198, 40, 40, 156, 39, 176,187, 222, 251});
+% text(25, 1.4, {sprintf('%.0f',tt(up)), sprintf('%.0f',tt(mm_p)),sprintf('%.0f',tt(ll_p))}, 'Color', {198, 40, 40, 156, 39, 176,187, 222, 251});
 
 axis square
 xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
 ylabel('d''')
-ylim([-1 5])
+ylim([-.5 3])
 xlim([0 35])
 
 end
