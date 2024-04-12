@@ -5,8 +5,8 @@
 data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_41and42\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_21and42\SweepTask';
 
-% process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep';
-
+process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_41and42';
+% 
 
 %%
 block_struct =struct();
@@ -43,11 +43,11 @@ data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 % data.ElectDetectTable = cat(1,block_struct.ElectRT);
 % data.MechDetectTable = cat(1, block_struct.MechRT);
 % 
-% save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
-% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-% 
-%     save(fullfile(process_loc, save_fname), 'data')
-% end
+save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
+if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+
+    save(fullfile(process_loc, save_fname), 'data')
+end
 
 
 %% putting things into block - will need to concat response tables?
@@ -179,7 +179,8 @@ xticks(0:.01:.1)
 xtickangle(0)
 xq = linspace(0, x_mech(end));
 yq = siggyfun(coeffs,xq);
-% [~, b] = min(abs(yq-dprime_threshold));
+%getting the points from here
+
 plot(xq,yq,'Color',rgb(84, 110, 122))
 % plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
 % text(.02,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));

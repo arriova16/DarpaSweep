@@ -1,6 +1,6 @@
 
-tld = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_12and13\SweepTask';
-process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_12and13';
+tld = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_41and42\SweepTask';
+process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_41and42';
 file_list = dir(tld);
 %% loading matfiles
 %need to load 
@@ -26,7 +26,7 @@ for i  = 1:size(mat_files,1)
 end
 
 CatTable = cat(1,sweep_table{:});
-
+% 
 save_fname = sprintf('%s_%s_Sweep_comb.mat', animal, electrode);
 if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
     save(fullfile(process_loc, save_fname), 'CatTable')

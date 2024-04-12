@@ -64,3 +64,5 @@ for m = 1:length(monkey_list) %monkey names
     
     end %electrode_llist
 end %monkey_list
+%% Saving cat files in processing folder
+

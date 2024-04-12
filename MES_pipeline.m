@@ -1,5 +1,5 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
+sweep_df = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_41and42';
 file_list = dir(sweep_df);
 
  %% Loading mat files
@@ -23,8 +23,20 @@ electrode = (name_split{8}(11:end));
  
  end
 
+%% Sweep analysis test
+% 
+[dt, dppp] = AnalyzeSweepTable(block_struct.SweepDetectTable);
+% [dt2] = AnalyzeHybridTable(block_struct.SweepDetectTable);
+% 
+% 
+% 
+
+
+
  %% Sweep Analysis
 %create function
+
+
 u_icms_big = unique(block_struct.SweepDetectTable.StimAmp);
 [u_test_amps_big, ~, ia] = unique(block_struct.SweepDetectTable.IndentorAmp);
 [pd_strings_big, dp_strings_big] = deal(cell(1, length(u_icms_big)));
@@ -165,7 +177,7 @@ y_mech_pdetect = MechDetect_DT.pDetect;
 % wp
   % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
   %  'NumCoeffs', 3, 'CoeffInit', [300,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
-[~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect,'NumCoeffs', 4, 'CoeffInit', [200,.01,NaN,NaN],  'PlotFit', true);
+           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect,'NumCoeffs', 4, 'CoeffInit', [1000,.01,NaN,NaN],  'PlotFit', true);
 
 %Elect table dt
 
@@ -182,7 +194,7 @@ y_elect_pdetect = ElectDetect_DT.pDetect;
 %wp
 % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
 %            3,'CoeffInit', [1,30,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
-[~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN], 'PlotFit', true);
+       [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
 
 %%
 
