@@ -2,10 +2,10 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_41and42\SweepTask';
-% data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_21and42\SweepTask';
+% data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_41and42\SweepTask';
+data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Pinot\Electrode_3and23\SweepTask';
 
-process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_41and42';
+% process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_41and42';
 % 
 
 %%
@@ -43,12 +43,12 @@ data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 % data.ElectDetectTable = cat(1,block_struct.ElectRT);
 % data.MechDetectTable = cat(1, block_struct.MechRT);
 % 
-save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
-if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-
-    save(fullfile(process_loc, save_fname), 'data')
-end
-
+% save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
+% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+% 
+%     save(fullfile(process_loc, save_fname), 'data')
+% end
+% 
 
 %% putting things into block - will need to concat response tables?
 %coding not rounding correctly- if pdetect is zero then dprime should be
