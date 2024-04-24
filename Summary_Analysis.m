@@ -33,13 +33,27 @@ for i = 1:length(monkey)
        end
        data(ii).Task= convertCharsToStrings(data(m).Task);
         
-       
-     
-   
+
+       %need to fix
+       stuff_try = load(fullfile(mat_file(m).folder, mat_file(m).name));
+       data(ii).RT = stuff_try;
+      
        ii = ii+1;
 
     end
  
+end
+
+%% Sweep Analysis
+%observed detection rates
+
+tasks = vertcat(data(:).Task);
+me_idx = strcmpi(tasks, 'ME');
+
+for i = 1:length(data)
+    
+
+
 end
 
 

@@ -25,22 +25,28 @@ for i = 1:length(monkey)
            and_idx = strfind(mat_split{2}, 'and');
            ee = [str2double(mat_split{2}(1:and_idx-1)), str2double(mat_split{2}(and_idx+3:end))];
        end
-       
-       data(ii).Electrode = ee;
-       data(ii).Task = convertCharsToStrings(mat_split{3});
-      % if mat_split{3} == "ME.mat"
-      %   data(ii).Task = data(m).Task(1:2);
-      % end
 
-      ME_idx = strcmpi(data(m).Task, 'ME');
-    % if data.Task == "ME"
-    % 
-    % end
-   
+       data(ii).Electrode = ee;
+       data(ii).Task = mat_split{3};
+       if data(m).Task == "ME.mat"
+            data(ii).Task = data(m).Task(1:2);
+       end
+       data(ii).Task= convertCharsToStrings(data(m).Task);
+        
+
+       %need to fix
+       stuff_try = load(fullfile(mat_file(m).folder, mat_file(m).name));
+       data(ii).RT = stuff_try;
+      
        ii = ii+1;
 
     end
  
 end
+
+%% Sweep Analysis
+%observed detection rates
+
+for i 
 
 
