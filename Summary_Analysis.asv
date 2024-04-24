@@ -18,26 +18,29 @@ for i = 1:length(monkey)
     %loading tables
     for m = 1:size(mat_file)
        mat_split = strsplit(mat_file(m).name, '_');
-
-       mat_idx = string(mat_split{3});
+       mat_idx = mat_split{3};
        data(ii).Monkey = mat_split{1};
-       data(ii).Electrode = mat_split{2};
-       
-    %    if mat_idx == "ME"
-    %        data(ii).Task = 'MechandElect';
-    %    else
-    %        data(ii).Task = 'Sweep';
-    %    end
-    %    % data(ii).Task = mat_split{3};
-    % 
-    % 
-    % 
-    %  % me_temp=load(fullfile(mat_file(m).folder, mat_file(m).name));
-    %  % data(ii).RT = me_temp;
-    %  % 
-    end
-    ii = ii+1;
-end
 
+       if contains(mat_split{2}, 'and')
+           and_idx = strfind(mat_split{2}, 'and');
+           ee = [str2double(mat_split{2}(1:and_idx-1)), str2double(mat_split{2}(and_idx+3:end))];
+       end
+       
+       data(ii).Electrode = ee;
+       data(ii).Task = convertCharsToStrings(mat_split{3});
+      % if mat_split{3} == "ME.mat"
+      %   data(ii).Task = data(m).Task(1:2);
+      % end
+
+      ME_idx = strcmpi(data(m).Task, 'ME');
+    % if data.Task == "ME"
+    % 
+    % end
+   
+       ii = ii+1;
+
+    end
+ 
+end
 
 
