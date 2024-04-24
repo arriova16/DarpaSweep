@@ -1,5 +1,5 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_41and42';
+sweep_df = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_21and22';
 file_list = dir(sweep_df);
 
  %% Loading mat files
@@ -14,6 +14,7 @@ electrode = (name_split{8}(11:end));
 
 %loading tables 
  for i = 1:size(mat_file,1)
+     %hard coded need to fix
     ME_temp = load(fullfile(mat_file(1).folder, mat_file(1).name));
     sweep_temp = load(fullfile(mat_file(2).folder, mat_file(2).name));
     
@@ -23,14 +24,8 @@ electrode = (name_split{8}(11:end));
  
  end
 
-%% Sweep analysis test
-% 
-[dt, dppp] = AnalyzeSweepTable(block_struct.SweepDetectTable);
-% [dt2] = AnalyzeHybridTable(block_struct.SweepDetectTable);
-% 
-% 
-% 
-
+%%
+ % [dt] = AnalyzeSweepTable(block_struct.SweepDetectTable);
 
 
  %% Sweep Analysis
@@ -89,10 +84,10 @@ plot(DetectionRates{:,1}, DetectionRates{:,3},'o-', 'MarkerSize', 5,'Color',rgb(
 plot(DetectionRates{:,1}, DetectionRates{:,4},'o-', 'MarkerSize', 5,'Color',rgb(211, 47, 47), 'LineWidth', 4);
 plot(DetectionRates{:,1}, DetectionRates{:,5},'o-', 'MarkerSize', 5,'Color',rgb(183, 28, 28), 'LineWidth', 4);
 
-text(.02,0.15, '0','Color',rgb(229, 115, 115), 'FontSize', 18)
-text(.02,0.2, '16','Color',rgb(229, 115, 115), 'FontSize', 18)
-text(.02,0.25, '17','Color',rgb(211, 47, 47), 'FontSize', 18)
-text(.02,0.3, '18','Color',rgb(183, 28, 28), 'FontSize', 18)
+text(.01,0.15, '0','Color',rgb(229, 115, 115), 'FontSize', 18)
+text(.01,0.2, '11','Color',rgb(229, 115, 115), 'FontSize', 18)
+text(.01,0.25, '12','Color',rgb(211, 47, 47), 'FontSize', 18)
+text(.01,0.3, '16','Color',rgb(183, 28, 28), 'FontSize', 18)
 xlabel('Amplitude (mm)','FontSize', 18)
 ylabel('p(Detected)','FontSize',18)
 ylim([0 1])

@@ -1,4 +1,4 @@
-function [detection_table, dprime_table] = AnalyzeSweepTable(input_table)
+function [detection_table] = AnalyzeSweepTable(input_table)
 
     icms_amps = input_table.StimAmp;
     mech_amps = input_table.IndentorAmp;
@@ -27,22 +27,10 @@ function [detection_table, dprime_table] = AnalyzeSweepTable(input_table)
     end
     detection_table = array2table(detection_table,...
         'VariableNames', ux1_str, 'RowNames', ux2_str);
-    dprime_table = detection_table;
+ 
 
-    for c = 1:size(dprime_table,2)
-
-        if dprime_table{1,1}< 1e-3
-            z_fa = norminv(1e-3);
-        else 
-            z_fa = norminv(dprime_table{1,1});
-        end
-        z_hit = norminv(dprime_table{:,c});
-        z_hit(isinf(z_hit)) = norminv(1-1e-3);
-        dprime = z_hit - z_fa;
-        dprime_table{:,c} = dprime;
 
     end
 
 % %dprime - adjusted - z(hit)-z(FA)-- shared false alarm rate
 % % 
-end

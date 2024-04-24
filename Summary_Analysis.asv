@@ -14,13 +14,15 @@ for i = 1:length(monkey)
     %getting mat files
     mat_file = dir(fullfile(electrode_folders, '*.mat'));
     electrode = dir(electrode_folders);
-    electrodes = electrodes.name;
+    electrode = electrode.name;
     %loading tables
-    % for m = 1:size(mat_file)
-    %    mat_split = strsplit(mat_file(m).name, '_');
-    % 
-    %    mat_idx = string(mat_split{3});
-    %    data(ii).Monkey = mat_split{1};
+    for m = 1:size(mat_file)
+       mat_split = strsplit(mat_file(m).name, '_');
+
+       mat_idx = string(mat_split{3});
+       data(ii).Monkey = mat_split{1};
+       data(ii).Electrode = mat_split{2};
+       
     %    if mat_idx == "ME"
     %        data(ii).Task = 'MechandElect';
     %    else
@@ -33,8 +35,8 @@ for i = 1:length(monkey)
     %  % me_temp=load(fullfile(mat_file(m).folder, mat_file(m).name));
     %  % data(ii).RT = me_temp;
     %  % 
-    % end
-    % ii = ii+1;
+    end
+    ii = ii+1;
 end
 
 
