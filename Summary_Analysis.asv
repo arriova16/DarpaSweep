@@ -47,6 +47,14 @@ end
 %% Sweep Analysis
 %observed detection rates
 
-for i 
+tasks = vertcat(data(:).Task);
+me_idx = strcmpi(tasks, 'ME');
+sweep_idx = strcmpi(tasks, 'Sweep');
+
+for i = 1:length(data)
+    icms = unique(data(sweep_idx).)
+
+
+end
 
 
