@@ -35,6 +35,7 @@ for i = 1:length(monkey)
         
 
        %need to fix
+       if 
        stuff_try = load(fullfile(mat_file(m).folder, mat_file(m).name));
        data(ii).RT = stuff_try;
       
@@ -52,7 +53,7 @@ me_idx = strcmpi(tasks, 'ME');
 sweep_idx = strcmpi(tasks, 'Sweep');
 
 for i = 1:length(data)
-    icms = unique(data(sweep_idx).)
+    % icms = unique(data(sweep_idx).)
 
 
 end

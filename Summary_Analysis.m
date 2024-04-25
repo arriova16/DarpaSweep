@@ -35,10 +35,15 @@ for i = 1:length(monkey)
         
 
        %need to fix
+   
        stuff_try = load(fullfile(mat_file(m).folder, mat_file(m).name));
        data(ii).RT = stuff_try;
       
+       if data(m).Task == "ME"
+           data(ii).RT = data(ii).RT.data;
+       end
        ii = ii+1;
+
 
     end
  
@@ -49,10 +54,13 @@ end
 
 tasks = vertcat(data(:).Task);
 me_idx = strcmpi(tasks, 'ME');
+sweep_idx = strcmpi(tasks, 'Sweep');
+
 
 for i = 1:length(data)
-    
-
+    % icms = unique(data(sweep_idx).)
+    sweep_struct = data(i).RT(sweep_idx);
+    % sweep_RT = sweep_struct.CatTable;
 
 end
 
