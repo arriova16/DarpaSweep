@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'B:\ProjectFolders\DARPA\Data\ProcessedData';
+tld = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -27,21 +27,24 @@ for i = 1:length(monkey)
        end
 
        data(ii).Electrode = ee;
-       data(ii).Task = mat_split{3};
-       if data(m).Task == "ME.mat"
-            data(ii).Task = data(m).Task(1:2);
-       end
-       data(ii).Task= convertCharsToStrings(data(m).Task);
-        
-
        %need to fix
-   
+       data(ii).Task = mat_split{3};
+
+       data(m).Task= convertCharsToStrings(data(m).Task);
+%         
+% 
+%        %need to fix
+%    
        stuff_try = load(fullfile(mat_file(m).folder, mat_file(m).name));
        data(ii).RT = stuff_try;
-      
-       if data(m).Task == "ME"
-           data(ii).RT = data(ii).RT.data;
+
+       %fix later
+       if data(m).Task == "ME.mat"
+%          data(m).Task = data(m).Task(1:2);
        end
+%        if data(m).Task == "ME"
+%            data(ii).RT = data(ii).RT;
+%        end
        ii = ii+1;
 
 
@@ -55,13 +58,9 @@ end
 tasks = vertcat(data(:).Task);
 me_idx = strcmpi(tasks, 'ME');
 sweep_idx = strcmpi(tasks, 'Sweep');
+sweep_struct = data(sweep_idx).RT;
 
+u_icms = unique(sweep_struct.CatTable.StimAmp);
 
-for i = 1:length(data)
-    % icms = unique(data(sweep_idx).)
-    sweep_struct = data(i).RT(sweep_idx);
-    % sweep_RT = sweep_struct.CatTable;
-
-end
 
 
