@@ -58,9 +58,38 @@ end
 tasks = vertcat(data(:).Task);
 me_idx = strcmpi(tasks, 'ME');
 sweep_idx = strcmpi(tasks, 'Sweep');
-sweep_struct = data(sweep_idx).RT;
+sweep_some = data(sweep_idx).RT;
+sweep_struct = struct();
+sweep_struct = data(sweep_idx);
+ 
+for d = 1:length(sweep_struct)
+    sweep_struct(d).RT = sweep_struct(d).RT.CatTable;
+    u_icms = unique(sweep_struct(d).RT.StimAmp);
+    [u_mech,~, ia] = unique(sweep_struct(d).RT.IndentorAmp);
+    p_detect = zeros([length(u_mech), length(u_icms)]);
+    dprime = NaN([length(u_mech), length(u_icms)]);
 
-u_icms = unique(sweep_struct.CatTable.StimAmp);
+    for e = 1:length(u_icms)
+        p_detect_temp = ones([length(u_mech), 1]) * 1e-3;
+        dprime_temp = NaN([length(u_mech),1]);
 
+        for m = 1:length(u_mech)
+            trial_idx = ia == m & [sweep_struct(d).RT.StimAmp] == u_icms(e); 
+            correct_idx = strcmp(sweep_struct(d).RT.Response(trial_idx), 'correct');
+            if u_mech(m) == 0
+                p_detect_temp(m) = 1- (sum(correct_idx)/sum(trial_idx));
+            else
+                p_detect_temp(m) = sum(correct_idx)/sum(trial_idx);
+            end
 
+        end
+        p_detect(:,e) = p_detect_temp;
+        
+        p_miss = max([p_detect(1,1), 1e-3]);
+
+        
+    end
+
+    
+end
 
