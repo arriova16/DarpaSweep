@@ -31,6 +31,7 @@ for i = 1:length(monkey)
        data(ii).Task = mat_split{3};
 
        data(m).Task= convertCharsToStrings(data(m).Task);
+       data(m).Monkey = convertCharsToStrings(data(m).Monkey);
 %         
 % 
 %        %need to fix
@@ -116,14 +117,15 @@ end
 
 for m1 = 1:length(sweep_struct)
     
-    mech = sweep_struct(m1).pdetect_obs{2,1};
+    mech = sweep_struct(m1).pdetect_obs{2,2};
     icms_only = sweep_struct(m1).pdetect_obs(1,2:end);
     for m = 1:size(icms_only,2)
+        %predicted is incorrect
         empty_icms = zeros([size(icms_only,2)]);
         predict_pdetect{m} = (mech + icms_only{:,m}) - (mech .* icms_only{:,m});
-    end
+    end %icms_only
     FA = max([icms_only{1,1}, 1e-3]); 
-
+%dprime incorrect
     for j = 1:size(empty_icms)-1
         phit_predict = predict_pdetect{j+1};
 
@@ -134,8 +136,76 @@ for m1 = 1:length(sweep_struct)
         end
         
         empty_icms(j+1) = norminv(phit_predict) - norminv(FA);
-    end
+    end %empty_icms
     dprime_predicted = empty_icms;
-end
+sweep_struct(m1).pdetect_predict = predict_pdetect;
+sweep_struct(m1).dprime_predict = dprime_predicted;
 
+end %sweep_struct
+
+%% Plotting
+
+SetFont('Arial', 18)
+
+monkey_list = vertcat(sweep_struct(:).Monkey);
+WP_idx = strcmpi(monkey_list, 'Whistlepig');
+Pinot_idx = strcmpi(monkey_list, 'Pinot');
+Pinot_struct = struct(sweep_struct(Pinot_idx));
+WP_struct = struct(sweep_struct(WP_idx));
+
+    subplot(1,2,1);
+    hold on
+    title('pDetect')
+    for d1 = 1:length(Pinot_struct)
+    %plotting pinot pdetect_obs
+        scatter(Pinot_struct(d1).pdetect_predict{1,2},Pinot_struct(d1).pdetect_obs{2,3},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+        scatter(Pinot_struct(d1).pdetect_predict{1,3},Pinot_struct(d1).pdetect_obs{2,4},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+        scatter(Pinot_struct(d1).pdetect_predict{1,4},Pinot_struct(d1).pdetect_obs{2,5}, 'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+ 
+        for d2 = 1:length(WP_struct)
+            scatter(WP_struct(d2).pdetect_predict{1,2},WP_struct(d2).pdetect_obs{2,3},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+            scatter(WP_struct(d2).pdetect_predict{1,3},WP_struct(d2).pdetect_obs{2,4},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+            scatter(WP_struct(d2).pdetect_predict{1,4},WP_struct(d2).pdetect_obs{2,5},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+         plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
+
+        end
+
+    end
+    text(.6, .2, 'Monkey 1', 'Color',rgb(183, 28, 28))
+    text(.6, .15, 'Monkey 2', 'Color', rgb(13, 71, 161))
+   
+    xlim([0,1])
+    ylim([0,1])
+    xlabel('Predicted (pDetect)')
+    ylabel('Observed (pDetect)')
+    axis square
+
+    subplot(1,2,2); hold on
+    title('dPrime')
+    
+    for d1 = 1:length(Pinot_struct)
+        scatter(Pinot_struct(d1).dprime_predict(2,1), Pinot_struct(d1).dprime_obs{2,3},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+        scatter(Pinot_struct(d1).dprime_predict(3,1), Pinot_struct(d1).dprime_obs{2,4},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+        scatter(Pinot_struct(d1).dprime_predict(4,1), Pinot_struct(d1).dprime_obs{2,5}, 'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+    
+    for d2 = 1:length(WP_struct)
+            scatter(WP_struct(d2).dprime_predict(2,1),WP_struct(d2).dprime_obs{2,3},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+            scatter(WP_struct(d2).dprime_predict(3,1),WP_struct(d2).dprime_obs{2,4},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+            scatter(WP_struct(d2).dprime_predict(4,1),WP_struct(d2).dprime_obs{2,5},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+         plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
+        
+
+    end
+
+
+
+    end
+
+
+
+    xlabel('Predicted (dPrime)')
+    ylabel('Observed (dPrime)')
+    xlim([0,4])
+    ylim([0 4])
+    axis square
 
