@@ -52,44 +52,90 @@ for i = 1:length(monkey)
  
 end
 
-%% Sweep Analysis
-%observed detection rates
-
 tasks = vertcat(data(:).Task);
 me_idx = strcmpi(tasks, 'ME');
 sweep_idx = strcmpi(tasks, 'Sweep');
 sweep_some = data(sweep_idx).RT;
-sweep_struct = struct();
-sweep_struct = data(sweep_idx);
+sweep_struct = struct(data(sweep_idx));
  
-for d = 1:length(sweep_struct)
-    sweep_struct(d).RT = sweep_struct(d).RT.CatTable;
-    u_icms = unique(sweep_struct(d).RT.StimAmp);
-    [u_mech,~, ia] = unique(sweep_struct(d).RT.IndentorAmp);
-    p_detect = zeros([length(u_mech), length(u_icms)]);
-    dprime = NaN([length(u_mech), length(u_icms)]);
-
-    for e = 1:length(u_icms)
-        p_detect_temp = ones([length(u_mech), 1]) * 1e-3;
-        dprime_temp = NaN([length(u_mech),1]);
-
-        for m = 1:length(u_mech)
-            trial_idx = ia == m & [sweep_struct(d).RT.StimAmp] == u_icms(e); 
-            correct_idx = strcmp(sweep_struct(d).RT.Response(trial_idx), 'correct');
-            if u_mech(m) == 0
-                p_detect_temp(m) = 1- (sum(correct_idx)/sum(trial_idx));
-            else
-                p_detect_temp(m) = sum(correct_idx)/sum(trial_idx);
-            end
-
-        end
-        p_detect(:,e) = p_detect_temp;
-        
-        p_miss = max([p_detect(1,1), 1e-3]);
-
-        
-    end
-
-    
+for p = 1:length(sweep_struct)
+    sweep_struct(p).RT = sweep_struct(p).RT.CatTable;
 end
+
+%% Sweep Analysis
+%observed detection rates
+for d = 1:length(sweep_struct)
+    u_icms = unique(sweep_struct(d).RT.StimAmp);
+    [u_mech, ~, ia] = unique(sweep_struct(d).RT.IndentorAmp);
+    [pd_strings_big, dp_strings_big] = deal(cell(1, length(u_icms)));
+    p_detect = zeros([length(u_mech),length(u_icms)]);
+    dprime = NaN([length(u_mech),length(u_icms)]);
+    for u = 1:length(u_icms)
+        % Initalize arrays
+        p_detect_temp = ones([length(u_mech),1]) * 1e-3;
+        dprime_temp = NaN([length(u_mech),1]);
+        for j = 1:length(u_mech)
+            trial_idx = ia == j & [sweep_struct(d).RT.StimAmp] == u_icms(u);
+            correct_idx = strcmp(sweep_struct(d).RT.Response(trial_idx), 'correct');
+            if u_mech(j) == 0
+                p_detect_temp(j) = 1 - (sum(correct_idx) / sum(trial_idx));
+            else
+                p_detect_temp(j) = sum(correct_idx) / sum(trial_idx);
+            end
+        end
+        p_detect(:,u) = p_detect_temp;
+        % Compute d'
+        %dprime wrong- no longer the same dprime formula- needs to be changed-
+        %all have the same FA point.
+        % pmiss_big = max([p_detect(1), 1e-3]);
+        pmiss =  max([p_detect(1,1), 1e-3]);
+        for j = 1:length(dprime_temp)-1
+             phit = p_detect_temp(j+1);
+            if phit == 1 % Correct for infinite hit rate
+                phit = .999;
+            elseif phit == 0
+                phit = 1e-3;
+            end
+            dprime_temp(j+1) = norminv(phit) - norminv(pmiss);
+        end
+        dprime(:,u) = dprime_temp;
+        % Make strings
+        pd_strings_big{u} = sprintf('pDetect_%d', u_icms(u));
+        dp_strings_big{u} = sprintf('dPrime_%d', u_icms(u));
+    end
+    sweep_struct(d).pdetect_obs = array2table([u_mech, p_detect], 'VariableNames', ['TestAmps', pd_strings_big]);
+    sweep_struct(d).dprime_obs = array2table([u_mech, dprime], 'VariableNames', ['TestAmps', dp_strings_big]);
+
+end
+ %% Predicted Detection Rates
+% sweep_probabilty formula
+% P(A)+P(B) - P(A)*(and)P(B)
+% P(A) = probability of Mechanical- just mechanical
+% P(B) = Probability of Electrical- just electrical 
+%predicted is from the formula / observed is icms w/ mechnical
+
+for m1 = 1:length(sweep_struct)
+    
+    mech = sweep_struct(m1).pdetect_obs{2,1};
+    icms_only = sweep_struct(m1).pdetect_obs(1,2:end);
+    for m = 1:size(icms_only,2)
+        empty_icms = zeros([size(icms_only,2)]);
+        predict_pdetect{m} = (mech + icms_only{:,m}) - (mech .* icms_only{:,m});
+    end
+    FA = max([icms_only{1,1}, 1e-3]); 
+
+    for j = 1:size(empty_icms)-1
+        phit_predict = predict_pdetect{j+1};
+
+        if phit_predict == 1
+            phit_predict = .999;
+        elseif phit_predict == 0
+            phit_predict = 1e-3;
+        end
+        
+        empty_icms(j+1) = norminv(phit_predict) - norminv(FA);
+    end
+    dprime_predicted = empty_icms;
+end
+
 
