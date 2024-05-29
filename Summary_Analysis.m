@@ -202,10 +202,11 @@ WP_struct = struct(sweep_struct(WP_idx));
     end
 
 
-
     xlabel('Predicted (dPrime)')
     ylabel('Observed (dPrime)')
     xlim([0,4])
     ylim([0 4])
     axis square
+%% three analysis
+
 
