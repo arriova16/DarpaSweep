@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\Somlab\OneDrive\DARPA\Data\RawData\Pinot\Electrode_3and23\SweepTask';
+data_folder = 'Z:\UserFolders\ToriArriola\Tori\new_darpa\RawData\Pinot\Electrode_3and23\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_21and22\SweepTask';
 
 % process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_21and22';
@@ -179,11 +179,7 @@ xticks(0:.01:.1)
 xtickangle(0)
 xq = linspace(0, x_mech(end));
 yq = siggyfun(coeffs,xq);
-%getting the points from here
 
-plot(xq,yq,'Color',rgb(84, 110, 122))
-% plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
-% text(.02,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
 text(0.015,.3, 'First Session', 'Color', rgb(207, 216, 220))
 text(0.015,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
 text(0.015, .17, 'Last Two Days', 'Color',rgb(198, 40, 40))
@@ -198,8 +194,8 @@ plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Colo
 
 % md = siggyfun(coeffs_mech_dprime,xq);
 [~, b] = min(abs(mech_dprime_coeffs-dprime_threshold));
-% plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
-% text(.015,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
+plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
+text(.015,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
 
 plot(xq,mech_dprime_coeffs,'Color',rgb(84, 110, 122))
 
@@ -246,16 +242,16 @@ lp = 0.3;
 mp = 0.45;
 
 [~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
-% plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
-% text(25,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
+plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
+text(25,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
 
 [~, mm_p] = min(abs(elect_dprime_coeffs-mp));
-% plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- % text(25,1.3,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
+ text(25,1.3,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
 
 [~, ll_p] = min(abs(elect_dprime_coeffs-lp));
-% plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-% text(25,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
+text(25,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
 
 % C = ColorGradient(rgb(106, 27, 154),rgb(186, 104, 200));
 
