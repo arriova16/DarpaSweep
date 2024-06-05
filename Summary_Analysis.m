@@ -63,8 +63,15 @@ for p = 1:length(sweep_struct)
     sweep_struct(p).RT = sweep_struct(p).RT.CatTable;
 end
 
+
+%% Sweep Analysis redo
+
+
+
+
 %% Sweep Analysis
 %observed detection rates
+
 for d = 1:length(sweep_struct)
     u_icms = unique(sweep_struct(d).RT.StimAmp);
     [u_mech, ~, ia] = unique(sweep_struct(d).RT.IndentorAmp);
