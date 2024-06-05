@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData';
+tld = 'C:\Users\Somlab\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
