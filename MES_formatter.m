@@ -1,7 +1,7 @@
 % MES formatter
 %changes the rsp to mat files
 
-tld = 'Z:\UserFolders\ToriArriola\Tori\new_darpa\RawData';
+tld = 'Z:\UserFolders\ToriArriola\DARPA';
 monkey_list = dir(tld);
 monkey_list = monkey_list(3:end);
 
