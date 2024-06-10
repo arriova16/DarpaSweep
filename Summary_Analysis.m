@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'C:\Users\Somlab\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -58,11 +58,11 @@ me_idx = strcmpi(tasks, 'ME');
 sweep_idx = strcmpi(tasks, 'Sweep');
 sweep_some = data(sweep_idx).RT;
 sweep_struct = struct(data(sweep_idx));
- 
+% 
 for p = 1:length(sweep_struct)
     sweep_struct(p).RT = sweep_struct(p).RT.CatTable;
 end
-
+sweep_struct = sweep_struct(2:8);
 
 %% Sweep Analysis redo
 
@@ -80,10 +80,13 @@ for d = 1:length(sweep_struct)
     dprime = NaN([length(u_mech),length(u_icms)]);
     for u = 1:length(u_icms)
         % Initalize arrays
-        p_detect_temp = ones([length(u_mech),1]) * 1e-3;
+        % p_detect_temp = ones([length(u_mech),1]);% * 1e-3;
+         p_detect_temp = zeros(length(u_mech),length(u_icms));%1]);% * 1e-3;
+
         dprime_temp = NaN([length(u_mech),1]);
         for j = 1:length(u_mech)
-            trial_idx = ia == j & [sweep_struct(d).RT.StimAmp] == u_icms(u);
+            trial_idx = [sweep_struct(d).RT.IndentorAmp] == u_mech(j) & [sweep_struct(d).RT.StimAmp] == u_icms(u);
+            % trial_idx = ia == j & [sweep_struct(d).RT.StimAmp] == u_icms(u);
             correct_idx = strcmp(sweep_struct(d).RT.Response(trial_idx), 'correct');
             if u_mech(j) == 0
                 p_detect_temp(j) = 1 - (sum(correct_idx) / sum(trial_idx));
@@ -92,11 +95,14 @@ for d = 1:length(sweep_struct)
             end
         end
         p_detect(:,u) = p_detect_temp;
-        % Compute d'
-        %dprime wrong- no longer the same dprime formula- needs to be changed-
-        %all have the same FA point.
+        
+    %     % Compute d'
+    %     %dprime wrong- no longer the same dprime formula- needs to be changed-
+    %     %all have the same FA point.
         % pmiss_big = max([p_detect(1), 1e-3]);
-        pmiss =  max([p_detect(1,1), 1e-3]);
+        pmiss =  max([p_detect(1,1)]);
+        % pmiss =  max([p_detect(1,1), 1e-3]);
+
         for j = 1:length(dprime_temp)-1
              phit = p_detect_temp(j+1);
             if phit == 1 % Correct for infinite hit rate
@@ -115,6 +121,11 @@ for d = 1:length(sweep_struct)
     sweep_struct(d).dprime_obs = array2table([u_mech, dprime], 'VariableNames', ['TestAmps', dp_strings_big]);
 
 end
+%% Checking pdetect
+
+
+
+
  %% Predicted Detection Rates
 % sweep_probabilty formula
 % P(A)+P(B) - P(A)*(and)P(B)
