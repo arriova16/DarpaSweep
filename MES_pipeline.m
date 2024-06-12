@@ -1,6 +1,6 @@
 %Combination of Mech_Elect with SweepTask
 % sweep_df = 'C:\Users\Somlab\OneDrive\DARPA\Data\RawData\Pinot\Electrode_3and23\SweepTask';
-sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_3and23';
+sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_31and41';
 file_list = dir(sweep_df);
 
  %% Loading mat files
@@ -85,10 +85,10 @@ plot(DetectionRates{:,1}, DetectionRates{:,3},'o-', 'MarkerSize', 5,'Color',rgb(
 plot(DetectionRates{:,1}, DetectionRates{:,4},'o-', 'MarkerSize', 5,'Color',rgb(211, 47, 47), 'LineWidth', 4);
 plot(DetectionRates{:,1}, DetectionRates{:,5},'o-', 'MarkerSize', 5,'Color',rgb(183, 28, 28), 'LineWidth', 4);
 
-text(.01,0.15, '0','Color',rgb(229, 115, 115), 'FontSize', 18)
-text(.01,0.2, '11','Color',rgb(229, 115, 115), 'FontSize', 18)
-text(.01,0.25, '12','Color',rgb(211, 47, 47), 'FontSize', 18)
-text(.01,0.3, '16','Color',rgb(183, 28, 28), 'FontSize', 18)
+% text(.01,0.15, '0','Color',rgb(229, 115, 115), 'FontSize', 18)
+% text(.01,0.2, '11','Color',rgb(229, 115, 115), 'FontSize', 18)
+% text(.01,0.25, '12','Color',rgb(211, 47, 47), 'FontSize', 18)
+% text(.01,0.3, '16','Color',rgb(183, 28, 28), 'FontSize', 18)
 xlabel('Amplitude (mm)','FontSize', 18)
 ylabel('p(Detected)','FontSize',18)
 ylim([0 1])
