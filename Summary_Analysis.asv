@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+tld = 'C:\Users\arrio\OneDrive\DARPA\Data\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -80,8 +80,8 @@ for d = 1:length(sweep_struct)
     dprime = NaN([length(u_mech),length(u_icms)]);
     for u = 1:length(u_icms)
         % Initalize arrays
-        % p_detect_temp = ones([length(u_mech),1]);% * 1e-3;
-         p_detect_temp = zeros([length(u_mech),1]);% * 1e-3;
+        p_detect_temp = ones([length(u_mech),1]);% * 1e-3;
+%          p_detect_temp = zeros(length(u_mech),length(u_icms));%1]);% * 1e-3;
 
         dprime_temp = NaN([length(u_mech),1]);
         for j = 1:length(u_mech)
@@ -123,8 +123,22 @@ for d = 1:length(sweep_struct)
 end
 %% Checking pdetect
 
+hold on
+for i = 1:length(sweep_struct)
+plot(sweep_struct(3).pdetect_obs{:,1}, sweep_struct(3).pdetect_obs{:,2},'o-', 'MarkerSize', 5,'Color',rgb(229, 115, 115), 'LineWidth', 4);
+plot(sweep_struct(3).pdetect_obs{:,1}, sweep_struct(3).pdetect_obs{:,3},'o-', 'MarkerSize', 5,'Color',rgb(229, 115, 115), 'LineWidth', 4);
+plot(sweep_struct(3).pdetect_obs{:,1}, sweep_struct(3).pdetect_obs{:,4},'o-', 'MarkerSize', 5,'Color',rgb(211, 47, 47), 'LineWidth', 4);
+plot(sweep_struct(3).pdetect_obs{:,1}, sweep_struct(3).pdetect_obs{:,5},'o-', 'MarkerSize', 5,'Color',rgb(183, 28, 28), 'LineWidth', 4);
 
-
+% text(.01,0.15, '0','Color',rgb(229, 115, 115), 'FontSize', 18)
+% text(.01,0.2, '11','Color',rgb(229, 115, 115), 'FontSize', 18)
+% text(.01,0.25, '12','Color',rgb(211, 47, 47), 'FontSize', 18)
+% text(.01,0.3, '16','Color',rgb(183, 28, 28), 'FontSize', 18)
+xlabel('Amplitude (mm)','FontSize', 18)
+ylabel('p(Detected)','FontSize',18)
+ylim([0 1])
+axis square
+end
 
  %% Predicted Detection Rates
 % sweep_probabilty formula
@@ -142,7 +156,7 @@ for m1 = 1:length(sweep_struct)
         empty_icms = zeros([size(icms_only,2)]);
         predict_pdetect{m} = (mech + icms_only{:,m}) - (mech .* icms_only{:,m});
     end %icms_only
-    FA = max([icms_only{1,1}, 1e-3]); 
+    FA = max([icms_only{1,1}]); 
 %dprime incorrect
     for j = 1:size(empty_icms)-1
         phit_predict = predict_pdetect{j+1};
@@ -220,11 +234,25 @@ WP_struct = struct(sweep_struct(WP_idx));
     end
 
 
-    xlabel('Predicted (dPrime)')
+%     xlabel('Predicted (dPrime)')
     ylabel('Observed (dPrime)')
     xlim([0,4])
     ylim([0 4])
     axis square
+
+
 %% three analysis
+figure; hold on
+for i = 1:length(sweep_struct)
+
+%     sweep_struct(i).dprime_predict = vercat(sweep_struct(i).dprime_predict{:,1);
+
+    x1 = repmat({'Low'},sweep_struct(i).dprime_predict(2,1));
+    x2 = repmat({'Middle'},sweep_struct(i).dprime_predict(3,1));
+    x3 = repmat({'High'},sweep_struct(i).dprime_predict(4,1));
+    g = [x1; x2; x3];
+
+%     boxpchart(sweep_struct(i).dprime_predict:,1})
 
 
+end

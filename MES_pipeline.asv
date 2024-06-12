@@ -1,5 +1,6 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_41and42';
+% sweep_df = 'C:\Users\Somlab\OneDrive\DARPA\Data\RawData\Pinot\Electrode_3and23\SweepTask';
+sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_3and23\SweepTask';
 file_list = dir(sweep_df);
 
  %% Loading mat files
@@ -214,7 +215,7 @@ elect_dprime_coeffs = norminv(ec)- norminv(elect_fa);
 %% new plots 6 plots
 
 SetFont('Arial',18)
-sgtitle(sprintf('%s %s', Monkey, electrode))
+% sgtitle(sprintf('%s %s', Monkey, electrode))
 % title(sprintf('%s_%s', Monkey, electrode))
 % title('Pinot')
 subplot(2,3,1); hold on
@@ -286,7 +287,7 @@ mq = linspace(0, x_mech(end));
 [~, m] = min(abs(mech_dprime_coeffs-dprime_threshold));
 
 plot([0 mq(m) mq(m)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
-text(.01,1,(sprintf('%.3f', mq(m))), 'Color', rgb(233, 30, 99));
+text(.04,1,(sprintf('%.3f', mq(m))), 'Color', rgb(233, 30, 99));
 
 %incorrect 
 dpm = sigfun(mech_dprime_coeffs,mq);

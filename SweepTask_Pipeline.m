@@ -22,7 +22,7 @@ for i  = 1:size(mat_files,1)
 
     data(ii).ResponseTable = sweep_table{i};
 
-    ii = ii+1;
+    ii = ii+1; 
 end
 
 CatTable = cat(1,sweep_table{:});
@@ -74,6 +74,7 @@ DetectionRates = array2table([u_test_amps_big, p_detect_big, dprime_big], 'Varia
 
 
 %fix this function in rewrite
+
 
 
 %% probability formula

@@ -1,6 +1,7 @@
 %Combination of Mech_Elect with SweepTask
 % sweep_df = 'C:\Users\Somlab\OneDrive\DARPA\Data\RawData\Pinot\Electrode_3and23\SweepTask';
-sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_3and23\SweepTask';
+% sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_3and23\SweepTask';
+sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_21and42';
 file_list = dir(sweep_df);
 
  %% Loading mat files
@@ -314,15 +315,15 @@ mp = 0.45;
 
 [~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
 plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
-text(25,2,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
+text(27,2,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
 
 [~, ll_p] = min(abs(elect_dprime_coeffs-lp));
 plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-text(25,1,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+text(27,1,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
 
 [~, mm_p] = min(abs(elect_dprime_coeffs-mp));
 plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- text(25,1.5,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+ text(27,1.5,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
 
 
 plot(tt,elect_dprime_coeffs,'Color',rgb(183, 28, 28))
