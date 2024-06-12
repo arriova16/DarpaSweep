@@ -5,7 +5,7 @@
 data_folder = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_3and23\SweepTask';
 % data_folder = 'B:\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_21and22\SweepTask';
 
-% process_loc = 'B:\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_21and22';
+process_loc = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_3and23';
 % 
 
 %%
@@ -43,11 +43,11 @@ data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 % data.ElectDetectTable = cat(1,block_struct.ElectRT);
 % data.MechDetectTable = cat(1, block_struct.MechRT);
 % 
-% save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
-% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-% 
-%     save(fullfile(process_loc, save_fname), 'data')
-% end
+save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
+if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+
+    save(fullfile(process_loc, save_fname), 'data')
+end
 
 
 %% putting things into block - will need to concat response tables?

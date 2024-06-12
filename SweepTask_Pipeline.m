@@ -1,6 +1,6 @@
 
-tld = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\RawData\Whistlepig\Electrode_6and15\SweepTask';
-% process_loc = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Whistlepig\DarpaSweep\Electrode_6and15';
+tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_3and23\SweepTask';
+process_loc = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_3and23';
 file_list = dir(tld);
 %% loading matfiles
 %need to load 

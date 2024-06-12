@@ -80,8 +80,8 @@ for d = 1:length(sweep_struct)
     dprime = NaN([length(u_mech),length(u_icms)]);
     for u = 1:length(u_icms)
         % Initalize arrays
-        % p_detect_temp = ones([length(u_mech),1]);% * 1e-3;
-         p_detect_temp = zeros(length(u_mech),length(u_icms));%1]);% * 1e-3;
+        p_detect_temp = ones([length(u_mech),1]);% * 1e-3;
+         % p_detect_temp = zeros(length(u_mech),length(u_icms));%1]);% * 1e-3;
 
         dprime_temp = NaN([length(u_mech),1]);
         for j = 1:length(u_mech)

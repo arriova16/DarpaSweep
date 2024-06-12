@@ -1,6 +1,6 @@
 %Combination of Mech_Elect with SweepTask
 % sweep_df = 'C:\Users\Somlab\OneDrive\DARPA\Data\RawData\Pinot\Electrode_3and23\SweepTask';
-sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_3and23\SweepTask';
+sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_3and23';
 file_list = dir(sweep_df);
 
  %% Loading mat files
