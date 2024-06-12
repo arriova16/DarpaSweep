@@ -226,5 +226,18 @@ WP_struct = struct(sweep_struct(WP_idx));
     ylim([0 4])
     axis square
 %% three analysis
+figure; hold on
+for i = 1:length(sweep_struct)
 
+%     sweep_struct(i).dprime_predict = vercat(sweep_struct(i).dprime_predict{:,1);
+
+    x1 = repmat({'Low'},sweep_struct(i).dprime_predict(2,1));
+    x2 = repmat({'Middle'},sweep_struct(i).dprime_predict(3,1));
+    x3 = repmat({'High'},sweep_struct(i).dprime_predict(4,1));
+    g = [x1; x2; x3];
+
+%     boxpchart(sweep_struct(i).dprime_predict:,1})
+
+
+end
 
