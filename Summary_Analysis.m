@@ -92,10 +92,15 @@ ii = ii+1;
     end
 %% block analysis
 for dt = 1:length(cath_an_struct)
-    [detection_table, dprime_table]
+    [detection_table{dt}, dprime_table{dt}] = AnalyzeHybridTable(cath_an_struct(dt).ResponseTable);
 
+    cath_an_struct(dt).DetectionTable = detection_table{dt};
+    cath_an_struct(dt).DprimeTable = dprime_table{dt};
+    cath_an_struct(dt).Pulse = convertCharsToStrings(cath_an_struct(dt).Pulse);
 
+    [sigmoidfun, coeffs, rnorm, residuals, jnd, warn] = FitSigmoid(cath_an_struct(dt).DetectionTable)
 end
+
 
 
 

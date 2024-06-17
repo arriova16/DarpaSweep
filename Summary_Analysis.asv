@@ -83,60 +83,21 @@ sweep_struct = sweep_struct(2:8);
         cath_an_struct(ii).Electrode = ee;
         cath_an_struct(ii).Task = task_cath;
         cath_an_struct(ii).Pulse = pulse_cath;
-        temp_one = load(fullfile(mat_file_cath(p1).folder, ))
+        temp_one = load(fullfile(mat_file_cath(p1).folder, mat_file_cath(p1).name));
+        cath_an_struct(ii).ResponseTable = temp_one.bigtable;
         
 
 ii = ii+1;
 
     end
+%% block analysis
+for dt = 1:length(cath_an_struct)
+    [detection_table{dt}, dprime_table{dt}] = AnalyzeHybridTable(cath_an_struct(dt).ResponseTable);
 
-%     for m = 1:size(mat_file)
-%        mat_split = strsplit(mat_file(m).name, '_');
-%        mat_idx = mat_split{3};
-%        data(ii).Monkey = mat_split{1};
-% 
-%        if contains(mat_split{2}, 'and')
-%            and_idx = strfind(mat_split{2}, 'and');
-%            ee = [str2double(mat_split{2}(1:and_idx-1)), str2double(mat_split{2}(and_idx+3:end))];
-%        end
-% 
-%        data(ii).Electrode = ee;
-%        %need to fix
-%        data(ii).Task = mat_split{3};
-% 
-%        data(m).Task= convertCharsToStrings(data(m).Task);
-%        data(m).Monkey = convertCharsToStrings(data(m).Monkey);
-% %         
-% % 
-% %        %need to fix
-% %    
-%        stuff_try = load(fullfile(mat_file(m).folder, mat_file(m).name));
-%        data(ii).RT = stuff_try;
-% 
-%        %fix later
-%        if data(m).Task == "ME.mat"
-% %          data(m).Task = data(m).Task(1:2);
-%        end
-% %        if data(m).Task == "ME"
-% %            data(ii).RT = data(ii).RT;
-% %        end
-%        ii = ii+1;
-% 
-% 
-%     end
-% 
-% end
-% 
-% tasks = vertcat(data(:).Task);
-% me_idx = strcmpi(tasks, 'ME');
-% sweep_idx = strcmpi(tasks, 'Sweep');
-% sweep_some = data(sweep_idx).RT;
-% sweep_struct = struct(data(sweep_idx));
-% % 
-% for p = 1:length(sweep_struct)
-%     sweep_struct(p).RT = sweep_struct(p).RT.CatTable;
-% end
-% sweep_struct = sweep_struct(2:8);
+    cath_an_struct(dt).DetectionTable = detection_table{dt};
+    cath_an_s
+
+end
 
 
 
