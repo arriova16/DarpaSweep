@@ -26,7 +26,6 @@ electrode = (name_split{8}(11:end));
  end
 
 %%
- % [dt] = AnalyzeSweepTable(block_struct.SweepDetectTable);
 
 
  %% Sweep Analysis

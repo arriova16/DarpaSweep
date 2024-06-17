@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -245,40 +245,126 @@ WP_struct = struct(sweep_struct(WP_idx));
     axis square
 %% three analysis
 
+% monkey = vertcat(sweep_struct(:).Monkey);
+% WP_idx = strcmpi(monkey_list, 'Whistlepig');
+% Pinot_idx = strcmpi(monkey_list, 'Pinot');
+% Pinot_struct = struct(sweep_struct(Pinot_idx));
+% WP_struct = struct(sweep_struct(WP_idx));
+
+
+subplot(1,2,1); hold on
 for i = 1:length(sweep_struct)
     
     low_diff(i) = sweep_struct(i).pdetect_obs{2,2} - sweep_struct(i).pdetect_obs{2,3};
     mid_diff(i) = sweep_struct(i).pdetect_obs{2,2} - sweep_struct(i).pdetect_obs{2,4};
     high_diff(i) = sweep_struct(i).pdetect_obs{2,2} - sweep_struct(i).pdetect_obs{2,5};
-    
+ end   
 
     low_diff = vertcat(low_diff);
     mid_diff = vertcat(mid_diff);
     high_diff = vertcat(high_diff);
 
-    names = ["low" "mid" "high"];
-    figure; hold on
+    
     Swarm(1, low_diff)
     Swarm(2, mid_diff)
     Swarm(3, high_diff)
-    hold off
 
-end
-%% pdetect_diff predict
+ylabel('\Delta Mechanical Only - Subthreshold \muA')
+xticklabels({'low', 'medium', 'high'})
+xlabel('Subthreshold \muA')
+
+subplot(1,2,2); hold on
 for d = 1:length(sweep_struct)
     mech_predict_diff(d) = sweep_struct(d).pdetect_predict{1} - sweep_struct(d).pdetect_obs{2,2};
     low_predict_diff(d) = sweep_struct(d).pdetect_predict{2} - sweep_struct(d).pdetect_obs{2,3};
     mid_predict_diff(d) = sweep_struct(d).pdetect_predict{3} - sweep_struct(d).pdetect_obs{2,4};
     high_predict_diff(d) = sweep_struct(d).pdetect_predict{4} - sweep_struct(d).pdetect_obs{2,5};
-
-    figure; hold on
-    Swarm(1, mech_predict_diff)
-    Swarm(2, low_predict_diff)
-    Swarm(3, mid_predict_diff)
-    Swarm(4, high_predict_diff)
-
 end
-hold off
+
+    % Swarm(1, mech_predict_diff)
+    Swarm(1, low_predict_diff)
+    Swarm(2, mid_predict_diff)
+    Swarm(3, high_predict_diff)
+
+ylabel('\Delta Predicted \muA - Observed \muA')
+xticklabels({'low', 'medium', 'high'})
+xlabel('Subthreshold \muA')
+
 
 %%
+% WP_idx = strcmpi(monkey_list, 'Whistlepig');
+% Pinot_idx = strcmpi(monkey_list, 'Pinot');
+% Pinot_struct = struct(sweep_struct(Pinot_idx));
+% WP_struct = struct(sweep_struct(WP_idx));
+subplot(1,2,1); hold on
+for i = 1:length(Pinot_struct)
+    
+    Pinot_low_diff(i) = Pinot_struct(i).pdetect_obs{2,2} -  Pinot_struct(i).pdetect_obs{2,3};
+    Pinot_mid_diff(i) =  Pinot_struct(i).pdetect_obs{2,2} -  Pinot_struct(i).pdetect_obs{2,4};
+    Pinot_high_diff(i) =  Pinot_struct(i).pdetect_obs{2,2} - Pinot_struct(i).pdetect_obs{2,5};
+end   
+    Pinot_low_diff = vertcat(Pinot_low_diff);
+    Pinot_mid_diff = vertcat(Pinot_mid_diff);
+    Pinot_high_diff = vertcat(Pinot_high_diff);
 
+for w = 1:length(WP_struct)
+    WP_low_diff(w) = WP_struct(w).pdetect_obs{2,2} -  WP_struct(w).pdetect_obs{2,3};
+    WP_mid_diff(w) =  WP_struct(w).pdetect_obs{2,2} -  WP_struct(w).pdetect_obs{2,4};
+    WP_high_diff(w) =  WP_struct(w).pdetect_obs{2,2} - WP_struct(w).pdetect_obs{2,5};
+
+end
+    
+    WP_low_diff = vertcat(WP_low_diff(1:3));
+    WP_mid_diff = vertcat(WP_mid_diff(1:3));
+    WP_high_diff = vertcat(WP_high_diff(1:3));
+    
+    
+    % Swarm(1, [Pinot_low_diff, WP_low_diff])
+    % Swarm(2, [Pinot_mid_diff, WP_mid_diff])
+    % Swarm(3, [Pinot_high_diff, WP_high_diff])
+    swarmchart(1, Pinot_low_diff,100, '+')
+    swarmchart(1,WP_low_diff,100, 'o', 'filled')
+    swarmchart(2,Pinot_mid_diff,100, '+')
+    swarmchart(2,WP_mid_diff,100, 'o', 'filled')
+    swarmchart(3, Pinot_high_diff,100, '+')
+    swarmchart(3,WP_high_diff,100, 'o', 'filled')
+        % swarmchart(1, Pinot_low_predict_diff, '+','filled')
+    % swarmchart(1,WP_low_predict_diff,'o','filled')
+
+ylabel('\Delta Mechanical Only - Subthreshold')
+xticks([1 2 3])
+xticklabels({'Low', 'Medium', 'High'})
+xlabel('Subthreshold \muA')
+text(3,.1, 'Pinot + ')
+text(3, .08, "WP o")
+axis square
+subplot(1,2,2); hold on
+for d = 1:length(Pinot_struct)
+    Pinot_mech_predict_diff(d) = Pinot_struct(d).pdetect_predict{1} - Pinot_struct(d).pdetect_obs{2,2};
+    Pinot_low_predict_diff(d) = Pinot_struct(d).pdetect_predict{2} - Pinot_struct(d).pdetect_obs{2,3};
+    Pinot_mid_predict_diff(d) = Pinot_struct(d).pdetect_predict{3} - Pinot_struct(d).pdetect_obs{2,4};
+    Pinot_high_predict_diff(d) = Pinot_struct(d).pdetect_predict{4} - Pinot_struct(d).pdetect_obs{2,5};
+end
+
+for d1 = 1:length(WP_struct)
+    WP_mech_predict_diff(d1) = WP_struct(d1).pdetect_predict{1} - WP_struct(d1).pdetect_obs{2,2};
+    WP_low_predict_diff(d1) = WP_struct(d1).pdetect_predict{2} - WP_struct(d1).pdetect_obs{2,3};
+    WP_mid_predict_diff(d1) = WP_struct(d1).pdetect_predict{3} - WP_struct(d1).pdetect_obs{2,4};
+    WP_high_predict_diff(d1) = WP_struct(d1).pdetect_predict{4} - WP_struct(d1).pdetect_obs{2,5};
+
+
+end
+    % Swarm(1, mech_predict_diff)
+    % marker = 
+    swarmchart(1, Pinot_low_predict_diff,100, '+')
+    swarmchart(1,WP_low_predict_diff,100,'o','filled')
+    swarmchart(2, Pinot_mid_predict_diff,100,'+')
+    swarmchart(2, WP_mid_predict_diff, 100,'o','filled')
+    swarmchart(3,WP_high_predict_diff,100,'o','filled')
+    swarmchart(3,Pinot_high_predict_diff,100,'+')
+
+ylabel('\Delta Predicted \muA - Observed \muA')
+xticklabels({'Low', 'Medium', 'High'})
+xticks([1 2 3])
+xlabel('Subthreshold \muA')
+axis square
