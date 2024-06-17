@@ -10,6 +10,21 @@ data = struct(); ii =1;
 for i = 1:length(monkey)
 
     monkey_folders = fullfile(tld, monkey(i).name, 'DarpaSweep');
+    Pinot_hybrid = fullfile(tld, 'Pinot', 'Cathodic_Anodic');
+    mat_file_cath = dir(fullfile(Pinot_hybrid, '*.mat'));
+    cath_struct = struct();
+    for p1 = 1:size(mat_file_cath)
+        cath_split = strsplit(mat_file_cath(1).name,'_');
+        electrode_cath = cath_split(2);
+        task_cath = cath_split(3);
+        pulse_cath = cath_split(6);
+        cath_struct(ii).Electrode = electrode_cath
+
+
+
+    end
+
+
     electrode_folders = fullfile(monkey_folders, 'Electrode*');
     %getting mat files
     mat_file = dir(fullfile(electrode_folders, '*.mat'));
@@ -240,9 +255,27 @@ for i = 1:length(sweep_struct)
 
     names = ["low" "mid" "high"];
     figure; hold on
-    Swarm('low', low_diff)
-    Swarm('mid', mid_diff)
-    Swarm('hi, high_diff)
+    Swarm(1, low_diff)
+    Swarm(2, mid_diff)
+    Swarm(3, high_diff)
+    hold off
 
 end
+%% pdetect_diff predict
+for d = 1:length(sweep_struct)
+    mech_predict_diff(d) = sweep_struct(d).pdetect_predict{1} - sweep_struct(d).pdetect_obs{2,2};
+    low_predict_diff(d) = sweep_struct(d).pdetect_predict{2} - sweep_struct(d).pdetect_obs{2,3};
+    mid_predict_diff(d) = sweep_struct(d).pdetect_predict{3} - sweep_struct(d).pdetect_obs{2,4};
+    high_predict_diff(d) = sweep_struct(d).pdetect_predict{4} - sweep_struct(d).pdetect_obs{2,5};
+
+    figure; hold on
+    Swarm(1, mech_predict_diff)
+    Swarm(2, low_predict_diff)
+    Swarm(3, mid_predict_diff)
+    Swarm(4, high_predict_diff)
+
+end
+hold off
+
+%%
 

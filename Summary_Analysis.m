@@ -10,6 +10,7 @@ data = struct(); ii =1;
 for i = 1:length(monkey)
 
     monkey_folders = fullfile(tld, monkey(i).name, 'DarpaSweep');
+  
     electrode_folders = fullfile(monkey_folders, 'Electrode*');
     %getting mat files
     mat_file = dir(fullfile(electrode_folders, '*.mat'));
@@ -64,7 +65,24 @@ for p = 1:length(sweep_struct)
 end
 sweep_struct = sweep_struct(2:8);
 
-%% Sweep Analysis redo
+%% Cath_getting
+  Pinot_hybrid = fullfile(tld, 'Pinot', 'Cathodic_Anodic');
+    mat_file_cath = dir(fullfile(Pinot_hybrid, '*.mat'));
+    cath_struct = struct(); ii =1;
+    for p1 = 1:size(mat_file_cath)
+        cath_split = strsplit(mat_file_cath(p1).name,'_');
+        electrode_cath = cath_split(2);
+        task_cath = cath_split(3);
+        pulse_cath = cath_split(6);
+        cath_struct(ii).Electrode = electrode_cath;
+        cath_struct(ii).Task = task_cath;
+        cath_struct(ii).Pulse = pulse_cath;
+
+ii = ii+1;
+
+    end
+
+
 
 
 
