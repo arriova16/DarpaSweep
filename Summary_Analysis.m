@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+tld = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -226,18 +226,41 @@ WP_struct = struct(sweep_struct(WP_idx));
     ylim([0 4])
     axis square
 %% three analysis
-figure; hold on
+
 for i = 1:length(sweep_struct)
+    
+    low_diff(i) = sweep_struct(i).pdetect_obs{2,2} - sweep_struct(i).pdetect_obs{2,3};
+    mid_diff(i) = sweep_struct(i).pdetect_obs{2,2} - sweep_struct(i).pdetect_obs{2,4};
+    high_diff(i) = sweep_struct(i).pdetect_obs{2,2} - sweep_struct(i).pdetect_obs{2,5};
+    
 
-%     sweep_struct(i).dprime_predict = vercat(sweep_struct(i).dprime_predict{:,1);
+    low_diff = vertcat(low_diff);
+    mid_diff = vertcat(mid_diff);
+    high_diff = vertcat(high_diff);
 
-    x1 = repmat({'Low'},sweep_struct(i).dprime_predict(2,1));
-    x2 = repmat({'Middle'},sweep_struct(i).dprime_predict(3,1));
-    x3 = repmat({'High'},sweep_struct(i).dprime_predict(4,1));
-    g = [x1; x2; x3];
-
-%     boxpchart(sweep_struct(i).dprime_predict:,1})
-
+    names = ["low" "mid" "high"];
+    figure; hold on
+    Swarm(1, low_diff)
+    Swarm(2, mid_diff)
+    Swarm(3, high_diff)
+    hold off
 
 end
+%% pdetect_diff predict
+for d = 1:length(sweep_struct)
+    mech_predict_diff(d) = sweep_struct(d).pdetect_predict{1} - sweep_struct(d).pdetect_obs{2,2};
+    low_predict_diff(d) = sweep_struct(d).pdetect_predict{2} - sweep_struct(d).pdetect_obs{2,3};
+    mid_predict_diff(d) = sweep_struct(d).pdetect_predict{3} - sweep_struct(d).pdetect_obs{2,4};
+    high_predict_diff(d) = sweep_struct(d).pdetect_predict{4} - sweep_struct(d).pdetect_obs{2,5};
+
+    figure; hold on
+    Swarm(1, mech_predict_diff)
+    Swarm(2, low_predict_diff)
+    Swarm(3, mid_predict_diff)
+    Swarm(4, high_predict_diff)
+
+end
+hold off
+
+%%
 
