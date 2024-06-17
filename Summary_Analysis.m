@@ -68,19 +68,34 @@ sweep_struct = sweep_struct(2:8);
 %% Cath_getting
   Pinot_hybrid = fullfile(tld, 'Pinot', 'Cathodic_Anodic');
     mat_file_cath = dir(fullfile(Pinot_hybrid, '*.mat'));
-    cath_struct = struct(); ii =1;
+    cath_an_struct = struct(); ii =1;
     for p1 = 1:size(mat_file_cath)
         cath_split = strsplit(mat_file_cath(p1).name,'_');
-        electrode_cath = cath_split(2);
-        task_cath = cath_split(3);
-        pulse_cath = cath_split(6);
-        cath_struct(ii).Electrode = electrode_cath;
-        cath_struct(ii).Task = task_cath;
-        cath_struct(ii).Pulse = pulse_cath;
+        electrode_cath = cath_split{2};
+        task_cath = cath_split{3};
+        pulse_cath = cath_split{6}(1:2);
+       
+        if contains(cath_split{2}, 'and')
+            and_idx_cath = strfind(cath_split{2}, 'and');
+            ee = [str2double(cath_split{2}(1:and_idx_cath-1)), str2double(cath_split{2}(and_idx_cath+3:end))];
+        end
+        cath_an_struct(ii).Monkey = 'Pinot';
+        cath_an_struct(ii).Electrode = ee;
+        cath_an_struct(ii).Task = task_cath;
+        cath_an_struct(ii).Pulse = pulse_cath;
+        temp_one = load(fullfile(mat_file_cath(p1).folder, mat_file_cath(p1).name));
+        cath_an_struct(ii).ResponseTable = temp_one.bigtable;
+        
 
 ii = ii+1;
 
     end
+%% block analysis
+for dt = 1:length(cath_an_struct)
+    [detection_table, dprime_table]
+
+
+end
 
 
 
@@ -322,11 +337,11 @@ end
     % Swarm(1, [Pinot_low_diff, WP_low_diff])
     % Swarm(2, [Pinot_mid_diff, WP_mid_diff])
     % Swarm(3, [Pinot_high_diff, WP_high_diff])
-    swarmchart(1, Pinot_low_diff,100, '+')
+    swarmchart(1, Pinot_low_diff,100, '^', 'filled')
     swarmchart(1,WP_low_diff,100, 'o', 'filled')
-    swarmchart(2,Pinot_mid_diff,100, '+')
+    swarmchart(2,Pinot_mid_diff,100, '^', 'filled')
     swarmchart(2,WP_mid_diff,100, 'o', 'filled')
-    swarmchart(3, Pinot_high_diff,100, '+')
+    swarmchart(3, Pinot_high_diff,100, '^', 'filled')
     swarmchart(3,WP_high_diff,100, 'o', 'filled')
         % swarmchart(1, Pinot_low_predict_diff, '+','filled')
     % swarmchart(1,WP_low_predict_diff,'o','filled')
@@ -335,7 +350,7 @@ ylabel('\Delta Mechanical Only - Subthreshold')
 xticks([1 2 3])
 xticklabels({'Low', 'Medium', 'High'})
 xlabel('Subthreshold \muA')
-text(3,.1, 'Pinot + ')
+text(3,.1, 'Pinot \Delta ')
 text(3, .08, "WP o")
 axis square
 subplot(1,2,2); hold on
@@ -356,15 +371,15 @@ for d1 = 1:length(WP_struct)
 end
     % Swarm(1, mech_predict_diff)
     % marker = 
-    swarmchart(1, Pinot_low_predict_diff,100, '+')
+    swarmchart(1, Pinot_low_predict_diff,100, '^', 'filled')
     swarmchart(1,WP_low_predict_diff,100,'o','filled')
-    swarmchart(2, Pinot_mid_predict_diff,100,'+')
+    swarmchart(2, Pinot_mid_predict_diff,100,'^', 'filled')
     swarmchart(2, WP_mid_predict_diff, 100,'o','filled')
     swarmchart(3,WP_high_predict_diff,100,'o','filled')
-    swarmchart(3,Pinot_high_predict_diff,100,'+')
+    swarmchart(3,Pinot_high_predict_diff,100,'^', 'filled')
 
 ylabel('\Delta Predicted \muA - Observed \muA')
 xticklabels({'Low', 'Medium', 'High'})
 xticks([1 2 3])
-xlabel('Subthreshold \muA')
+% xlabel('Subthreshold \muA')
 axis square

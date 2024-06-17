@@ -68,19 +68,75 @@ sweep_struct = sweep_struct(2:8);
 %% Cath_getting
   Pinot_hybrid = fullfile(tld, 'Pinot', 'Cathodic_Anodic');
     mat_file_cath = dir(fullfile(Pinot_hybrid, '*.mat'));
-    cath_struct = struct(); ii =1;
+    cath_an_struct = struct(); ii =1;
     for p1 = 1:size(mat_file_cath)
         cath_split = strsplit(mat_file_cath(p1).name,'_');
-        electrode_cath = cath_split(2);
-        task_cath = cath_split(3);
-        pulse_cath = cath_split(6);
-        cath_struct(ii).Electrode = electrode_cath;
-        cath_struct(ii).Task = task_cath;
-        cath_struct(ii).Pulse = pulse_cath;
+        electrode_cath = cath_split{2};
+        task_cath = cath_split{3};
+        pulse_cath = cath_split{6}(1:2);
+       
+        if contains(cath_split{2}, 'and')
+            and_idx_cath = strfind(cath_split{2}, 'and');
+            ee = [str2double(cath_split{2}(1:and_idx_cath-1)), str2double(cath_split{2}(and_idx_cath+3:end))];
+        end
+        cath_an_struct(ii).Monkey = 'Pinot';
+        cath_an_struct(ii).Electrode = ee;
+        cath_an_struct(ii).Task = task_cath;
+        cath_an_struct(ii).Pulse = pulse_cath;
+        temp_one = load(fullfile(mat_file_cath(p1).folder, ))
+        
 
 ii = ii+1;
 
     end
+
+%     for m = 1:size(mat_file)
+%        mat_split = strsplit(mat_file(m).name, '_');
+%        mat_idx = mat_split{3};
+%        data(ii).Monkey = mat_split{1};
+% 
+%        if contains(mat_split{2}, 'and')
+%            and_idx = strfind(mat_split{2}, 'and');
+%            ee = [str2double(mat_split{2}(1:and_idx-1)), str2double(mat_split{2}(and_idx+3:end))];
+%        end
+% 
+%        data(ii).Electrode = ee;
+%        %need to fix
+%        data(ii).Task = mat_split{3};
+% 
+%        data(m).Task= convertCharsToStrings(data(m).Task);
+%        data(m).Monkey = convertCharsToStrings(data(m).Monkey);
+% %         
+% % 
+% %        %need to fix
+% %    
+%        stuff_try = load(fullfile(mat_file(m).folder, mat_file(m).name));
+%        data(ii).RT = stuff_try;
+% 
+%        %fix later
+%        if data(m).Task == "ME.mat"
+% %          data(m).Task = data(m).Task(1:2);
+%        end
+% %        if data(m).Task == "ME"
+% %            data(ii).RT = data(ii).RT;
+% %        end
+%        ii = ii+1;
+% 
+% 
+%     end
+% 
+% end
+% 
+% tasks = vertcat(data(:).Task);
+% me_idx = strcmpi(tasks, 'ME');
+% sweep_idx = strcmpi(tasks, 'Sweep');
+% sweep_some = data(sweep_idx).RT;
+% sweep_struct = struct(data(sweep_idx));
+% % 
+% for p = 1:length(sweep_struct)
+%     sweep_struct(p).RT = sweep_struct(p).RT.CatTable;
+% end
+% sweep_struct = sweep_struct(2:8);
 
 
 
@@ -322,19 +378,22 @@ end
     % Swarm(1, [Pinot_low_diff, WP_low_diff])
     % Swarm(2, [Pinot_mid_diff, WP_mid_diff])
     % Swarm(3, [Pinot_high_diff, WP_high_diff])
-    swarmchart(1, Pinot_low_diff, '+')
-    swarmchart(1,WP_low_diff, 'o', 'filled')
-    swarmchart(2,Pinot_mid_diff, '+')
-    swarmchart(2,WP_mid_diff, 'o', 'filled')
-    swarmchart(3, Pinot_high_diff, '+')
-    swarmchart(3,WP_high_diff, 'o', 'filled')
+    swarmchart(1, Pinot_low_diff,100, '^', 'filled')
+    swarmchart(1,WP_low_diff,100, 'o', 'filled')
+    swarmchart(2,Pinot_mid_diff,100, '^', 'filled')
+    swarmchart(2,WP_mid_diff,100, 'o', 'filled')
+    swarmchart(3, Pinot_high_diff,100, '^', 'filled')
+    swarmchart(3,WP_high_diff,100, 'o', 'filled')
         % swarmchart(1, Pinot_low_predict_diff, '+','filled')
     % swarmchart(1,WP_low_predict_diff,'o','filled')
 
 ylabel('\Delta Mechanical Only - Subthreshold')
-xticklabels({'low', 'Medium', 'High'})
+xticks([1 2 3])
+xticklabels({'Low', 'Medium', 'High'})
 xlabel('Subthreshold \muA')
-
+text(3,.1, 'Pinot \Delta ')
+text(3, .08, "WP o")
+axis square
 subplot(1,2,2); hold on
 for d = 1:length(Pinot_struct)
     Pinot_mech_predict_diff(d) = Pinot_struct(d).pdetect_predict{1} - Pinot_struct(d).pdetect_obs{2,2};
@@ -353,13 +412,15 @@ for d1 = 1:length(WP_struct)
 end
     % Swarm(1, mech_predict_diff)
     % marker = 
-    swarmchart(1, Pinot_low_predict_diff, '+','filled')
-    swarmchart(1,WP_low_predict_diff,'o','filled')
-    swarmchart(2, Pinot_mid_predict_diff,'+','filled')
-    swarmchart(2, WP_mid_predict_diff, 'o','filled')
-    swarmchart(3,WP_high_predict_diff,'o','filled')
-    swarmchart(3,Pinot_high_predict_diff,'+','filled')
+    swarmchart(1, Pinot_low_predict_diff,100, '^', 'filled')
+    swarmchart(1,WP_low_predict_diff,100,'o','filled')
+    swarmchart(2, Pinot_mid_predict_diff,100,'^', 'filled')
+    swarmchart(2, WP_mid_predict_diff, 100,'o','filled')
+    swarmchart(3,WP_high_predict_diff,100,'o','filled')
+    swarmchart(3,Pinot_high_predict_diff,100,'^', 'filled')
 
 ylabel('\Delta Predicted \muA - Observed \muA')
-xticklabels({'low', 'medium', 'high'})
-xlabel('Subthreshold \muA')
+xticklabels({'Low', 'Medium', 'High'})
+xticks([1 2 3])
+% xlabel('Subthreshold \muA')
+axis square
