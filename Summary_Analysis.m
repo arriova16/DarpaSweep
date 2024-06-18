@@ -151,7 +151,28 @@ for d3 = 1:size(cath_struct,2)
 end
 
 %% plot
+subplot(1,3,1); hold on
+    u_mech_3 = unique(cath_struct(1).ResponseTable.IndentorAmp);   
 
+    plot(u_mech_3, cath_struct(1).DetectionTable{:,1}, 'Color',rgb(33, 33, 33))
+    plot(u_mech_3, cath_struct(1).DetectionTable{:,2}, 'Color',rgb(211, 47, 47))
+    
+    xlabel(sprintf('Stimulus Amplitude (%sm)', GetUnicodeChar('mu')),'FontSize',18)
+    ylabel('p(Detected)','FontSize',18)
+    
+    axis square
+subplot(1,3,2); hold on
+    plot(u_mech_3, cath_struct(1).DprimeTable{:,1}, 'Color',rgb(33, 33, 33))
+    plot(u_mech_3, cath_struct(1).DprimeTable{:,2}, 'Color',rgb(211, 47, 47))
+    xlabel(sprintf('Stimulus Amplitude (%sm)', GetUnicodeChar('mu')),'FontSize',18)
+    ylabel('d''','FontSize',18)
+    
+    yline(1.35,'-', 'Threshold', 'FontSize', 15)
+    axis square
+subplot(1,3,3); hold on
+
+
+    axis square
 
 
 %% Sweep Analysis

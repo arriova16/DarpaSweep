@@ -132,8 +132,7 @@ end
 %% finding thresholds between
 
 for d3 = 1:size(cath_struct,2)
-    for j = 1:size(cath_struct(d3).DetectionTable,1)
-        for n = 1:size(cath_struct(d3).DprimeTable,1)
+
             siggy = GetSigmoid(4);
             u_mech = unique(cath_struct(d3).ResponseTable.IndentorAmp);   
             xq = linspace(0, .2);
@@ -149,13 +148,21 @@ for d3 = 1:size(cath_struct,2)
             cath_struct(d3).ThresholdW= xq(b);
             cath_struct(d3).ThresholdWO = xq(c);
     
-%             plot([0 xq(pp) xq(pp)], [])
-%     plot([])
-% plot(xq,y_fit)
-        end
-    end
 end
 
+%% plot
+subplot(1,3,1); hold on
+    u_mech_3 = unique(cath_struct(1).ResponseTable.IndentorAmp);   
+
+    scatter(u_mech_3, cath_struct(1).DetectionTable{:,1})
+    scatter(u_mech_3, cath_struct(1).DetectionTable{:,2})
+
+
+subplot(1,3,2); hold on
+    scatter(u_mech_3, cath_struct(1).DprimeTable{:,1})
+    scatter(u_mech_3, cath_struct(1).DprimeTable{:,2})
+
+subplot(1,3,3); hold on
 
 
 
