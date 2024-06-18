@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+tld = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -86,24 +86,71 @@ sweep_struct = sweep_struct(2:8);
         temp_one = load(fullfile(mat_file_cath(p1).folder, mat_file_cath(p1).name));
         cath_an_struct(ii).ResponseTable = temp_one.bigtable;
         
-
-ii = ii+1;
+        
+ 
+       
+    ii = ii+1;
 
     end
 %% block analysis
+
+
 for dt = 1:length(cath_an_struct)
-    [detection_table{dt}, dprime_table{dt}] = AnalyzeHybridTable(cath_an_struct(dt).ResponseTable);
-
-    cath_an_struct(dt).DetectionTable = detection_table{dt};
-    cath_an_struct(dt).DprimeTable = dprime_table{dt};
     cath_an_struct(dt).Pulse = convertCharsToStrings(cath_an_struct(dt).Pulse);
+    pulse_data = vertcat(cath_an_struct(:).Pulse);
+    cath_idx = strcmpi(pulse_data, 'Ca');
 
-    [sigmoidfun, coeffs, rnorm, residuals, jnd, warn] = FitSigmoid(cath_an_struct(dt).DetectionTable)
+    cath_struct = struct();
+
+    cath_struct = cath_an_struct(cath_idx) ;
+
 end
 
+for d2 = 1:length(cath_struct)
 
+    [detection_table{d2}, dprime_table{d2}] = AnalyzeHybridTable(cath_struct(d2).ResponseTable);
+    cath_struct(d2).DetectionTable = detection_table{d2};
+    cath_struct(d2).DprimeTable = dprime_table{d2};
+% 
+    u_mech_amps = unique(cath_struct(d2).ResponseTable.IndentorAmp);
+    dprime_block_2 = cath_struct(d2).DprimeTable{:,2};
+    dprime_block_1 = cath_struct(d2).DprimeTable{:,1};
 
+% 
+% 
+    x_block = u_mech_amps;
+    y_block_1 = dprime_block_1;
+    y_block_2 = dprime_block_2;
+    [~, coeffs_woicms, ~, ~,~, warn_0] = FitSigmoid(x_block,y_block_1,'NumCoeffs', 4, 'CoeffInit', [200,.01,NaN,NaN], 'Plotfit', true);
+    [~, coeffs_wicms, ~, ~,~, warn_w] = FitSigmoid(x_block,y_block_2,'NumCoeffs', 4, 'CoeffInit', [200,.01,NaN,NaN], 'Plotfit', true);
 
+    cath_struct(d2).Coeff_w_icms = coeffs_wicms;
+    cath_struct(d2).Coeff_wo_icms = coeffs_woicms;
+
+end
+
+%% finding thresholds between
+
+for d3 = 1:size(cath_struct,2)
+
+            siggy = GetSigmoid(4);
+            u_mech = unique(cath_struct(d3).ResponseTable.IndentorAmp);   
+            xq = linspace(0, .2);
+            yq_w = sigfun(cath_struct(d3).Coeff_w_icms, xq);
+            yq_wo = sigfun(cath_struct(d3).Coeff_wo_icms,xq);
+            dprime_threshold = 1.35;
+            hold on;
+            [~, b] = min(abs(cath_struct(d3).Coeff_w_icms - dprime_threshold));
+            [~, c] = min(abs(cath_struct(d3).Coeff_wo_icms - dprime_threshold));
+            plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
+            plot([0 xq(c) xq(c)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
+
+            cath_struct(d3).ThresholdW= xq(b);
+            cath_struct(d3).ThresholdWO = xq(c);
+    
+end
+
+%% plot
 
 
 

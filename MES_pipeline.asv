@@ -258,7 +258,7 @@ subplot(2,3,3); hold on
 title('Sweep pDetect')
 
 plot([0,2],[0,2], 'LineStyle','--','color', [.6,.6,.6])
-scatter(predict(1),p_detect_big(2,2), 'filled', 'MarkerEdgeColor', rgb(229, 115, 115), 'MarkerFaceColor',rgb(229, 115, 115))
+scatter(predict(1),p_detect_big(2,2), 'filled', 'MarkerEdgeColor', rgb(103, 58, 183), 'MarkerFaceColor',rgb(103, 58, 183))
 scatter(predict(2),p_detect_big(2,3), 'filled', 'MarkerEdgeColor', rgb(229, 57, 53), 'MarkerFaceColor',rgb(229, 57, 53))
 scatter(predict(3),p_detect_big(2,4), 'filled', 'MarkerEdgeColor', rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
 plot([0 p_detect_big(2,1) p_detect_big(2,1)], [p_detect_big(2,1) p_detect_big(2,1) 0], ...
@@ -285,8 +285,8 @@ plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyl
 mq = linspace(0, x_mech(end));
 [~, m] = min(abs(mech_dprime_coeffs-dprime_threshold));
 
-plot([0 mq(m) mq(m)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(136, 14, 79),'LineStyle','--')
-text(.02,1,(sprintf('%.3f', mq(m))), 'Color',rgb(136, 14, 79));
+plot([0 mq(m) mq(m)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(233, 30, 99),'LineStyle','--')
+text(.04,1,(sprintf('%.3f', mq(m))), 'Color', rgb(233, 30, 99));
 
 %incorrect 
 dpm = sigfun(mech_dprime_coeffs,mq);
@@ -321,7 +321,7 @@ text(25,1,(sprintf('%.0fuA',tt(ll_p))), 'Color', rgb(229, 115, 115));
 
 [~, mm_p] = min(abs(elect_dprime_coeffs-mp));
 plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(229, 57, 53),'LineStyle', '--')
- text(25,1.5,(sprintf('%.0fuA',tt(mm_p))), 'Color',rgb(229, 57, 53));
+ text(25,1.5,(sprintf('%.0f',tt(mm_p))), 'Color',rgb(229, 57, 53));
 
 
 plot(tt,elect_dprime_coeffs,'Color',rgb(183, 28, 28))
@@ -330,7 +330,7 @@ plot(tt,elect_dprime_coeffs,'Color',rgb(183, 28, 28))
 
 xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
 ylabel('d''')
-ylim([0 4.1])
+ylim([-1 4.1])
 xlim([0 30])
 axis square
 
@@ -342,24 +342,24 @@ title('Sweep d''')
 scatter(dprime_predicted(2),dprime_big(2,2),'filled', 'MarkerEdgeColor', rgb(229, 115, 115), 'MarkerFaceColor',rgb(229, 115, 115))
 scatter(dprime_predicted(3),dprime_big(2,3),'filled', 'MarkerEdgeColor',rgb(229, 57, 53), 'MarkerFaceColor',rgb(229, 57, 53))
 scatter(dprime_predicted(4),dprime_big(2,4),'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
-plot([0 dprime_big(2,1) dprime_big(2,1)], [dprime_big(2,1) dprime_big(2,1) -1],'LineStyle','--', 'Color', rgb(136, 14, 79))
+plot([0 dprime_big(2,1) dprime_big(2,1)], [dprime_big(2,1) dprime_big(2,1) -1],'LineStyle','--', 'Color', rgb(233, 30, 99))
 plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
 
 
 
 % text(2, 2, 'Mech+Elec 19', 'Color',rgb(26, 35, 126), 'FontSize',15)
-text(2.5, 2, (sprintf('Mech+%.0fuA', tt(up))), 'Color',rgb(183, 28, 28), 'FontSize',15)
+text(2.5, 2, (sprintf('Mech+Elec %.0f', tt(up))), 'Color',rgb(183, 28, 28), 'FontSize',15)
 
 % text(2, 1.75, 'Mech+Elec 18', 'Color',rgb(156, 39, 176), 'FontSize',15)
-text(2.5, 1.75, (sprintf('Mech+%.0fuA', tt(mm_p))), 'Color',rgb(229, 57, 53), 'FontSize',15)
+text(2.5, 1.75, (sprintf('Mech+Elec %.0f', tt(mm_p))), 'Color',rgb(229, 57, 53), 'FontSize',15)
 
 % text(2, 1.5, 'Mech+Elec 17', 'Color', rgb(103, 58, 183), 'FontSize',15)
-text(2.5, 1.5, (sprintf('Mech+%.0fuA', tt(ll_p))), 'Color', rgb(229, 115, 115), 'FontSize',15)
-text(2.5, 1.25, 'MechOnly', 'Color',  rgb(136, 14, 79), 'FontSize',15)
+text(2.5, 1.5, (sprintf('Mech+Elec %.0f', tt(ll_p))), 'Color', rgb(103, 58, 183), 'FontSize',15)
+text(2.5, 1.25, 'MechOnly', 'Color',  rgb(233, 30, 99), 'FontSize',15)
 
 
 xlim([0 3.2])
-ylim([0 4.1])
+ ylim([-1 3.2])
 xlabel('Predicted (dPrime)')
 ylabel('Observed (dPrime)')
 axis square
