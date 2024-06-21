@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -405,17 +405,19 @@ end
     WP_low_diff = vertcat(WP_low_diff(1:3));
     WP_mid_diff = vertcat(WP_mid_diff(1:3));
     WP_high_diff = vertcat(WP_high_diff(1:3));
-    
+   
+    elec_colors = [rgb(216, 27, 96); rgb(94, 53, 177); rgb(30, 136, 229); rgb(124, 179, 66)];
+
     
     % Swarm(1, [Pinot_low_diff, WP_low_diff])
     % Swarm(2, [Pinot_mid_diff, WP_mid_diff])
     % Swarm(3, [Pinot_high_diff, WP_high_diff])
-    swarmchart(1, Pinot_low_diff,100, '^', 'filled')
-    swarmchart(1,WP_low_diff,100, 'o', 'filled')
-    swarmchart(2,Pinot_mid_diff,100, '^', 'filled')
-    swarmchart(2,WP_mid_diff,100, 'o', 'filled')
-    swarmchart(3, Pinot_high_diff,100, '^', 'filled')
-    swarmchart(3,WP_high_diff,100, 'o', 'filled')
+    swarmchart(1, Pinot_low_diff,100, elec_colors,'^', 'filled')
+    swarmchart(1,WP_low_diff,100,elec_colors(1:3, :), 'o', 'filled')
+    swarmchart(2,Pinot_mid_diff,100,elec_colors, '^', 'filled')
+    swarmchart(2,WP_mid_diff,100,elec_colors(1:3, :), 'o', 'filled')
+    swarmchart(3, Pinot_high_diff,100,elec_colors, '^', 'filled')
+    swarmchart(3,WP_high_diff,100,elec_colors(1:3, :), 'o', 'filled')
         % swarmchart(1, Pinot_low_predict_diff, '+','filled')
     % swarmchart(1,WP_low_predict_diff,'o','filled')
 
@@ -444,12 +446,14 @@ for d1 = 1:length(WP_struct)
 end
     % Swarm(1, mech_predict_diff)
     % marker = 
-    swarmchart(1, Pinot_low_predict_diff,100, '^', 'filled')
-    swarmchart(1,WP_low_predict_diff,100,'o','filled')
-    swarmchart(2, Pinot_mid_predict_diff,100,'^', 'filled')
-    swarmchart(2, WP_mid_predict_diff, 100,'o','filled')
-    swarmchart(3,WP_high_predict_diff,100,'o','filled')
-    swarmchart(3,Pinot_high_predict_diff,100,'^', 'filled')
+
+    % elec_colors = [rgb(216, 27, 96); rgb(94, 53, 177); rgb(30, 136, 229); rgb(124, 179, 66)];
+    swarmchart(1, Pinot_low_predict_diff, 100, elec_colors, '^', 'filled')
+    swarmchart(1,WP_low_predict_diff,100, elec_colors(1:3, :), 'o','filled')
+    swarmchart(2, Pinot_mid_predict_diff,100, elec_colors, '^', 'filled')
+    swarmchart(2, WP_mid_predict_diff, 100, elec_colors(1:3, :), 'o','filled')
+    swarmchart(3,WP_high_predict_diff,100, elec_colors(1:3, :), 'o','filled')
+    swarmchart(3,Pinot_high_predict_diff,100, elec_colors, '^', 'filled')
 
 ylabel('\Delta Predicted \muA - Observed \muA')
 xticklabels({'Low', 'Medium', 'High'})
