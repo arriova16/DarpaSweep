@@ -1,5 +1,5 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_21and42';
+sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_3and23';
 % sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(sweep_df);
 
@@ -171,8 +171,8 @@ y_mech_pdetect = MechDetect_DT.pDetect;
 % [~,coeffs_mech_pdetect, ~,~,~, warn__mech_pdetect] = FitSigmoid(x_mech, y_mech_pdetect, 'NumCoeffs', 3,'Constraints', [0, 200; -5, 5],  'PlotFit', true);
 % wp
   % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_dprime,...
-  %  'NumCoeffs', 3, 'CoeffInit', [300,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
-           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect,'NumCoeffs', 4, 'CoeffInit', [1000,.01,NaN,NaN],  'PlotFit', true);
+   % 'NumCoeffs', 4, 'CoeffInit', [1000,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);
+           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect,'NumCoeffs', 4, 'CoeffInit', [100,.01,NaN,NaN],  'PlotFit', true);
 
 %Elect table dt
 
