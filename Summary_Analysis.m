@@ -294,8 +294,9 @@ WP_struct = struct(sweep_struct(WP_idx));
         end
 
     end
-    text(.6, .2, 'Monkey 1', 'Color',rgb(183, 28, 28))
-    text(.6, .15, 'Monkey 2', 'Color', rgb(13, 71, 161))
+    text(.6, .2, ColorText({'Monkey 1', 'Monkey 2'}, [rgb(183, 28, 28); rgb(13, 71, 161)]), 'HorizontalAlignment', 'left', 'VerticalAlignment', 'top')
+    % text(.6, .2, 'Monkey 1', 'Color', rgb(183, 28, 28))
+    % text(.6, .15, 'Monkey 2', 'Color', rgb(13, 71, 161))
    
     xlim([0,1])
     ylim([0,1])
@@ -408,7 +409,7 @@ end
     elec_colors = [rgb(216, 27, 96); rgb(94, 53, 177); rgb(30, 136, 229); rgb(124, 179, 66)];
 
     
-    Swarm(1, [Pinot_low_diff, WP_low_diff])
+    Swarm(1, [Pinot_low_diff, WP_low_diff], "DS", 'Box', "Color", [.1 .1 .1])
     Swarm(2, [Pinot_mid_diff, WP_mid_diff])
     Swarm(3, [Pinot_high_diff, WP_high_diff])
 
