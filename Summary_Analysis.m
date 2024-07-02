@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+tld = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -410,8 +410,8 @@ end
 
     
     Swarm(1, [Pinot_low_diff, WP_low_diff], "DS", 'Box', "Color", [.1 .1 .1])
-    Swarm(2, [Pinot_mid_diff, WP_mid_diff])
-    Swarm(3, [Pinot_high_diff, WP_high_diff])
+    Swarm(2, [Pinot_mid_diff, WP_mid_diff], "DS", 'Box', "Color", [.1 .1 .1])
+    Swarm(3, [Pinot_high_diff, WP_high_diff], "DS", 'Box', "Color", [.1 .1 .1])
 
     %old plot code
     % Swarm(3, Pinot_high_diff)
@@ -453,9 +453,9 @@ end
     % marker = 
 
     % elec_colors = [rgb(216, 27, 96); rgb(94, 53, 177); rgb(30, 136, 229); rgb(124, 179, 66)];
-    Swarm(1,[Pinot_low_predict_diff, WP_low_predict_diff])
-    Swarm(2,[Pinot_mid_predict_diff, WP_mid_predict_diff])
-    Swarm(3, [Pinot_high_predict_diff, WP_high_predict_diff])
+    Swarm(1,[Pinot_low_predict_diff, WP_low_predict_diff], "DS", 'Box', "Color", [.1 .1 .1])
+    Swarm(2,[Pinot_mid_predict_diff, WP_mid_predict_diff], "DS", 'Box', "Color", [.1 .1 .1])
+    Swarm(3, [Pinot_high_predict_diff, WP_high_predict_diff], "DS", 'Box', "Color", [.1 .1 .1])
 
     %old plotting code
     % swarmchart(1, Pinot_low_predict_diff, 100, elec_colors, '^', 'filled')

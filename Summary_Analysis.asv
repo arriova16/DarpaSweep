@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+tld = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -410,7 +410,7 @@ end
 
     
     Swarm(1, [Pinot_low_diff, WP_low_diff], "DS", 'Box', "Color", [.1 .1 .1])
-    Swarm(2, [Pinot_mid_diff, WP_mid_diff])
+    Swarm(2, [Pinot_mid_diff, WP_mid_diff], "DS")
     Swarm(3, [Pinot_high_diff, WP_high_diff])
 
     %old plot code
