@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_12and22\SweepTask';
+data_folder = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_41and42\SweepTask';
 
 % process_loc = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_3and23';
 % 
@@ -65,7 +65,7 @@ for i = 1:length(data)
          %works for pinot
           % plot(x_mech, y_mech)
          % pdetect
-           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech, 'PlotFit', true);
+           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4, 'Constraints', [0,500;-5, 5], 'PlotFit', true);
            % dprime
            % [~,coeffs_mech_dprime, ~,~,~, warn_mech_dprime] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4, 'CoeffInit', [200,.01,NaN,NaN],  'PlotFit', true);
           
