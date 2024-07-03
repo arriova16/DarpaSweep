@@ -1,5 +1,5 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_3and23';
+sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_21and42';
 % sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(sweep_df);
 
@@ -174,8 +174,7 @@ y_mech_pdetect = MechDetect_DT.pDetect;
    % 'NumCoeffs', 4, 'CoeffInit', [1000,0.02,NaN,NaN], 'EnableBackup', false, 'PlotFit', true);           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect,'NumCoeffs', 2, 'CoeffInit', [.05,.01,NaN,NaN],  'PlotFit', true);
            % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect,'NumCoeffs', 2, 'CoeffInit', [100,.01,NaN,NaN],  'PlotFit', true);
 
-           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect,'NumCoeffs', 4, 'CoeffInit', [100,.01,NaN,NaN],  'PlotFit', true);
-
+           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech_pdetect,'NumCoeffs', 4, 'Constraints', [0,200;-5,5],  'PlotFit', true);
 %Elect table dt
 
 [ElectDetect_DT] = AnalyzeElectTable(block_struct.ElectDetectTable);
@@ -222,12 +221,12 @@ SetFont('Arial',18)
 subplot(2,3,1); hold on
 title('Mech pDetect')
 scatter(x_mech,y_mech_pdetect, 50, [.1 .1 .1], 'filled')
-plot(x_mech, y_mech_pdetect,'Color', rgb(33, 33, 33), 'LineStyle', '-')
+% plot(x_mech, y_mech_pdetect,'Color', rgb(33, 33, 33), 'LineStyle', '-')
 
 xq = linspace(0, x_mech(end));
 yq = sigfun(coeffs,xq);
 %sig plot
-plot(xq,yq,'Color', rgb(183, 28, 28))
+plot(xq,yq,'Color', [.0 .0 .0])
 
 
 
@@ -242,12 +241,12 @@ subplot(2,3,2); hold on
 title('Elec pDetect')
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color',rgb(33, 33, 33), 'LineStyle', '-')
+% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color',rgb(33, 33, 33), 'LineStyle', '-')
 
 tt = linspace(0,x_elect(end));
 tq = sigfun(coeffs_elect,tt);
 %sigmoid 
-plot(tt,tq,'Color',rgb(183, 28, 28))
+plot(tt,tq,'Color',[.0 .0 .0])
 
 xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
 ylabel('pDetect')
@@ -283,7 +282,7 @@ subplot(2,3,4); hold on
 title('Mech d''')
 
 scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
+% plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
 mq = linspace(0, x_mech(end));
 [~, m] = min(abs(mech_dprime_coeffs-dprime_threshold));
 
@@ -292,7 +291,7 @@ text(.02,1,(sprintf('%.3f', mq(m))), 'Color',rgb(136, 14, 79));
 
 %incorrect 
 dpm = sigfun(mech_dprime_coeffs,mq);
-plot(mq,mech_dprime_coeffs,'Color',rgb(183, 28, 28))
+plot(mq,mech_dprime_coeffs,'Color',[.0 .0 .0])
 
 
 
@@ -309,7 +308,7 @@ subplot(2,3,5); hold on
 title('Elec d''')
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
+% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
 lp = 0.3;
 mp = 0.45;
 

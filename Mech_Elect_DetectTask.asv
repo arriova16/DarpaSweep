@@ -100,7 +100,7 @@ for i = 1:length(data)
 %         dprime incorrect
        % [~,coeffs_elect_dprime,~, ~, ~, warn_elect_dprime] = FitSigmoid(x_elect,y_elect_dprime ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN], 'PlotFit', true);
 %         pdetect
-   [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
+% **      [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN], 'PlotFit', true);
 
        %  %wp
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
@@ -119,10 +119,9 @@ end
 
 %new dprime coeffs for mech
 sigfun = GetSigmoid(4);
-sig = GetSigmoid(2);
 
 xq = linspace(0, x_mech(end));
-mc = sig(coeffs,xq);
+mc = sigfun(coeffs,xq);
 
 mech_fa = MechDetect_DT{1,2};
 mech_dprime_coeffs = norminv(mc) - norminv(mech_fa);
