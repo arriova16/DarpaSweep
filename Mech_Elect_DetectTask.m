@@ -119,10 +119,10 @@ end
 
 %new dprime coeffs for mech
 sigfun = GetSigmoid(4);
-sig = GetSigmoid(2);
+% sig = GetSigmoid(2);
 
 xq = linspace(0, x_mech(end));
-mc = sig(coeffs,xq);
+mc = sigfun(coeffs,xq);
 
 mech_fa = MechDetect_DT{1,2};
 mech_dprime_coeffs = norminv(mc) - norminv(mech_fa);
@@ -173,7 +173,7 @@ xlabel('Amplitude (mm)')
 ylabel('pDetect') 
 ylim([0 1])
 
-xlim([0 .02])
+xlim([0 .03])
 xticks(0:.01:.1)
 xtickangle(0)
 xq = linspace(0, x_mech(end));
@@ -194,14 +194,14 @@ plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Colo
 % md = siggyfun(coeffs_mech_dprime,xq);
 [~, b] = min(abs(mech_dprime_coeffs-dprime_threshold));
 plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
-text(.015,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
+text(.02,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
 
 plot(xq,mech_dprime_coeffs,'Color',rgb(84, 110, 122))
 
 xlabel('Amplitude (mm)')
 ylabel('d''')
-ylim([-.5 4])
-xlim([0 .02])
+ylim([-.2 4])
+xlim([0 .03])
 % xlim([0 
 endddd = MechDetect_DT(end,1);
 xticks(0:.01:.1)
@@ -220,7 +220,7 @@ plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Co
 xlim([0 30])
 tt = linspace(0,x_elect(end));
 tq = siggyfun(coeffs_elect,tt);
-plot(tt,tq,'Color',rgb(84, 110, 122))
+% plot(tt,tq,'Color',rgb(84, 110, 122))
 
 axis square
 xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
@@ -250,7 +250,7 @@ plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle',
 
 [~, ll_p] = min(abs(elect_dprime_coeffs-lp));
 plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-text(25,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+text(25,.9,(sprintf('%.1f',tt(ll_p))), 'Color', rgb(103, 58, 183));
 
 % C = ColorGradient(rgb(106, 27, 154),rgb(186, 104, 200));
 
