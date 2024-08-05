@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\PreProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -453,7 +453,7 @@ end
     % marker = 
 
     % elec_colors = [rgb(216, 27, 96); rgb(94, 53, 177); rgb(30, 136, 229); rgb(124, 179, 66)];
-    Swarm(1,[Pinot_low_predict_diff, WP_low_predict_diff], "DS", 'Box', "Color", [.1 .1 .1])
+    Swarm(1,[Pinot_low_predict_diff, WP_low_predict_diff], "DS", 'Box','CM', "Color", [.1 .1 .1])
     Swarm(2,[Pinot_mid_predict_diff, WP_mid_predict_diff], "DS", 'Box', "Color", [.1 .1 .1])
     Swarm(3, [Pinot_high_predict_diff, WP_high_predict_diff], "DS", 'Box', "Color", [.1 .1 .1])
 
