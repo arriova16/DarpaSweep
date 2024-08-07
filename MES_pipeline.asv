@@ -372,26 +372,6 @@ subplot(2,2,1);hold on
 %mech detect dprime example
 title('Mechanical Detection d''')
 
-scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-% plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
-mq = linspace(0, x_mech(end));
-[~, m] = min(abs(mech_dprime_coeffs-dprime_threshold));
-
-plot([0 mq(m) mq(m)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(136, 14, 79),'LineStyle','--')
-text(.02,1,(sprintf('%.3f', mq(m))), 'Color',rgb(136, 14, 79));
-
-%incorrect 
-dpm = sigfun(mech_dprime_coeffs,mq);
-plot(mq,mech_dprime_coeffs,'Color',[.0 .0 .0])
-
-
-
-
-
-xlabel('Amplitude (mm)')
-ylabel('d''')
-ylim([0 4.1])
-
 
 
 axis square
@@ -399,39 +379,11 @@ subplot(2,2,2); hold on
 %elect detect dprime example
 title('ICMS Detection d''')
 
-
-scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-% plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', [.1 .1 .1], 'LineStyle', '-')
-lp = 0.3;
-mp = 0.45;
-
-[~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
-plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(183, 28, 28),'LineStyle', '--')
-text(25,2,(sprintf('%.0fuA',tt(up))), 'Color', rgb(183, 28, 28));
-
-[~, ll_p] = min(abs(elect_dprime_coeffs-lp));
-plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(229, 115, 115), 'LineStyle', '--')
-text(25,1,(sprintf('%.0fuA',tt(ll_p))), 'Color', rgb(229, 115, 115));
-
-[~, mm_p] = min(abs(elect_dprime_coeffs-mp));
-plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(229, 57, 53),'LineStyle', '--')
- text(25,1.5,(sprintf('%.0fuA',tt(mm_p))), 'Color',rgb(229, 57, 53));
-
-
-plot(tt,elect_dprime_coeffs,'Color',rgb(183, 28, 28))
-
-
-
-xlabel(sprintf('Amplitude (%sA)', GetUnicodeChar('mu')))
-ylabel('d''')
-ylim([0 4.1])
-xlim([0 30])
-
 axis square
 
 subplot(2,2,[3,4]); hold on
 %sweep detect example
-title('Sweep d''')
+title
 
 
 

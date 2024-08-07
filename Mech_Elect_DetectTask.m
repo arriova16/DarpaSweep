@@ -2,9 +2,9 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_12and22\SweepTask';
+data_folder = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_31and41\SweepTask';
 
-process_loc = 'Z:\UserFolders\ToriArriola\DARPA_updated\PreProcessedData\Pinot\DarpaSweep\Electrode_12and22';
+% process_loc = 'Z:\UserFolders\ToriArriola\DARPA_updated\PreProcessedData\Pinot\DarpaSweep\Electrode_12and22';
 % 
 
 %%
@@ -42,11 +42,11 @@ data.MechDetectTable = cat(1, block_struct(end-1:end).MechRT);
 % data.ElectDetectTable = cat(1,block_struct(end).ElectRT);
 % data.MechDetectTable = cat(1, block_struct(end).MechRT);
 % % 
-save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
-if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-
-    save(fullfile(process_loc, save_fname), 'data')
-end
+% save_fname = sprintf('%s_%s_ME.mat', monkey_name, monkey_electrode);
+% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+% 
+%     save(fullfile(process_loc, save_fname), 'data')
+% end
 
 
 %% putting things into block - will need to concat response tables?
@@ -65,7 +65,7 @@ for i = 1:length(data)
          %works for pinot
           % plot(x_mech, y_mech)
          % pdetect
-           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4, 'Constraints', [0,500;-5, 5], 'PlotFit', true);
+           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4, 'Constraints', [0,200;-5, 5], 'PlotFit', true);
            % dprime
            % [~,coeffs_mech_dprime, ~,~,~, warn_mech_dprime] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4, 'CoeffInit', [200,.01,NaN,NaN],  'PlotFit', true);
           
@@ -242,15 +242,15 @@ mp = 0.45;
 
 [~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
 plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
-text(25,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
+text(28,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
 
 [~, mm_p] = min(abs(elect_dprime_coeffs-mp));
 plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- text(25,1.3,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+ text(28,1.3,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
 
 [~, ll_p] = min(abs(elect_dprime_coeffs-lp));
 plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-text(25,.9,(sprintf('%.1f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+text(28,.9,(sprintf('%.1f',tt(ll_p))), 'Color', rgb(103, 58, 183));
 
 % C = ColorGradient(rgb(106, 27, 154),rgb(186, 104, 200));
 
