@@ -381,8 +381,8 @@ plot([0 mq(m) mq(m)], [dprime_threshold, dprime_threshold, 0], 'Color',rgb(136, 
 text(.02,1,(sprintf('%.3f', mq(m))), 'Color',rgb(136, 14, 79));
 
 %incorrect 
-dpm = sigfun(mech_dprime_coeffs,mq);
-plot(mq,mech_dprime_coeffs,'Color',[.0 .0 .0])
+% dpm = sigfun(mech_dprime_coeffs,mq);
+% plot(mq,mech_dprime_coeffs,'Color',[.0 .0 .0])
 
 
 
@@ -431,8 +431,31 @@ axis square
 
 subplot(2,2,[3,4]); hold on
 %sweep detect example
-title('Sweep d''')
 
+title('Sweep d''')
+scatter(dprime_predicted(2),dprime_big(2,2),'filled', 'MarkerEdgeColor', rgb(229, 115, 115), 'MarkerFaceColor',rgb(229, 115, 115))
+scatter(dprime_predicted(3),dprime_big(2,3),'filled', 'MarkerEdgeColor',rgb(229, 57, 53), 'MarkerFaceColor',rgb(229, 57, 53))
+scatter(dprime_predicted(4),dprime_big(2,4),'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+plot([0 dprime_big(2,1) dprime_big(2,1)], [dprime_big(2,1) dprime_big(2,1) -1],'LineStyle','--', 'Color', rgb(136, 14, 79))
+plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
+
+
+
+% text(2, 2, 'Mech+Elec 19', 'Color',rgb(26, 35, 126), 'FontSize',15)
+text(2.5, 2, (sprintf('Mech+%.0fuA', tt(up))), 'Color',rgb(183, 28, 28), 'FontSize',15)
+
+% text(2, 1.75, 'Mech+Elec 18', 'Color',rgb(156, 39, 176), 'FontSize',15)
+text(2.5, 1.75, (sprintf('Mech+%.0fuA', tt(mm_p))), 'Color',rgb(229, 57, 53), 'FontSize',15)
+
+% text(2, 1.5, 'Mech+Elec 17', 'Color', rgb(103, 58, 183), 'FontSize',15)
+text(2.5, 1.5, (sprintf('Mech+%.0fuA', tt(ll_p))), 'Color', rgb(229, 115, 115), 'FontSize',15)
+text(2.5, 1.25, 'MechOnly', 'Color',  rgb(136, 14, 79), 'FontSize',15)
+
+
+xlim([0 3.2])
+ylim([0 4.1])
+xlabel('Predicted (dPrime)')
+ylabel('Observed (dPrime)')
 
 
 
