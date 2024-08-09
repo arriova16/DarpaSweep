@@ -382,7 +382,7 @@ text(.02,1,(sprintf('%.3f', mq(m))), 'Color',rgb(136, 14, 79));
 
 %incorrect 
 % dpm = sigfun(mech_dprime_coeffs,mq);
-% plot(mq,mech_dprime_coeffs,'Color',[.0 .0 .0])
+plot(mq,mech_dprime_coeffs,'Color',[.0 .0 .0])
 
 
 
