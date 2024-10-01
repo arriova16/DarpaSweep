@@ -2,7 +2,7 @@
 tld = 'C:\Users\Somlab\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\PreProcessedData';
 %% loading matfiles
 
-sweep_struct = struct();
+sweep_struct = struct(); ii =1;
 file_list = dir(tld); monkey_list = file_list(3:end);
 
 for a = 1:length(monkey_list)
@@ -14,15 +14,16 @@ for a = 1:length(monkey_list)
     for e = 1:size(mat_file)
         mat_split = strsplit(mat_file(e).name, '_');
         mat_idx = mat_split{3};
-        sweep_struct(e).Monkey = mat_split(1);
+        sweep_struct(ii).Monkey = mat_split(1);
 
         if contains(mat_split{2}, 'and')
             and_idx = strfind(mat_split{2}, 'and');
             ee = [str2double(mat_split{2}(1:and_idx-1)), str2double(mat_split{2}(and_idx+3:end))];
         end
-        sweep_struct(e).Electrode = ee;
+        sweep_struct(ii).Electrode = ee;
 
     end %mat_file
+    ii = ii+1;
 
 end %monkey_list
 
