@@ -1,7 +1,40 @@
 
-tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_3and23\SweepTask';
-process_loc = 'Z:\UserFolders\ToriArriola\DARPA_updated\ProcessedData\Pinot\DarpaSweep\Electrode_3and23';
-file_list = dir(tld);
+tld = 'C:\Users\Somlab\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\PreProcessedData';
+%% loading matfiles
+
+sweep_struct = struct();
+file_list = dir(tld); monkey_list = file_list(3:end);
+
+for a = 1:length(monkey_list)
+    subf = fullfile(tld, monkey_list(a).name, 'DarpaSweep');
+    dir_str = fullfile(subf, 'Electrode*');
+    mat_file = dir(fullfile(dir_str, '*.mat'));
+    electrode = dir(dir_str);
+    
+    for e = 1:size(mat_file)
+        mat_split = strsplit(mat_file(e).name, '_');
+        mat_idx = mat_split{3};
+        sweep_struct(e).Monkey = mat_split(1);
+
+        if contains(mat_split{2}, 'and')
+            and_idx = strfind(mat_split{2}, 'and');
+            ee = [str2double(mat_split{2}(1:and_idx-1)), str2double(mat_split{2}(and_idx+3:end))];
+        end
+        sweep_struct(e).Electrode = ee;
+
+    end %mat_file
+
+end %monkey_list
+
+
+
+
+
+
+
+
+
+
 %% loading matfiles
 %need to load 
 data = struct(); ii = 1;
@@ -27,10 +60,10 @@ end
 
 CatTable = cat(1,sweep_table{:});
 
-save_fname = sprintf('%s_%s_Sweep_comb.mat', animal, electrode);
-if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
-    save(fullfile(process_loc, save_fname), 'CatTable')
-end
+% save_fname = sprintf('%s_%s_Sweep_comb.mat', animal, electrode);
+% if exist(fullfile(process_loc, save_fname), 'file') ~=1 || overwrite
+%     save(fullfile(process_loc, save_fname), 'CatTable')
+% end
 
 %% Analysis
 
