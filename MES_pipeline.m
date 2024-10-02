@@ -214,7 +214,7 @@ elect_dprime_coeffs = norminv(ec)- norminv(elect_fa);
 
 %% new plots 6 plots
 
-SetFont('Arial',18)
+SetFont('Arial',25)
 % sgtitle(sprintf('%s %s', Monkey, electrode))
 % title(sprintf('%s_%s', Monkey, electrode))
 % title('Pinot')
