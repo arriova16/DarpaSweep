@@ -1,9 +1,11 @@
 %Combination of Mech_Elect with SweepTask
-sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\PreProcessedData\Pinot\DarpaSweep\Electrode_21and42';
-% sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
+% sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\PreProcessedData\Pinot\DarpaSweep\Electrode_21and42';
+sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\ProcessedData';
 file_list = dir(sweep_df);
 
+
  %% Loading mat files
+
 
  block_struct = struct(); ii =1;
 %need to figure out how to avoid this and go straight to matfiles
