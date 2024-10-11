@@ -1,5 +1,5 @@
 %New script for summary data of sweep task
-tld = 'Z:\UserFolders\ToriArriola\DARPA_updated\PreProcessedData';
+tld = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\PreProcessedData';
 file_list = dir(tld);
 
 %% loading mat files
@@ -268,7 +268,7 @@ end %sweep_struct
 
 %% Plotting
 
-SetFont('Arial', 18)
+SetFont('Arial', 33)
 
 monkey_list = vertcat(sweep_struct(:).Monkey);
 WP_idx = strcmpi(monkey_list, 'Whistlepig');
@@ -276,19 +276,19 @@ Pinot_idx = strcmpi(monkey_list, 'Pinot');
 Pinot_struct = struct(sweep_struct(Pinot_idx));
 WP_struct = struct(sweep_struct(WP_idx));
 
-    subplot(1,2,1);
+%     subplot(1,2,1);
     hold on
     title('pDetect')
     for d1 = 1:length(Pinot_struct)
     %plotting pinot pdetect_obs
-        scatter(Pinot_struct(d1).pdetect_predict{1,2},Pinot_struct(d1).pdetect_obs{2,3},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
-        scatter(Pinot_struct(d1).pdetect_predict{1,3},Pinot_struct(d1).pdetect_obs{2,4},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
-        scatter(Pinot_struct(d1).pdetect_predict{1,4},Pinot_struct(d1).pdetect_obs{2,5}, 'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+        scatter(Pinot_struct(d1).pdetect_predict{1,2},Pinot_struct(d1).pdetect_obs{2,3},150,'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+        scatter(Pinot_struct(d1).pdetect_predict{1,3},Pinot_struct(d1).pdetect_obs{2,4},150,'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+        scatter(Pinot_struct(d1).pdetect_predict{1,4},Pinot_struct(d1).pdetect_obs{2,5},150, 'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
  
         for d2 = 1:length(WP_struct)
-            scatter(WP_struct(d2).pdetect_predict{1,2},WP_struct(d2).pdetect_obs{2,3},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
-            scatter(WP_struct(d2).pdetect_predict{1,3},WP_struct(d2).pdetect_obs{2,4},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
-            scatter(WP_struct(d2).pdetect_predict{1,4},WP_struct(d2).pdetect_obs{2,5},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+            scatter(WP_struct(d2).pdetect_predict{1,2},WP_struct(d2).pdetect_obs{2,3},150,'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+            scatter(WP_struct(d2).pdetect_predict{1,3},WP_struct(d2).pdetect_obs{2,4},150,'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+            scatter(WP_struct(d2).pdetect_predict{1,4},WP_struct(d2).pdetect_obs{2,5},150,'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
          plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
 
         end
@@ -297,40 +297,41 @@ WP_struct = struct(sweep_struct(WP_idx));
     text(.6, .2, ColorText({'Monkey 1', 'Monkey 2'}, [rgb(183, 28, 28); rgb(13, 71, 161)]), 'HorizontalAlignment', 'left', 'VerticalAlignment', 'top')
     % text(.6, .2, 'Monkey 1', 'Color', rgb(183, 28, 28))
     % text(.6, .15, 'Monkey 2', 'Color', rgb(13, 71, 161))
-   
+     axis square
     xlim([0,1])
     ylim([0,1])
+    yticks([.2,.4,.6,.8, 1])
     xlabel('Predicted (pDetect)')
     ylabel('Observed (pDetect)')
-    axis square
+  
 
-    subplot(1,2,2); hold on
-    title('dPrime')
-    
-    for d1 = 1:length(Pinot_struct)
-        scatter(Pinot_struct(d1).dprime_predict(2,1), Pinot_struct(d1).dprime_obs{2,3},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
-        scatter(Pinot_struct(d1).dprime_predict(3,1), Pinot_struct(d1).dprime_obs{2,4},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
-        scatter(Pinot_struct(d1).dprime_predict(4,1), Pinot_struct(d1).dprime_obs{2,5}, 'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
-    
-    for d2 = 1:length(WP_struct)
-            scatter(WP_struct(d2).dprime_predict(2,1),WP_struct(d2).dprime_obs{2,3},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
-            scatter(WP_struct(d2).dprime_predict(3,1),WP_struct(d2).dprime_obs{2,4},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
-            scatter(WP_struct(d2).dprime_predict(4,1),WP_struct(d2).dprime_obs{2,5},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
-         plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
-        
-
-    end
-
-
-
-    end
-
-
-    xlabel('Predicted (dPrime)')
-    ylabel('Observed (dPrime)')
-    xlim([0,4])
-    ylim([0 4])
-    axis square
+%     subplot(1,2,2); hold on
+%     title('dPrime')
+%     
+%     for d1 = 1:length(Pinot_struct)
+%         scatter(Pinot_struct(d1).dprime_predict(2,1), Pinot_struct(d1).dprime_obs{2,3},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+%         scatter(Pinot_struct(d1).dprime_predict(3,1), Pinot_struct(d1).dprime_obs{2,4},'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+%         scatter(Pinot_struct(d1).dprime_predict(4,1), Pinot_struct(d1).dprime_obs{2,5}, 'filled', 'MarkerEdgeColor',rgb(183, 28, 28), 'MarkerFaceColor',rgb(183, 28, 28))
+%     
+%     for d2 = 1:length(WP_struct)
+%             scatter(WP_struct(d2).dprime_predict(2,1),WP_struct(d2).dprime_obs{2,3},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+%             scatter(WP_struct(d2).dprime_predict(3,1),WP_struct(d2).dprime_obs{2,4},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+%             scatter(WP_struct(d2).dprime_predict(4,1),WP_struct(d2).dprime_obs{2,5},'filled', 'MarkerEdgeColor',rgb(13, 71, 161), 'MarkerFaceColor',rgb(13, 71, 161))
+%          plot([0,5],[0,5], 'LineStyle','--','color', [.6,.6,.6])
+%         
+% 
+%     end
+% 
+% 
+% 
+%     end
+% 
+% 
+%     xlabel('Predicted (dPrime)')
+%     ylabel('Observed (dPrime)')
+%     xlim([0,4])
+%     ylim([0 4])
+%     axis square
 %% three analysis
 
 % monkey = vertcat(sweep_struct(:).Monkey);
