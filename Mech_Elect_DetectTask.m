@@ -2,7 +2,7 @@
 %goals I want to be able pull files and be able to formatt them here
 %I also want to be able to save those formatted files and analyze them
 
-data_folder = 'C:\Users\arrio\Box\BensmaiaLab\UserData\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_21and42\SweepTask';
+data_folder = 'Z:\UserFolders\ToriArriola\DARPA_updated\RawData\Pinot\Electrode_41and42\SweepTask';
 
 % process_loc = 'Z:\UserFolders\ToriArriola\DARPA_updated\PreProcessedData\Pinot\DarpaSweep\Electrode_12and22';
 % 
@@ -59,13 +59,17 @@ for i = 1:length(data)
           [dbd_mech_dt{d}]= AnalyzeMechTable(block_struct(d).MechRT(:,:));
          block_struct(d).MechDT_daily = dbd_mech_dt{d};
          x_mech = MechDetect_DT.MechAmp;
-         y_mech_dprime = MechDetect_DT.dPrime;
+         % y_mech_dprime = MechDetect_DT.dPrime;
          y_mech = MechDetect_DT.pDetect;
+         x_mech_daily = block_struct(d).MechDT_daily.pDetect;
+         y_mech_daily = block_struct(d).MechDT_daily.MechAmp;
 
          %works for pinot
           % plot(x_mech, y_mech)
          % pdetect
-           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4,'Constraints', [0,200;-5, 5],  'PlotFit', true);
+           [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech, y_mech,'NumCoeffs', 4,'Constraints', [0,200;-5, 5]);
+            % [~,coeffs, ~,~,~, warn] = FitSigmoid(x_mech_daily, y_mech_daily,'NumCoeffs', 4,'Constraints', [0,200;-5, 5], 'Plotfit', true);
+
            % dprime
            % [~,coeffs_mech_dprime, ~,~,~, warn_mech_dprime] = FitSigmoid(x_mech, y_mech_dprime, 'NumCoeffs', 4, 'CoeffInit', [200,.01,NaN,NaN],  'PlotFit', true);
           
@@ -100,7 +104,7 @@ for i = 1:length(data)
 %         dprime incorrect
        % [~,coeffs_elect_dprime,~, ~, ~, warn_elect_dprime] = FitSigmoid(x_elect,y_elect_dprime ,'NumCoeffs', 4,'CoeffInit', [1,15,NaN,NaN], 'PlotFit', true);
 %         pdetect
-   [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'CoeffInit', [.5,15,NaN,NaN]);
+   [~,coeffs_elect, ~,~,~, warn_elect] = FitSigmoid(x_elect, y_elect_pdetect,'NumCoeffs', 4,'Constraints', [-5,300;-50,50], 'PlotFit', true);
 
        %  %wp
        % [~,coeffs_elect,~, ~, ~, warn_elect] = FitSigmoid(x_elect,y_elect ,'NumCoeffs', ...
@@ -156,60 +160,60 @@ dprime_threshold = 1.35;
 
 
 %plotting Mech Detection pdetect and dprime
-% subplot(1,2,1); hold on 
-% 
-% 
-% title('Mech pDetect')
-% scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
-% plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color',rgb(198, 40, 40), 'LineStyle', '-')
-% 
-% %plotting day by day
-% c = ColorGradient(rgb(207, 216, 220), rgb(33, 33, 33), length(block_struct));
-% % colormap(flipud(parula))
-% % c = flipud(parula(length(block_struct)));
-% plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
-% axis square
-% xlabel('Amplitude (mm)')
-% ylabel('pDetect') 
-% ylim([0 1])
-% 
-% xlim([0 .03])
-% xticks(0:.01:.1)
-% xtickangle(0)
-% xq = linspace(0, x_mech(end));
-% yq = siggyfun(coeffs,xq);
-% 
-% text(0.015,.3, 'First Session', 'Color', rgb(207, 216, 220))
-% text(0.015,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
-% text(0.015, .17, 'Last Two Days', 'Color',rgb(198, 40, 40))
-% 
-% subplot(1,2,2); 
-% hold on; title('Mech dPrime')
-% 
-% 
-% scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
-% plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', rgb(198, 40, 40), 'LineStyle', '-')
-% plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
-% 
-% % md = siggyfun(coeffs_mech_dprime,xq);
-% [~, b] = min(abs(mech_dprime_coeffs-dprime_threshold));
-% plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
-% text(.02,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
-% 
-% plot(xq,mech_dprime_coeffs,'Color',rgb(84, 110, 122))
-% 
-% xlabel('Amplitude (mm)')
-% ylabel('d''')
-% ylim([-.2 4])
-% xlim([0 .03])
-% % xlim([0 
-% endddd = MechDetect_DT(end,1);
-% xticks(0:.01:.1)
-% xtickangle(0)
-% axis square
+subplot(2,4,1); hold on 
+
+
+title('Mech pDetect')
+scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
+plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color',rgb(198, 40, 40), 'LineStyle', '-')
+
+%plotting day by day
+c = ColorGradient(rgb(207, 216, 220), rgb(33, 33, 33), length(block_struct));
+% colormap(flipud(parula))
+% c = flipud(parula(length(block_struct)));
+plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
+axis square
+xlabel('Amplitude (mm)')
+ylabel('pDetect') 
+ylim([0 1])
+
+xlim([0 .03])
+xticks(0:.01:.1)
+xtickangle(0)
+xq = linspace(0, x_mech(end));
+yq = siggyfun(coeffs,xq);
+
+text(0.015,.3, 'First Session', 'Color', rgb(207, 216, 220))
+text(0.015,.23, 'Latest Session', 'Color',rgb(33, 33, 33))
+text(0.015, .17, 'Last Two Days', 'Color',rgb(198, 40, 40))
+
+subplot(2,2,2); 
+hold on; title('Mech dPrime')
+
+
+scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', rgb(198, 40, 40), 'LineStyle', '-')
+plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
+
+% md = siggyfun(coeffs_mech_dprime,xq);
+[~, b] = min(abs(mech_dprime_coeffs-dprime_threshold));
+plot([0 xq(b) xq(b)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(69, 90, 100),'LineStyle','--')
+text(.02,.1,(sprintf('%.3f',xq(b))), 'Color', rgb(26, 35, 126));
+
+plot(xq,mech_dprime_coeffs,'Color',rgb(84, 110, 122))
+
+xlabel('Amplitude (mm)')
+ylabel('d''')
+ylim([-.2 4])
+xlim([0 .03])
+% xlim([0 
+endddd = MechDetect_DT(end,1);
+xticks(0:.01:.1)
+xtickangle(0)
+axis square
 
 % 
-subplot(1,2,1); hold on; title('Elect pDetect')
+subplot(2,2,3); hold on; title('Elect pDetect')
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color',rgb(198, 40, 40), 'LineStyle', '-')
@@ -226,7 +230,7 @@ ylabel('pDetect')
 ylim([0 1])
 xlim([0 35])
 
-subplot(1,2,2); hold on; title('Elect dPrime')
+subplot(2,2,4); hold on; title('Elect dPrime')
 
 
 scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
