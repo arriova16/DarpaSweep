@@ -145,7 +145,7 @@ elect_dprime_coeffs = norminv(ec)- norminv(elect_fa);
 %% Plotting
 %c(1) = rate of change, c(2) = x-offset, c(3) = multiplier, c(4) = offset
 % sigfun = @(c,x) (c(3) .* (1./(1 + exp(-c(1).*(x-c(2)))))) + c(4);
-SetFont('Arial', 30)
+SetFont('Arial', 18)
 %need to find 6 pts on sigmoid.
 %  one pt at 100%, one point at 70%, 3 points at 40, 50 60 percent detection 
 
@@ -154,17 +154,17 @@ SetFont('Arial', 30)
  %giving 3
  siggyfun = GetSigmoid(4); 
 
-%  sgtitle(sprintf('%s %s', monkey_name, monkey_electrode), 'FontSize', 30)
+ sgtitle(sprintf('%s %s', monkey_name, monkey_electrode), 'FontSize', 18)
 for i = 1:length(block_struct)
 dprime_threshold = 1.35;
 
 
 %plotting Mech Detection pdetect and dprime
-subplot(2,4,1); hold on 
+subplot(2,2,1); hold on 
 
 
 title('Mech pDetect')
-scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 50, [.1 .1 .1], 'filled')
+scatter(MechDetect_DT.MechAmp,MechDetect_DT.pDetect , 20, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp,MechDetect_DT.pDetect,'Color',rgb(198, 40, 40), 'LineStyle', '-')
 
 %plotting day by day
@@ -177,8 +177,8 @@ xlabel('Amplitude (mm)')
 ylabel('pDetect') 
 ylim([0 1])
 
-xlim([0 .03])
-xticks(0:.01:.1)
+xlim([0 .1])
+% xticks(0:.1:.1)
 xtickangle(0)
 xq = linspace(0, x_mech(end));
 yq = siggyfun(coeffs,xq);
@@ -191,7 +191,7 @@ subplot(2,2,2);
 hold on; title('Mech dPrime')
 
 
-scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+scatter(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 20, [.1 .1 .1], 'filled')
 plot(MechDetect_DT.MechAmp, MechDetect_DT.dPrime, 'Color', rgb(198, 40, 40), 'LineStyle', '-')
 plot(block_struct(i).MechDT_daily{:,1}, block_struct(i).MechDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 
@@ -205,17 +205,17 @@ plot(xq,mech_dprime_coeffs,'Color',rgb(84, 110, 122))
 xlabel('Amplitude (mm)')
 ylabel('d''')
 ylim([-.2 4])
-xlim([0 .03])
+xlim([0 .1])
 % xlim([0 
 endddd = MechDetect_DT(end,1);
-xticks(0:.01:.1)
+% xticks(0:.1:.1)
 xtickangle(0)
 axis square
 
 % 
 subplot(2,2,3); hold on; title('Elect pDetect')
 
-scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 50, [.1 .1 .1], 'filled')
+scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 20, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.pDetect, 'Color',rgb(198, 40, 40), 'LineStyle', '-')
 plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,2}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 
@@ -233,7 +233,7 @@ xlim([0 35])
 subplot(2,2,4); hold on; title('Elect dPrime')
 
 
-scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 50, [.1 .1 .1], 'filled')
+scatter(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 20, [.1 .1 .1], 'filled')
 plot(ElectDetect_DT.StimAmp, ElectDetect_DT.dPrime, 'Color', rgb(198, 40, 40), 'LineStyle', '-')
 plot(block_struct(i).ElectDT_daily{:,1}, block_struct(i).ElectDT_daily{:,3}, 'Color', c(i,:),'LineStyle', ':', 'LineWidth', 2)
 
