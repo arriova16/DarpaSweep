@@ -1,6 +1,6 @@
 %Combination of Mech_Elect with SweepTask
-% sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\PreProcessedData\Pinot\DarpaSweep\Electrode_21and42';
-sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_21and42';
+sweep_df = 'Z:\UserFolders\ToriArriola\DARPA_updated\PreProcessedData\Pinot\DarpaSweep\Electrode_21and42';
+% sweep_df = 'C:\Users\arrio\Box\BensmaiaLab\ProjectFolders\DARPA\Data\ProcessedData\Pinot\DarpaSweep\Electrode_21and42';
 file_list = dir(sweep_df);
 
 
