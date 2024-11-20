@@ -155,7 +155,7 @@ SetFont('Arial', 18)
  siggyfun = GetSigmoid(4); 
 
  sgtitle(sprintf('%s %s', monkey_name, monkey_electrode), 'FontSize', 18)
-for i = 1:length(block_struct)
+for i = 9:length(block_struct)
 dprime_threshold = 1.35;
 
 
@@ -244,15 +244,15 @@ mp = 0.45;
 
 [~, up] = min(abs(elect_dprime_coeffs-dprime_threshold));
 plot([0 tt(up) tt(up)], [dprime_threshold, dprime_threshold, -1], 'Color',rgb(26, 35, 126),'LineStyle', '--')
-text(28,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
+text(18,1.8,(sprintf('%.0f',tt(up))), 'Color', rgb(26, 35, 126));
 
 [~, mm_p] = min(abs(elect_dprime_coeffs-mp));
 plot([0 tt(mm_p) tt(mm_p)], [mp, mp,-1], 'Color', rgb(156, 39, 176),'LineStyle', '--')
- text(28,1.3,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
+ text(18,1.3,(sprintf('%.0f',tt(mm_p))), 'Color', rgb(156, 39, 176));
 
 [~, ll_p] = min(abs(elect_dprime_coeffs-lp));
 plot([0 tt(ll_p) tt(ll_p)], [lp, lp, -1],'Color', rgb(103, 58, 183), 'LineStyle', '--')
-text(28,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
+text(18,.9,(sprintf('%.0f',tt(ll_p))), 'Color', rgb(103, 58, 183));
 
 % C = ColorGradient(rgb(106, 27, 154),rgb(186, 104, 200));
 
